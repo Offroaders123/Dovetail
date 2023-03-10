@@ -1,0 +1,14 @@
+{
+  "name": "dovetail",
+  "private": true,
+  "type": "module",
+  "main": "./src/app.js",
+  "dependencies": {
+    "@stardazed/streams-compression": "^1.0.0",
+    "nbtify": "^1.20.0"
+  },
+  "devDependencies": {
+    "better-typescript": "^0.0.7",
+    "new-javascript": "^0.2.4"
+  }
+}
