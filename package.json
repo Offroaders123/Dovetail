@@ -5,7 +5,7 @@
   "main": "./src/app.js",
   "dependencies": {
     "@stardazed/streams-compression": "^1.0.0",
-    "nbtify": "^1.20.0"
+    "nbtify": "^1.20.1"
   },
   "devDependencies": {
     "better-typescript": "^0.0.7",
