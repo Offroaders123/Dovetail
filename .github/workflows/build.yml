@@ -28,4 +28,4 @@ jobs:
           git checkout -b gh-pages
           git add -f dist/
           git commit -m "Deploy to GitHub Pages"
-          git push -f "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+          git push -f "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
