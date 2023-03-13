@@ -7,7 +7,7 @@ if (usePolyfill){
   const {
     CompressionStream,
     DecompressionStream
-  } = await import("https://cdn.jsdelivr.net/npm/@stardazed/streams-compression@1.0.0/+esm");
+  } = await import("@stardazed/streams-compression");
 
   globalThis.CompressionStream = CompressionStream;
   globalThis.DecompressionStream = DecompressionStream;

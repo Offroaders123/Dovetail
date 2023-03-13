@@ -1,5 +1,5 @@
 import "./compression-polyfill.js";
-import { read, write, parse, stringify, NBTData } from "https://cdn.jsdelivr.net/npm/nbtify@1.20.1/dist/index.js";
+import { read, write, parse, stringify, NBTData } from "nbtify";
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
