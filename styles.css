@@ -2,6 +2,34 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  margin: 0;
+  padding: 1em;
+  height: 100%;
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
   font-family: system-ui, sans-serif;
+}
+
+body > * {
+  flex-shrink: 0;
+}
+
+header {
+  display: flex;
+  gap: 0.5em;
+}
+
+textarea {
+  padding: 6px;
+  flex-grow: 1;
+  font-size: 13px;
+  font-family: ui-monospace, "Noto Sans Mono", "Cousine", monospace;
+  line-height: 1.4;
+  resize: none;
 }

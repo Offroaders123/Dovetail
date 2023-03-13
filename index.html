@@ -14,8 +14,12 @@
 
 <body>
 
-<h1>Dovetail</h1>
-<p>A cross-platform NBT editor built on the web!</p>
+<header>
+  <button id="saver" disabled>Save</button>
+  <input id="opener" type="file" accept="application/octet-stream, application/gzip, .nbt, .dat">
+</header>
+
+<textarea id="editor" placeholder="NBT data will show here..." wrap="off" spellcheck="false" autocomplete="off" autocapitalize="none" autocorrect="off"></textarea>
 
 <script type="module" src="./src/app.js"></script>
 
