@@ -56,6 +56,7 @@ opener.addEventListener("change",async () => {
 */
 export async function openFile(file){
   saver.disabled = true;
+  editor.disabled = true;
 
   const nbt = await readFile(file);
   if (nbt === null){
@@ -67,6 +68,7 @@ export async function openFile(file){
   name = file.name;
   saver.disabled = false;
   editor.value = snbt;
+  editor.disabled = false;
 }
 
 /**

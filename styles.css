@@ -33,3 +33,9 @@ textarea {
   line-height: 1.4;
   resize: none;
 }
+
+::placeholder {
+  color: inherit;
+  opacity: 0.55;
+  white-space: pre-wrap;
+}
