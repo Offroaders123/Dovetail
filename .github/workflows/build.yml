@@ -11,29 +11,21 @@ jobs:
     
     steps:
       - name: Checkout code
-        env:
-          REPO_DIR: ""
-        run: |
-          export REPO_DIR=$(echo ${GITHUB_REPOSITORY} | cut -d "/" -f2)
-          git clone https://github.com/${GITHUB_REPOSITORY}.git --branch main --depth 1
-          cd ${REPO_DIR}
+        uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
-        run: |
-          cd ${REPO_DIR}
-          npm run build
+        run: npm run build
 
       - name: Deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd ./dist
-          git init
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git add .
+          git checkout -b gh-pages
+          git add -f dist/
           git commit -m "Deploy to GitHub Pages"
-          git push --force "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" master:gh-pages
+          git push -f origin gh-pages
