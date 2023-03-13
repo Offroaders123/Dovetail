@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "browser": "./dist/app.js",
+  "scripts": {
+    "build": "npx tsc"
+  },
   "dependencies": {
     "@stardazed/streams-compression": "^1.0.0",
     "nbtify": "^1.20.1"
