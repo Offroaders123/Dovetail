@@ -8,17 +8,6 @@
     "types": [
       "new-javascript"
     ],
-    "paths": {
-      "https://cdn.jsdelivr.net/npm/*": [
-        "../node_modules/*"
-      ],
-      "https://cdn.jsdelivr.net/npm/nbtify*": [
-        "../node_modules/nbtify"
-      ],
-      "https://cdn.jsdelivr.net/npm/@stardazed/streams-compression*": [
-        "../node_modules/@stardazed/streams-compression"
-      ]
-    },
     "skipLibCheck": true,
     "strict": true
   }
