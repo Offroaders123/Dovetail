@@ -11,13 +11,20 @@ jobs:
     
     steps:
       - name: Checkout code
-        run: git clone https://github.com/${GITHUB_REPOSITORY}.git --branch main --depth 1
+        env:
+          REPO_DIR: ""
+        run: |
+          export REPO_DIR=$(echo ${GITHUB_REPOSITORY} | cut -d "/" -f2)
+          git clone https://github.com/${GITHUB_REPOSITORY}.git --branch main --depth 1
+          cd ${REPO_DIR}
 
       - name: Install dependencies
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: |
+          cd ${REPO_DIR}
+          npm run build
 
       - name: Deploy
         env:
