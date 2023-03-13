@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "types": [
+      "new-javascript"
+    ],
+    "skipLibCheck": true,
+    "strict": true
+  }
+}
