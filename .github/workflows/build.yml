@@ -21,11 +21,11 @@ jobs:
 
       - name: Deploy
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git checkout -b gh-pages
           git add -f dist/
           git commit -m "Deploy to GitHub Pages"
-          git push -f "https://${ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+          git push -f "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
