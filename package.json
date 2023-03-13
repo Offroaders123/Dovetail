@@ -2,7 +2,7 @@
   "name": "dovetail",
   "private": true,
   "type": "module",
-  "main": "./src/app.js",
+  "browser": "./dist/app.js",
   "dependencies": {
     "@stardazed/streams-compression": "^1.0.0",
     "nbtify": "^1.20.1"

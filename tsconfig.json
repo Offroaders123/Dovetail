@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "baseUrl": "./src",
     "outDir": "./dist",
     "module": "ESNext",
@@ -21,11 +19,7 @@
         "../node_modules/@stardazed/streams-compression"
       ]
     },
-    "noEmit": true,
     "skipLibCheck": true,
     "strict": true
-  },
-  "exclude": [
-    "./service-worker.js"
-  ]
+  }
 }

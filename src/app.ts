@@ -1,21 +1,17 @@
 import "./compression-polyfill.js";
-import * as NBT from "https://cdn.jsdelivr.net/npm/nbtify@1.20.1/dist/index.js";
+import { read, write, parse, stringify, NBTData } from "https://cdn.jsdelivr.net/npm/nbtify@1.20.1/dist/index.js";
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
 }
 
-console.log(NBT);
+const saver = document.querySelector<HTMLButtonElement>("#saver")!;
+const opener = document.querySelector<HTMLInputElement>("#opener")!;
+const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 
-const saver = /** @type { HTMLButtonElement } */ (document.querySelector("#saver"));
-const opener = /** @type { HTMLInputElement } */ (document.querySelector("#opener"));
-const editor = /** @type { HTMLTextAreaElement } */ (document.querySelector("#editor"));
+let config: NBTData;
 
-/** @type { NBT.NBTData } */
-let config;
-
-/** @type { string } */
-let name;
+let name: string;
 
 document.addEventListener("dragover",event => {
   event.preventDefault();
@@ -32,13 +28,13 @@ document.addEventListener("drop",async event => {
   if (items.length === 0) return;
 
   const [item] = items;
-  const file = /** @type { File } */ (item.getAsFile());
+  const file = item.getAsFile()!;
   await openFile(file);
 });
 
 saver.addEventListener("click",async () => {
   const snbt = editor.value;
-  const nbt = new NBT.NBTData(NBT.parse(snbt),config);
+  const nbt = new NBTData(parse(snbt),config);
   const file = await writeFile(nbt);
   saveFile(file);
 });
@@ -51,10 +47,7 @@ opener.addEventListener("change",async () => {
   await openFile(file);
 });
 
-/**
- * @param { File } file
-*/
-export async function openFile(file){
+export async function openFile(file: File){
   saver.disabled = true;
   editor.disabled = true;
 
@@ -63,7 +56,7 @@ export async function openFile(file){
     return;
   }
 
-  const snbt = NBT.stringify(nbt,{ space: 2 });
+  const snbt = stringify(nbt,{ space: 2 });
   config = nbt;
   name = file.name;
   saver.disabled = false;
@@ -71,13 +64,10 @@ export async function openFile(file){
   editor.disabled = false;
 }
 
-/**
- * @param { File } file
-*/
-export async function readFile(file){
+export async function readFile(file: File){
   try {
     const buffer = await file.arrayBuffer();
-    const nbt = await NBT.read(buffer);
+    const nbt = await read(buffer);
     return nbt;
   } catch (error){
     alert(error);
@@ -85,10 +75,7 @@ export async function readFile(file){
   }
 }
 
-/**
- * @param { File } file
-*/
-export function saveFile(file){
+export function saveFile(file: File){
   const anchor = document.createElement("a");
   const blob = URL.createObjectURL(file);
   anchor.href = blob;
@@ -97,11 +84,8 @@ export function saveFile(file){
   URL.revokeObjectURL(blob);
 }
 
-/**
- * @param { NBT.NBTData } nbt
-*/
-export async function writeFile(nbt){
-  const data = await NBT.write(nbt);
+export async function writeFile(nbt: NBTData){
+  const data = await write(nbt);
   const file = new File([data],name);
   return file;
 }
