@@ -11,7 +11,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        run: git clone https://github.com/<username>/<repository>.git --branch main --depth 1
+        run: git clone https://github.com/${GITHUB_REPOSITORY}.git --branch main --depth 1
 
       - name: Install dependencies
         run: npm install
@@ -29,4 +29,4 @@ jobs:
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add .
           git commit -m "Deploy to GitHub Pages"
-          git push --force "https://github.com/<username>/<repository>.git" master:gh-pages
+          git push --force "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" master:gh-pages
