@@ -10,7 +10,6 @@ const opener = document.querySelector<HTMLInputElement>("#opener")!;
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 
 let config: NBTData;
-
 let name: string;
 
 document.addEventListener("dragover",event => {

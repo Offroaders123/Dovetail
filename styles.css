@@ -4,16 +4,19 @@
 
 html {
   height: 100%;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
-  padding: 1em;
   height: 100%;
+  position: fixed;
+  inset: 0;
   display: flex;
-  gap: 1em;
   flex-direction: column;
   font-family: system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 body > * {
@@ -21,21 +24,34 @@ body > * {
 }
 
 header {
+  padding: 1rem;
   display: flex;
   gap: 0.5em;
 }
 
 textarea {
-  padding: 6px;
+  padding: 8px 1rem;
   flex-grow: 1;
   font-size: 13px;
   font-family: ui-monospace, "Noto Sans Mono", "Cousine", monospace;
   line-height: 1.4;
+  background: #aaaaaa40;
+  border: 0 solid transparent;
+  border-radius: 0;
+  border-top: 1px solid #80808080;
   resize: none;
+}
+
+textarea[disabled] {
+  opacity: unset;
 }
 
 ::placeholder {
   color: inherit;
   opacity: 0.55;
   white-space: pre-wrap;
+}
+
+[disabled]::placeholder {
+  opacity: 0.5;
 }
