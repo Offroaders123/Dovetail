@@ -39,6 +39,7 @@ textarea {
   border: 0 solid transparent;
   border-radius: 0;
   border-top: 1px solid #80808080;
+  border-bottom-width: env(safe-area-inset-bottom);
   resize: none;
 }
 
