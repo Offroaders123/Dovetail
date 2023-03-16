@@ -1,0 +1,23 @@
+{
+  "name": "Dovetail",
+  "short_name": "Dovetail",
+  "description": "A cross-platform NBT editor built on the web!",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay"],
+  "theme_color": "#445985",
+  "background_color": "#445985",
+  "icons": [
+    {
+      "src": "./resources/app-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./resources/app-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
