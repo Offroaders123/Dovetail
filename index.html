@@ -19,9 +19,10 @@
 <body>
 
 <header>
-  <img height="32" src="./resources/app-512.png">
+  <img height="32" draggable="false" src="./resources/app-512.png">
+  <button onclick="fileOpener.click();">Open</button>
+  <input id="fileOpener" type="file" accept="application/octet-stream, application/gzip, .nbt, .dat">
   <button id="saver" disabled>Save</button>
-  <input id="opener" type="file" accept="application/octet-stream, application/gzip, .nbt, .dat">
 </header>
 
 <textarea id="editor" disabled placeholder="NBT data will show here..." wrap="off" spellcheck="false" autocomplete="off" autocapitalize="none" autocorrect="off"></textarea>

@@ -6,7 +6,7 @@ if (window.isSecureContext){
 }
 
 const saver = document.querySelector<HTMLButtonElement>("#saver")!;
-const opener = document.querySelector<HTMLInputElement>("#opener")!;
+const opener = document.querySelector<HTMLInputElement>("#fileOpener")!;
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 
 let config: NBTData;
@@ -35,7 +35,17 @@ saver.addEventListener("click",async () => {
   const snbt = editor.value;
   const nbt = new NBTData(parse(snbt),config);
   const file = await writeFile(nbt);
-  saveFile(file);
+
+  const isiOSDevice = (
+    /^(Mac|iPhone|iPad|iPod)/i.test(navigator.userAgentData?.platform ?? navigator.platform) &&
+    typeof navigator.standalone === "boolean"
+  );
+
+  if (isiOSDevice && window.isSecureContext){
+    await shareFile(file);
+  } else {
+    saveFile(file);
+  }
 });
 
 opener.addEventListener("change",async () => {
@@ -51,13 +61,13 @@ export async function openFile(file: File){
   editor.disabled = true;
 
   const nbt = await readFile(file);
-  if (nbt === null){
-    return;
-  }
+  if (nbt === null) return;
 
   const snbt = stringify(nbt,{ space: 2 });
   config = nbt;
   name = file.name;
+
+  document.title = `Dovetail - ${name}`;
   saver.disabled = false;
   editor.value = snbt;
   editor.disabled = false;
@@ -77,10 +87,20 @@ export async function readFile(file: File){
 export function saveFile(file: File){
   const anchor = document.createElement("a");
   const blob = URL.createObjectURL(file);
+
   anchor.href = blob;
   anchor.download = file.name;
   anchor.click();
+
   URL.revokeObjectURL(blob);
+}
+
+export async function shareFile(file: File){
+  try {
+    await navigator.share({ files: [file] });
+  } catch (error){
+    console.warn(error);
+  }
 }
 
 export async function writeFile(nbt: NBTData){
