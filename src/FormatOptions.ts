@@ -1,4 +1,4 @@
-import { Int, Name, Endian, Compression, BedrockLevel, NBTDataOptions } from "nbtify";
+import { Int, Name, Endian, Compression, BedrockLevel, NBTData, NBTDataOptions } from "nbtify";
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -89,6 +89,18 @@ export function getOptions({ name, disableName, endian, compression, bedrockLeve
   return options;
 }
 
+export function setOptions({ name, endian, compression, bedrockLevel }: NBTData){
+  const optionsMap: FormatOptionsMap = {
+    name: (name === null) ? "" : name,
+    ...(name === null) && { disableName: "true" },
+    endian,
+    compression: (compression === undefined) ? "null" : compression,
+    bedrockLevel: (bedrockLevel === undefined) ? "" : bedrockLevel.toString()
+  };
+
+  return optionsMap;
+}
+
 export class FormatOptions extends HTMLElement {
   constructor() {
     super();
@@ -100,6 +112,11 @@ export class FormatOptions extends HTMLElement {
     const optionsMap = getOptionsMap(formData);
     const options = getOptions(optionsMap);
     return options;
+  }
+
+  setNBTDataOptions(options: NBTData) {
+    const optionsMap = setOptions(options);
+    return optionsMap;
   }
 
   get dialog() {

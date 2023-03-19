@@ -13,7 +13,7 @@ const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 const formatOptions = document.querySelector<FormatOptions>("#formatOptions")!;
 
-let config: NBTDataOptions;
+let config: NBTData;
 let name: string;
 
 document.addEventListener("dragover",event => {
@@ -63,6 +63,17 @@ fileOpener.addEventListener("change",async () => {
 formatOpener.addEventListener("click",() => {
   formatOptions.dialog.showModal();
 });
+
+// const demo = await fetch("../NBTify/test/nbt/simple_house.nbt")
+//   .then(response => response.blob())
+//   .then(blob => new File([blob],"simple_house.nbt"));
+
+// await openFile(demo);
+
+// formatOpener.click();
+
+// console.log(formatOptions.getNBTDataOptions());
+// console.log(formatOptions.setNBTDataOptions(config));
 
 export async function openFile(file: File){
   saver.disabled = true;
