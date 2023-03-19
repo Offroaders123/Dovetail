@@ -83,3 +83,20 @@ textarea[disabled] {
 [disabled]::placeholder {
   opacity: 0.5;
 }
+
+dialog {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: column;
+}

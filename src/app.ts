@@ -7,7 +7,10 @@ if (window.isSecureContext){
 
 const saver = document.querySelector<HTMLButtonElement>("#saver")!;
 const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
+const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
+const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
+const formatForm = document.querySelector<HTMLFormElement>("#formatForm")!;
 
 let config: NBTDataOptions;
 let name: string;
@@ -56,8 +59,13 @@ fileOpener.addEventListener("change",async () => {
   await openFile(file);
 });
 
+formatOpener.addEventListener("click",() => {
+  formatDialog.showModal();
+});
+
 export async function openFile(file: File){
   saver.disabled = true;
+  formatOpener.disabled = true;
   editor.disabled = true;
 
   const nbt = await readFile(file);
@@ -70,6 +78,7 @@ export async function openFile(file: File){
   document.title = `Dovetail - ${name}`;
 
   saver.disabled = false;
+  formatOpener.disabled = false;
   editor.value = snbt;
   editor.disabled = false;
 }
