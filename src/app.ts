@@ -1,5 +1,7 @@
 import "./compression-polyfill.js";
 import { read, write, parse, stringify, NBTData, NBTDataOptions } from "nbtify";
+import "./FormatOptions.js";
+import type FormatOptions from "./FormatOptions.js";
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
@@ -9,8 +11,7 @@ const saver = document.querySelector<HTMLButtonElement>("#saver")!;
 const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
 const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
-const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
-const formatForm = document.querySelector<HTMLFormElement>("#formatForm")!;
+const formatOptions = document.querySelector<FormatOptions>("#formatOptions")!;
 
 let config: NBTDataOptions;
 let name: string;
@@ -60,7 +61,7 @@ fileOpener.addEventListener("change",async () => {
 });
 
 formatOpener.addEventListener("click",() => {
-  formatDialog.showModal();
+  formatOptions.dialog.showModal();
 });
 
 export async function openFile(file: File){

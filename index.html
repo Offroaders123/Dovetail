@@ -28,68 +28,7 @@
 
 <textarea id="editor" disabled placeholder="NBT data will show here..." wrap="off" spellcheck="false" autocomplete="off" autocapitalize="none" autocorrect="off"></textarea>
 
-<dialog id="formatDialog">
-  <form id="formatForm" method="dialog">
-    <dialog-header>
-      <h3>Format Options</h3>
-      <button type="submit" aria-label="Close">✕</button>
-    </dialog-header>
-
-    <fieldset>
-      <legend>Root Name</legend>
-
-      <label>
-        <input type="text" name="name" placeholder="&lt;empty&gt;">
-      </label>
-      <label>
-        <input type="checkbox" name="disableName" value="true">
-        Disable
-      </label>
-    </fieldset>
-
-    <fieldset>
-      <legend>Endian</legend>
-
-      <label>
-        <input type="radio" name="endian" value="big" checked>
-        Big
-      </label>
-      <label>
-        <input type="radio" name="endian" value="little">
-        Little
-      </label>
-    </fieldset>
-
-    <fieldset>
-      <legend>Compression</legend>
-
-      <label>
-        <input type="radio" name="compression" value="null" checked>
-        None
-      </label>
-      <label>
-        <input type="radio" name="compression" value="gzip">
-        gzip
-      </label>
-      <label>
-        <input type="radio" name="compression" value="deflate">
-        zlib
-      </label>
-    </fieldset>
-
-    <fieldset>
-      <legend>Bedrock Level</legend>
-
-      <label>
-        <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" list="bedrock-level-version">
-        <code>(Uint32)</code>
-        <datalist id="bedrock-level-version">
-          <option value="8">(Most common)</option>
-        </datalist>
-      </label>
-    </fieldset>
-  </form>
-</dialog>
+<format-options id="formatOptions"></format-options>
 
 <script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.7.0/dist/es-module-shims.js"></script>
 
