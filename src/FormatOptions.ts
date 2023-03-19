@@ -55,9 +55,9 @@ template.innerHTML = `
       <legend>Bedrock Level</legend>
 
       <label>
-        <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" list="bedrock-level-version">
+        <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" list="bedrockLevelVersion">
         <code>(Uint32)</code>
-        <datalist id="bedrock-level-version">
+        <datalist id="bedrockLevelVersion">
           <option value="8">(Most common)</option>
         </datalist>
       </label>
@@ -74,49 +74,10 @@ export interface FormatOptionsMap {
   bedrockLevel: string;
 }
 
-export function getOptionsMap(formData: FormData){
-  return Object.fromEntries([...formData]) as unknown as FormatOptionsMap;
-}
-
-export function getOptions({ name, disableName, endian, compression, bedrockLevel }: FormatOptionsMap){
-  const options: NBTDataOptions = {
-    name: (disableName === "true") ? null : name,
-    endian,
-    compression: (compression === "null") ? null : compression,
-    bedrockLevel: (bedrockLevel === "") ? null : new Int(parseInt(bedrockLevel))
-  };
-
-  return options;
-}
-
-export function setOptions({ name, endian, compression, bedrockLevel }: NBTData){
-  const optionsMap: FormatOptionsMap = {
-    name: (name === null) ? "" : name,
-    ...(name === null) && { disableName: "true" },
-    endian,
-    compression: (compression === undefined) ? "null" : compression,
-    bedrockLevel: (bedrockLevel === undefined) ? "" : bedrockLevel.toString()
-  };
-
-  return optionsMap;
-}
-
-export class FormatOptions extends HTMLElement {
+export class FormatOptions extends HTMLElement implements NBTDataOptions {
   constructor() {
     super();
     this.append(template.content.cloneNode(true));
-  }
-
-  getNBTDataOptions() {
-    const formData = new FormData(this.form);
-    const optionsMap = getOptionsMap(formData);
-    const options = getOptions(optionsMap);
-    return options;
-  }
-
-  setNBTDataOptions(options: NBTData) {
-    const optionsMap = setOptions(options);
-    return optionsMap;
   }
 
   get dialog() {
@@ -125,6 +86,41 @@ export class FormatOptions extends HTMLElement {
 
   get form() {
     return this.querySelector("form")!;
+  }
+
+  get name() {
+    const nameInput = document.querySelector<HTMLInputElement>("input[type='text'][name='name']")!;
+    const disableNameInput = document.querySelector<HTMLInputElement>("input[type='checkbox'][name='disableName']")!;
+
+    const name: Name = (disableNameInput.checked) ? null : nameInput.value;
+    return name;
+  }
+
+  get endian() {
+    const endianInput = document.querySelector<HTMLInputElement>("input[type='radio'][name='endian'][checked]")!;
+
+    const endian: Endian = endianInput.value as Endian;
+    return endian;
+  }
+
+  get compression() {
+    const compressionInput = document.querySelector<HTMLInputElement>("input[type='radio'][name='compression'][checked]")!;
+
+    const compression: Compression | null = (compressionInput.value === "null") ? null : compressionInput.value as Compression;
+    return compression;
+  }
+
+  get bedrockLevel() {
+    const bedrockLevelInput = document.querySelector<HTMLInputElement>("input[type='number'][name='bedrockLevel']")!;
+
+    const bedrockLevel: BedrockLevel | null = (bedrockLevelInput.value === "") ? null : new Int(parseInt(bedrockLevelInput.value));
+    return bedrockLevel;
+  }
+
+  get options() {
+    const { name, endian, compression, bedrockLevel } = this;
+    const options: NBTDataOptions = { name, endian, compression, bedrockLevel };
+    return options;
   }
 }
 

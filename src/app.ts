@@ -13,7 +13,7 @@ const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 const formatOptions = document.querySelector<FormatOptions>("#formatOptions")!;
 
-let config: NBTData;
+let config: NBTDataOptions;
 let name: string;
 
 document.addEventListener("dragover",event => {
@@ -72,8 +72,7 @@ formatOpener.addEventListener("click",() => {
 
 // formatOpener.click();
 
-// console.log(formatOptions.getNBTDataOptions());
-// console.log(formatOptions.setNBTDataOptions(config));
+// console.log(formatOptions.options);
 
 export async function openFile(file: File){
   saver.disabled = true;
