@@ -1,15 +1,15 @@
 import "./compression-polyfill.js";
-import { read, write, parse, stringify, NBTData } from "nbtify";
+import { read, write, parse, stringify, NBTData, NBTDataOptions } from "nbtify";
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
 }
 
 const saver = document.querySelector<HTMLButtonElement>("#saver")!;
-const opener = document.querySelector<HTMLInputElement>("#fileOpener")!;
+const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 
-let config: NBTData;
+let config: NBTDataOptions;
 let name: string;
 
 document.addEventListener("dragover",event => {
@@ -48,11 +48,11 @@ saver.addEventListener("click",async () => {
   }
 });
 
-opener.addEventListener("change",async () => {
-  if (opener.files === null) return;
-  if (opener.files.length === 0) return;
+fileOpener.addEventListener("change",async () => {
+  if (fileOpener.files === null) return;
+  if (fileOpener.files.length === 0) return;
 
-  const [file] = opener.files;
+  const [file] = fileOpener.files;
   await openFile(file);
 });
 
@@ -68,6 +68,7 @@ export async function openFile(file: File){
   name = file.name;
 
   document.title = `Dovetail - ${name}`;
+
   saver.disabled = false;
   editor.value = snbt;
   editor.disabled = false;

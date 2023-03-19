@@ -53,7 +53,7 @@ input[type="file"] {
 
 textarea {
   margin: 0;
-  padding: 8px 1rem;
+  padding: 8px;
   flex-grow: 1;
   font-size: 13px;
   font-family: ui-monospace, "Noto Sans Mono", "Cousine", monospace;
