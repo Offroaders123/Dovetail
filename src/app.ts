@@ -1,5 +1,5 @@
 import "./compression-polyfill.js";
-import { read, write, parse, stringify, NBTData, NBTDataOptions } from "nbtify";
+import { read, write, parse, stringify, Name, Endian, Compression, BedrockLevel, Int, NBTData, NBTDataOptions } from "nbtify";
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
@@ -12,7 +12,9 @@ const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
 const formatForm = document.querySelector<HTMLFormElement>("#formatForm")!;
 
-let config: NBTDataOptions;
+/**
+ * The name of the currently opened file.
+*/
 let name: string;
 
 document.addEventListener("dragover",event => {
@@ -36,8 +38,10 @@ document.addEventListener("drop",async event => {
 
 saver.addEventListener("click",async () => {
   const snbt = editor.value;
-  const nbt = new NBTData(parse(snbt),config);
-  const file = await writeFile(nbt);
+  const nbt = parse(snbt);
+  const options = saveOptions();
+  const nbtData = new NBTData(nbt,options);
+  const file = await writeFile(nbtData);
 
   const isiOSDevice = (
     /^(Mac|iPhone|iPad|iPod)/i.test(navigator.userAgentData?.platform ?? navigator.platform) &&
@@ -71,6 +75,9 @@ formatOpener.addEventListener("click",() => {
 
 // formatOpener.click();
 
+/**
+ * Shows the open file picker to the user.
+*/
 export async function openFile(file: File){
   saver.disabled = true;
   formatOpener.disabled = true;
@@ -80,7 +87,7 @@ export async function openFile(file: File){
   if (nbt === null) return;
 
   const snbt = stringify(nbt,{ space: 2 });
-  config = openOptions(nbt);
+  openOptions(nbt);
   name = file.name;
 
   document.title = `Dovetail - ${name}`;
@@ -99,6 +106,9 @@ export interface FormatOptionsCollection extends HTMLFormControlsCollection {
   bedrockLevel: HTMLInputElement;
 }
 
+/**
+ * Updates the Format Options dialog to match the NBT file's metadata.
+*/
 export function openOptions({ name, endian, compression, bedrockLevel }: NBTData){
   const elements = formatForm.elements as FormatOptionsCollection;
 
@@ -119,6 +129,9 @@ export function openOptions({ name, endian, compression, bedrockLevel }: NBTData
   return options;
 }
 
+/**
+ * Attempts to create an NBTData object from a File object.
+*/
 export async function readFile(file: File){
   try {
     const buffer = await file.arrayBuffer();
@@ -130,6 +143,24 @@ export async function readFile(file: File){
   }
 }
 
+/**
+ * Turns the values from the Format Options dialog into the NBT file's metadata.
+*/
+export function saveOptions(){
+  const elements = formatForm.elements as FormatOptionsCollection;
+
+  const name: Name = (elements.disableName.checked) ? null : elements.name.value;
+  const endian: Endian = elements.endian.value as Endian;
+  const compression: Compression | null = (elements.compression.value === "none") ? null : elements.compression.value as Compression;
+  const bedrockLevel: BedrockLevel | null = (elements.bedrockLevel.value === "") ? null : new Int(parseInt(elements.bedrockLevel.value));
+
+  const options: NBTDataOptions = { name, endian, compression, bedrockLevel };
+  return options;
+}
+
+/**
+ * Shows the save file picker to the user.
+*/
 export function saveFile(file: File){
   const anchor = document.createElement("a");
   const blob = URL.createObjectURL(file);
@@ -141,6 +172,9 @@ export function saveFile(file: File){
   URL.revokeObjectURL(blob);
 }
 
+/**
+ * Shows the file share menu to the user.
+*/
 export async function shareFile(file: File){
   try {
     await navigator.share({ files: [file] });
@@ -149,6 +183,9 @@ export async function shareFile(file: File){
   }
 }
 
+/**
+ * Creates a File object from an NBTData object.
+*/
 export async function writeFile(nbt: NBTData){
   const data = await write(nbt);
   const file = new File([data],name);
