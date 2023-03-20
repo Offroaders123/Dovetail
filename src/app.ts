@@ -63,9 +63,9 @@ formatOpener.addEventListener("click",() => {
   formatDialog.showModal();
 });
 
-// const demo = await fetch("../NBTify/test/nbt/simple_house.nbt")
+// const demo = await fetch("../NBTify/test/nbt/ridiculous.nbt")
 //   .then(response => response.blob())
-//   .then(blob => new File([blob],"simple_house.nbt"));
+//   .then(blob => new File([blob],"ridiculous.nbt"));
 
 // await openFile(demo);
 
@@ -80,7 +80,7 @@ export async function openFile(file: File){
   if (nbt === null) return;
 
   const snbt = stringify(nbt,{ space: 2 });
-  config = nbt;
+  config = openOptions(nbt);
   name = file.name;
 
   document.title = `Dovetail - ${name}`;
@@ -89,6 +89,34 @@ export async function openFile(file: File){
   formatOpener.disabled = false;
   editor.value = snbt;
   editor.disabled = false;
+}
+
+export interface FormatOptionsCollection extends HTMLFormControlsCollection {
+  name: HTMLInputElement;
+  disableName: HTMLInputElement;
+  endian: RadioNodeList;
+  compression: RadioNodeList;
+  bedrockLevel: HTMLInputElement;
+}
+
+export function openOptions({ name, endian, compression, bedrockLevel }: NBTData){
+  const elements = formatForm.elements as FormatOptionsCollection;
+
+  if (name !== null){
+    elements.name.value = name;
+    elements.name.disabled = false;
+    elements.disableName.checked = false;
+  } else {
+    elements.name.value = "";
+    elements.name.disabled = true;
+    elements.disableName.checked = true;
+  }
+  elements.endian.value = endian;
+  elements.compression.value = compression ?? "none";
+  elements.bedrockLevel.value = (bedrockLevel === undefined) ? "" : `${bedrockLevel}`;
+
+  const options: NBTDataOptions = { name, endian, compression, bedrockLevel };
+  return options;
 }
 
 export async function readFile(file: File){

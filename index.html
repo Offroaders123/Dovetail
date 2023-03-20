@@ -42,7 +42,7 @@
         <input type="text" name="name" placeholder="&lt;empty&gt;">
       </label>
       <label>
-        <input type="checkbox" name="disableName" value="true">
+        <input type="checkbox" name="disableName" onchange="this.form.elements.name.disabled = this.checked;">
         Disable
       </label>
     </fieldset>
@@ -51,7 +51,7 @@
       <legend>Endian</legend>
 
       <label>
-        <input type="radio" name="endian" value="big" checked>
+        <input type="radio" name="endian" value="big">
         Big
       </label>
       <label>
@@ -64,7 +64,7 @@
       <legend>Compression</legend>
 
       <label>
-        <input type="radio" name="compression" value="null" checked>
+        <input type="radio" name="compression" value="none">
         None
       </label>
       <label>
