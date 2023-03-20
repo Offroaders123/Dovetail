@@ -5,7 +5,9 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay"],
+  "display_override": [
+    "window-controls-overlay"
+  ],
   "theme_color": "#445985",
   "background_color": "#445985",
   "icons": [

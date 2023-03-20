@@ -2,7 +2,6 @@
   "name": "dovetail",
   "private": true,
   "type": "module",
-  "browser": "./dist/app.js",
   "scripts": {
     "build": "npx tsc"
   },
