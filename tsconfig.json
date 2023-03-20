@@ -4,11 +4,13 @@
     "outDir": "./dist",
     "module": "ESNext",
     "moduleResolution": "Node",
+    "isolatedModules": true,
     "target": "ESNext",
     "types": [
       "new-javascript"
     ],
     "skipLibCheck": true,
+    "noEmit": true,
     "strict": true
   }
 }

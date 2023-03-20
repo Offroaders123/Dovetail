@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npx tsc"
+    "dev": "npx vite --host --port=5500",
+    "build": "npx tsc; npx vite build"
   },
   "dependencies": {
     "@stardazed/streams-compression": "^1.0.0",
