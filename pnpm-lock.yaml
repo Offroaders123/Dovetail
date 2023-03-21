@@ -1,0 +1,41 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@stardazed/streams-compression': ^1.0.0
+  better-typescript: ^0.0.7
+  nbtify: ^1.20.1
+  new-javascript: ^0.2.4
+
+dependencies:
+  '@stardazed/streams-compression': 1.0.0
+  nbtify: 1.20.1
+
+devDependencies:
+  better-typescript: 0.0.7
+  new-javascript: 0.2.4
+
+packages:
+
+  /@stardazed/streams-compression/1.0.0:
+    resolution: {integrity: sha512-SQCiwxdIVJ5xxUBYptN+fc+tJpSDbxQuJ0+3u2SmHjIzr6JIRZ28AVFtFnGy6x6j3UBlaLx73w9rC6UAFxnd1g==}
+    dependencies:
+      '@stardazed/zlib': 1.0.1
+    dev: false
+
+  /@stardazed/zlib/1.0.1:
+    resolution: {integrity: sha512-MS6PCYiRNJ32c69+3NPyL+bu7LpiFDvMcBXnlhQnF8CKMG0R/xRVCCo422NPkQ0+Cox3xKpk5Lc1LfWFS4b3cw==}
+    dev: false
+
+  /better-typescript/0.0.7:
+    resolution: {integrity: sha512-W+ERLAb0i+Hqya5wQWKHwP85876Grp9FEplYLpgP5OxrihKBjWooDy+Mnjzpiu+/KVqvjewyGLzQ5SZE1qWZzw==}
+    dependencies:
+      new-javascript: 0.2.4
+    dev: true
+
+  /nbtify/1.20.1:
+    resolution: {integrity: sha512-Rgcf1TmsmImhwhdJsAzIBZcc+DmUlkBx7yQVa5LFJRGR1Ra6q0LI/oJqdKlra21Unpw552SbkjFc0GxM0RU5VQ==}
+    dev: false
+
+  /new-javascript/0.2.4:
+    resolution: {integrity: sha512-Ib/RM1Irwy6eGuH1dxLFxLL0htWFlf2G6NP3FPzSK/51c9WWltUgZZ7XQcPb5DnUjdzu/iyS6k+uE6fTjeXOEQ==}
+    dev: true
