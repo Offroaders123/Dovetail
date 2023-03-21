@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "npx vite --host --port=5500",
-    "build": "npx tsc; npx vite build"
+    "build": "npx tsc; npx vite build --base=/Dovetail/"
   },
   "dependencies": {
     "@stardazed/streams-compression": "^1.0.0",
