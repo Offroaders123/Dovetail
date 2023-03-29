@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "dev": "npx tsc -w"
   },
   "dependencies": {
     "@stardazed/streams-compression": "^1.0.0",

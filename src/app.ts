@@ -85,7 +85,7 @@ formatOpener.addEventListener("click",() => {
 // formatOpener.click();
 
 /**
- * Shows the open file picker to the user.
+ * Attempts to read an NBT file, then open it in the editor.
 */
 export async function openFile(file: File){
   saver.disabled = true;
