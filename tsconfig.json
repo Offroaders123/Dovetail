@@ -8,7 +8,6 @@
     "types": [
       "new-javascript"
     ],
-    "skipLibCheck": true,
     "strict": true
   }
 }
