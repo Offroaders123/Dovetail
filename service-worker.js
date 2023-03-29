@@ -2,7 +2,7 @@
 /// <reference no-default-lib="true"/>
 /// <reference types="better-typescript/worker"/>
 
-const version = "Dovetail v1.2.11";
+const version = "Dovetail v1.3.0";
 
 self.addEventListener("activate",event => {
   event.waitUntil(removeOutdatedVersions());

@@ -17,6 +17,15 @@ const formatForm = document.querySelector<HTMLFormElement>("#formatForm")!;
 */
 let name: string;
 
+window.launchQueue?.setConsumer?.(async launchParams => {
+  const { files: handles } = launchParams;
+  if (handles.length === 0) return;
+
+  const [handle] = handles;
+  const file = await handle.getFile();
+  await openFile(file);
+});
+
 document.addEventListener("dragover",event => {
   event.preventDefault();
   if (event.dataTransfer === null) return;

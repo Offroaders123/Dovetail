@@ -21,5 +21,14 @@
       "type": "image/png",
       "sizes": "512x512"
     }
+  ],
+  "file_handlers": [
+    {
+      "action": "./",
+      "accept": {
+        "application/octet-stream": [".nbt", ".dat"],
+        "application/gzip": [".nbt", ".dat"]
+      }
+    }
   ]
 }
