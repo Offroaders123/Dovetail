@@ -3,11 +3,17 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "target": "ESNext",
+    "typeRoots": [
+      "./node_modules"
+    ],
     "types": [
+      "es-module-shims",
       "new-javascript"
     ],
-    "strict": true
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitOverride": true
   }
 }

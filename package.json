@@ -3,15 +3,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npx tsc",
-    "dev": "npx tsc -w"
+    "build": "tsc",
+    "dev": "tsc -w"
   },
   "dependencies": {
-    "@stardazed/streams-compression": "^1.0.0",
+    "compression-streams-polyfill": "^0.1.3",
+    "es-module-shims": "^1.7.2",
     "nbtify": "^1.20.1"
   },
   "devDependencies": {
-    "better-typescript": "^0.1.0",
-    "new-javascript": "^0.3.0"
+    "better-typescript": "^0.1.2",
+    "new-javascript": "^0.3.1",
+    "typescript": "^5.0.4"
   }
 }
