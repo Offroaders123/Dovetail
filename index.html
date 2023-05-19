@@ -21,7 +21,7 @@
 <header>
   <img height="32" draggable="false" src="./resources/app-512.png">
   <button onclick="fileOpener.click();">Open</button>
-  <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat">
+  <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old">
   <button id="saver" disabled>Save</button>
   <button id="formatOpener" disabled>Format Options...</button>
 </header>
@@ -73,7 +73,7 @@
       </label>
       <label>
         <input type="radio" name="compression" value="deflate">
-        zlib
+        deflate (zlib)
       </label>
     </fieldset>
 
@@ -81,11 +81,8 @@
       <legend>Bedrock Level</legend>
 
       <label>
-        <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" list="bedrockLevelVersion">
+        <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295">
         <code>(Uint32)</code>
-        <datalist id="bedrockLevelVersion">
-          <option value="8">(Most common)</option>
-        </datalist>
       </label>
     </fieldset>
   </form>

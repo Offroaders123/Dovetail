@@ -1,5 +1,5 @@
 import "./compression-polyfill.js";
-import { read, write, parse, stringify, Name, Endian, Compression, BedrockLevel, Int, NBTData, NBTDataOptions } from "nbtify";
+import { read, write, parse, stringify, Name, Endian, Compression, BedrockLevel, Int32, NBTData, NBTDataOptions, CompressionFormat } from "nbtify";
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
@@ -131,8 +131,8 @@ export function openOptions({ name, endian, compression, bedrockLevel }: NBTData
     elements.disableName.checked = true;
   }
   elements.endian.value = endian;
-  elements.compression.value = compression ?? "none";
-  elements.bedrockLevel.value = (bedrockLevel === undefined) ? "" : `${bedrockLevel}`;
+  elements.compression.value = (compression === null) ? "none" : compression;
+  elements.bedrockLevel.value = (bedrockLevel === null) ? "" : `${bedrockLevel}`;
 
   const options: NBTDataOptions = { name, endian, compression, bedrockLevel };
   return options;
@@ -142,13 +142,19 @@ export function openOptions({ name, endian, compression, bedrockLevel }: NBTData
  * Attempts to create an NBTData object from a File object.
 */
 export async function readFile(file: File){
+  const buffer = await file.arrayBuffer();
   try {
-    const buffer = await file.arrayBuffer();
     const nbt = await read(buffer);
     return nbt;
-  } catch (error){
-    alert(error);
-    return null;
+  } catch (error: any){
+    if ((error as Error).message.includes("unread bytes remaining")){
+      const reattempt = confirm(`${error}\n\nEncountered extra data at the end of the file. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
+      if (!reattempt) return null;
+      return read(buffer,{ strict: false });
+    } else {
+      alert(error);
+      return null;  
+    }
   }
 }
 
@@ -160,8 +166,8 @@ export function saveOptions(){
 
   const name: Name = (elements.disableName.checked) ? null : elements.name.value;
   const endian: Endian = elements.endian.value as Endian;
-  const compression: Compression | null = (elements.compression.value === "none") ? null : elements.compression.value as Compression;
-  const bedrockLevel: BedrockLevel | null = (elements.bedrockLevel.value === "") ? null : new Int(parseInt(elements.bedrockLevel.value));
+  const compression: Compression = (elements.compression.value === "none") ? null : elements.compression.value as CompressionFormat;
+  const bedrockLevel: BedrockLevel = (elements.bedrockLevel.value === "") ? null : new Int32(parseInt(elements.bedrockLevel.value));
 
   const options: NBTDataOptions = { name, endian, compression, bedrockLevel };
   return options;

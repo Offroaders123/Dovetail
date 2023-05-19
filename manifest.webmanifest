@@ -24,7 +24,7 @@
     {
       "action": "./",
       "accept": {
-        "application/octet-stream": [".nbt", ".dat"]
+        "application/octet-stream": [".nbt", ".dat", ".dat_old"]
       }
     }
   ]
