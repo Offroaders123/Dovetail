@@ -10,12 +10,12 @@
   "background_color": "#445985",
   "icons": [
     {
-      "src": "./resources/app-192.png",
+      "src": "./app-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "./resources/app-512.png",
+      "src": "./app-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

@@ -9,8 +9,8 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#445985">
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="16x16" href="./resources/icon-16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="./resources/icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./icon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./icon-32.png">
 
 <link rel="stylesheet" href="./styles.css">
 
@@ -19,7 +19,7 @@
 <body>
 
 <header>
-  <img height="32" draggable="false" src="./resources/app-512.png">
+  <img height="32" draggable="false" src="./app-512.png">
   <button onclick="fileOpener.click();">Open</button>
   <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old">
   <button id="saver" disabled>Save</button>
@@ -88,19 +88,7 @@
   </form>
 </dialog>
 
-<script async src="./node_modules/es-module-shims/dist/es-module-shims.js"></script>
-
-<script type="importmap">
-  {
-    "imports": {
-      "compression-streams-polyfill/ponyfill": "./node_modules/compression-streams-polyfill/ponyfill/esm.mjs",
-      "fflate": "./node_modules/fflate/esm/browser.js",
-      "nbtify": "./node_modules/nbtify/dist/index.js"
-    }
-  }
-</script>
-
-<script type="module" src="./dist/app.js"></script>
+<script type="module" src="./src/app.ts"></script>
 
 </body>
 

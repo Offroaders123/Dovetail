@@ -3,17 +3,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w"
+    "build": "tsc; vite build --base /Dovetail/ --target esnext",
+    "dev": "vite --host --port 5500 --base /Dovetail/",
+    "preview": "vite preview --host --port 5500 --base /Dovetail/"
   },
   "dependencies": {
     "compression-streams-polyfill": "^0.1.3",
-    "es-module-shims": "^1.7.2",
     "nbtify": "^1.35.2"
   },
   "devDependencies": {
     "better-typescript": "^0.1.2",
     "new-javascript": "^0.3.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vite": "^4.3.8"
   }
 }

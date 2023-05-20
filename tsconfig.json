@@ -1,18 +1,14 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
     "module": "ESNext",
     "moduleResolution": "NodeNext",
+    "isolatedModules": true,
     "target": "ESNext",
-    "typeRoots": [
-      "./node_modules"
-    ],
     "types": [
-      "es-module-shims",
       "new-javascript"
     ],
-    "sourceMap": true,
+    "noEmit": true,
+    "skipLibCheck": true,
     "strict": true,
     "noImplicitOverride": true
   }
