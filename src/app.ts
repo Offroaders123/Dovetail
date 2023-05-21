@@ -1,5 +1,5 @@
 import "./compression-polyfill.js";
-import { read, write, parse, stringify, Name, Endian, Compression, BedrockLevel, Int32, NBTData, NBTDataOptions, CompressionFormat } from "nbtify";
+import { read, write, parse, stringify, Name, Endian, Compression, BedrockLevel, NBTData, NBTDataOptions, RootTag, Int32, CompressionFormat } from "nbtify";
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
@@ -37,11 +37,12 @@ document.addEventListener("drop",async event => {
   event.preventDefault();
   if (event.dataTransfer === null) return;
 
-  const items = [...event.dataTransfer.items].filter(item => item.kind === "file");
+  const items = [...event.dataTransfer.items]
+    .filter((item): item is Omit<DataTransferItem,"getAsFile"> & { getAsFile(): File; } => item.kind === "file");
   if (items.length === 0) return;
 
   const [item] = items;
-  const file = item.getAsFile()!;
+  const file = item.getAsFile();
   await openFile(file);
 });
 
@@ -76,18 +77,10 @@ formatOpener.addEventListener("click",() => {
   formatDialog.showModal();
 });
 
-// const demo = await fetch("../NBTify/test/nbt/ridiculous.nbt")
-//   .then(response => response.blob())
-//   .then(blob => new File([blob],"ridiculous.nbt"));
-
-// await openFile(demo);
-
-// formatOpener.click();
-
 /**
  * Attempts to read an NBT file, then open it in the editor.
 */
-export async function openFile(file: File){
+export async function openFile(file: File): Promise<void> {
   saver.disabled = true;
   formatOpener.disabled = true;
   editor.disabled = true;
@@ -118,7 +111,7 @@ export interface FormatOptionsCollection extends HTMLFormControlsCollection {
 /**
  * Updates the Format Options dialog to match the NBT file's metadata.
 */
-export function openOptions({ name, endian, compression, bedrockLevel }: NBTData){
+export function openOptions({ name, endian, compression, bedrockLevel }: NBTData): NBTDataOptions {
   const elements = formatForm.elements as FormatOptionsCollection;
 
   if (name !== null){
@@ -134,23 +127,21 @@ export function openOptions({ name, endian, compression, bedrockLevel }: NBTData
   elements.compression.value = (compression === null) ? "none" : compression;
   elements.bedrockLevel.value = (bedrockLevel === null) ? "" : `${bedrockLevel}`;
 
-  const options: NBTDataOptions = { name, endian, compression, bedrockLevel };
-  return options;
+  return { name, endian, compression, bedrockLevel };
 }
 
 /**
  * Attempts to create an NBTData object from a File object.
 */
-export async function readFile(file: File){
+export async function readFile<T extends RootTag = any>(file: File): Promise<NBTData<T> | null> {
   const buffer = await file.arrayBuffer();
   try {
-    const nbt = await read(buffer);
-    return nbt;
-  } catch (error: any){
-    if ((error as Error).message.includes("unread bytes remaining")){
+    return await read(buffer);
+  } catch (error: unknown){
+    if (error instanceof Error && error.message.includes("unread bytes remaining")){
       const reattempt = confirm(`${error}\n\nEncountered extra data at the end of the file. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
       if (!reattempt) return null;
-      return read(buffer,{ strict: false });
+      return read<T>(buffer,{ strict: false });
     } else {
       alert(error);
       return null;  
@@ -161,7 +152,7 @@ export async function readFile(file: File){
 /**
  * Turns the values from the Format Options dialog into the NBT file's metadata.
 */
-export function saveOptions(){
+export function saveOptions(): NBTDataOptions {
   const elements = formatForm.elements as FormatOptionsCollection;
 
   const name: Name = (elements.disableName.checked) ? null : elements.name.value;
@@ -169,14 +160,13 @@ export function saveOptions(){
   const compression: Compression = (elements.compression.value === "none") ? null : elements.compression.value as CompressionFormat;
   const bedrockLevel: BedrockLevel = (elements.bedrockLevel.value === "") ? null : new Int32(parseInt(elements.bedrockLevel.value));
 
-  const options: NBTDataOptions = { name, endian, compression, bedrockLevel };
-  return options;
+  return { name, endian, compression, bedrockLevel };
 }
 
 /**
  * Shows the save file picker to the user.
 */
-export function saveFile(file: File){
+export function saveFile(file: File): void {
   const anchor = document.createElement("a");
   const blob = URL.createObjectURL(file);
 
@@ -190,7 +180,7 @@ export function saveFile(file: File){
 /**
  * Shows the file share menu to the user.
 */
-export async function shareFile(file: File){
+export async function shareFile(file: File): Promise<void> {
   try {
     await navigator.share({ files: [file] });
   } catch (error){
@@ -201,8 +191,7 @@ export async function shareFile(file: File){
 /**
  * Creates a File object from an NBTData object.
 */
-export async function writeFile(nbt: NBTData){
+export async function writeFile(nbt: NBTData): Promise<File> {
   const data = await write(nbt);
-  const file = new File([data],name);
-  return file;
+  return new File([data],name);
 }

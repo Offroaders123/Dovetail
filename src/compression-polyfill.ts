@@ -1,4 +1,7 @@
-export const usePolyfill: boolean = (() => {
+/**
+ * Specifies whether the Compression Streams API must be polyfilled to run in the current browser.
+*/
+const usePolyfill: boolean = (() => {
   try {
     new CompressionStream("deflate-raw");
     new DecompressionStream("deflate-raw");
@@ -9,10 +12,7 @@ export const usePolyfill: boolean = (() => {
 })();
 
 if (usePolyfill){
-  const {
-    makeCompressionStream,
-    makeDecompressionStream
-  } = await import("compression-streams-polyfill/ponyfill");
+  const { makeCompressionStream, makeDecompressionStream } = await import("compression-streams-polyfill/ponyfill");
 
   const CompressionStream = makeCompressionStream(TransformStream);
   const DecompressionStream = makeDecompressionStream(TransformStream);
@@ -20,3 +20,5 @@ if (usePolyfill){
   globalThis.CompressionStream = CompressionStream as typeof globalThis.CompressionStream;
   globalThis.DecompressionStream = DecompressionStream as typeof globalThis.DecompressionStream;
 }
+
+export default usePolyfill;
