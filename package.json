@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc; vite build --base /Dovetail/ --target esnext",
-    "dev": "vite --host --port 5500 --base /Dovetail/",
-    "preview": "vite preview --host --port 5500 --base /Dovetail/"
+    "build": "tsc; vite build --base ./ --target esnext",
+    "dev": "vite --host --port 5500 --base ./",
+    "preview": "vite preview --host --port 5500 --base ./"
   },
   "dependencies": {
     "compression-streams-polyfill": "^0.1.3",

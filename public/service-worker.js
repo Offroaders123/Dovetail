@@ -1,6 +1,7 @@
-// @ts-check
 /// <reference no-default-lib="true"/>
-/// <reference types="better-typescript/worker"/>
+/// <reference types="better-typescript/worker.d.ts"/>
+
+var self = /** @type { ServiceWorkerGlobalScope } */ (/** @type { unknown } */ (globalThis));
 
 const version = "Dovetail v1.6.0";
 

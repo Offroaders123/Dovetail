@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
     "module": "ESNext",
     "moduleResolution": "NodeNext",
     "isolatedModules": true,
@@ -11,5 +13,8 @@
     "skipLibCheck": true,
     "strict": true,
     "noImplicitOverride": true
-  }
+  },
+  "exclude": [
+    "./dist"
+  ]
 }
