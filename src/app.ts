@@ -1,21 +1,33 @@
 import "./compression-polyfill.js";
-import { read, write, parse, stringify, Name, Endian, Compression, BedrockLevel, NBTData, NBTDataOptions, RootTag, Int32, CompressionFormat } from "nbtify";
+import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
+import type { Name, Endian, Compression, BedrockLevel, NBTDataOptions, RootTag } from "nbtify";
 
-if (window.isSecureContext){
-  await navigator.serviceWorker.register("./service-worker.js");
-}
+const platform = navigator.userAgentData?.platform ?? navigator.platform;
+const isiOSDevice = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
 
 const saver = document.querySelector<HTMLButtonElement>("#saver")!;
 const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
 const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
 const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
-const formatForm = document.querySelector<HTMLFormElement>("#formatForm")!;
+const formatForm = document.querySelector<HTMLFormElement & { readonly elements: FormatOptionsCollection; }>("#formatForm")!;
+
+export interface FormatOptionsCollection extends HTMLFormControlsCollection {
+  name: HTMLInputElement;
+  disableName: HTMLInputElement;
+  endian: RadioNodeList;
+  compression: RadioNodeList;
+  bedrockLevel: HTMLInputElement;
+}
 
 /**
  * The name of the currently opened file.
 */
 let name: string;
+
+if (window.isSecureContext){
+  await navigator.serviceWorker.register("./service-worker.js");
+}
 
 window.launchQueue?.setConsumer?.(async launchParams => {
   const { files: handles } = launchParams;
@@ -52,11 +64,6 @@ saver.addEventListener("click",async () => {
   const options = saveOptions();
   const nbtData = new NBTData(nbt,options);
   const file = await writeFile(nbtData);
-
-  const isiOSDevice = (
-    /^(Mac|iPhone|iPad|iPod)/i.test(navigator.userAgentData?.platform ?? navigator.platform) &&
-    typeof navigator.standalone === "boolean"
-  );
 
   if (isiOSDevice && window.isSecureContext){
     await shareFile(file);
@@ -100,19 +107,11 @@ export async function openFile(file: File): Promise<void> {
   editor.disabled = false;
 }
 
-export interface FormatOptionsCollection extends HTMLFormControlsCollection {
-  name: HTMLInputElement;
-  disableName: HTMLInputElement;
-  endian: RadioNodeList;
-  compression: RadioNodeList;
-  bedrockLevel: HTMLInputElement;
-}
-
 /**
  * Updates the Format Options dialog to match the NBT file's metadata.
 */
 export function openOptions({ name, endian, compression, bedrockLevel }: NBTData): NBTDataOptions {
-  const elements = formatForm.elements as FormatOptionsCollection;
+  const { elements } = formatForm;
 
   if (name !== null){
     elements.name.value = name;
@@ -153,7 +152,7 @@ export async function readFile<T extends RootTag = any>(file: File): Promise<NBT
  * Turns the values from the Format Options dialog into the NBT file's metadata.
 */
 export function saveOptions(): NBTDataOptions {
-  const elements = formatForm.elements as FormatOptionsCollection;
+  const { elements } = formatForm;
 
   const name: Name = (elements.disableName.checked) ? null : elements.name.value;
   const endian: Endian = elements.endian.value as Endian;
