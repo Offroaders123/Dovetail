@@ -9,12 +9,12 @@
   },
   "dependencies": {
     "compression-streams-polyfill": "^0.1.4",
-    "nbtify": "^1.35.2"
+    "nbtify": "^1.60.2"
   },
   "devDependencies": {
     "better-typescript": "^0.1.3",
     "new-javascript": "^0.3.4",
-    "typescript": "^5.1.3",
+    "typescript": "^5.1.6",
     "vite": "^4.3.9"
   }
 }

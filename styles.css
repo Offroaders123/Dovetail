@@ -100,3 +100,7 @@ form {
   gap: 0.75rem;
   flex-direction: column;
 }
+
+fieldset > div + div {
+  margin-top: 0.25em;
+}

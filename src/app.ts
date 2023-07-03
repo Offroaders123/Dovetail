@@ -1,6 +1,6 @@
 import "./compression-polyfill.js";
 import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
-import type { Name, Endian, Compression, BedrockLevel, NBTDataOptions, RootTag } from "nbtify";
+import type { Name, Endian, Compression, BedrockLevel, FormatOptions, RootTag } from "nbtify";
 
 const platform = navigator.userAgentData?.platform ?? navigator.platform;
 const isiOSDevice = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
@@ -110,7 +110,7 @@ export async function openFile(file: File): Promise<void> {
 /**
  * Updates the Format Options dialog to match the NBT file's metadata.
 */
-export function openOptions({ name, endian, compression, bedrockLevel }: NBTData): NBTDataOptions {
+export function openOptions({ name, endian, compression, bedrockLevel }: NBTData): FormatOptions {
   const { elements } = formatForm;
 
   if (name !== null){
@@ -143,7 +143,7 @@ export async function readFile<T extends RootTag = any>(file: File): Promise<NBT
       return read<T>(buffer,{ strict: false });
     } else {
       alert(error);
-      return null;  
+      return null;
     }
   }
 }
@@ -151,7 +151,7 @@ export async function readFile<T extends RootTag = any>(file: File): Promise<NBT
 /**
  * Turns the values from the Format Options dialog into the NBT file's metadata.
 */
-export function saveOptions(): NBTDataOptions {
+export function saveOptions(): FormatOptions {
   const { elements } = formatForm;
 
   const name: Name = (elements.disableName.checked) ? null : elements.name.value;
