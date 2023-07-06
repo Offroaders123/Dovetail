@@ -5,6 +5,23 @@ declare global {
     */
     readonly standalone: boolean;
   }
+
+  var saver: HTMLButtonElement;
+  var fileOpener: HTMLInputElement;
+  var formatOpener: HTMLButtonElement;
+  var editor: HTMLTextAreaElement;
+  var formatDialog: HTMLDialogElement;
+  var formatForm: HTMLFormElement & {
+    readonly elements: FormatOptionsCollection;
+  };
+}
+
+interface FormatOptionsCollection extends HTMLFormControlsCollection {
+  name: HTMLInputElement;
+  disableName: HTMLInputElement;
+  endian: RadioNodeList;
+  compression: RadioNodeList;
+  bedrockLevel: HTMLInputElement;
 }
 
 export {};

@@ -1,24 +1,10 @@
 import "./compression-polyfill.js";
 import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
-import type { Name, Endian, Compression, BedrockLevel, FormatOptions, RootTag } from "nbtify";
+
+import type { Name, Endian, Compression, BedrockLevel, FormatOptions } from "nbtify";
 
 const platform = navigator.userAgentData?.platform ?? navigator.platform;
 const isiOSDevice = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
-
-const saver = document.querySelector<HTMLButtonElement>("#saver")!;
-const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
-const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
-const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
-const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
-const formatForm = document.querySelector<HTMLFormElement & { readonly elements: FormatOptionsCollection; }>("#formatForm")!;
-
-export interface FormatOptionsCollection extends HTMLFormControlsCollection {
-  name: HTMLInputElement;
-  disableName: HTMLInputElement;
-  endian: RadioNodeList;
-  compression: RadioNodeList;
-  bedrockLevel: HTMLInputElement;
-}
 
 /**
  * The name of the currently opened file.
@@ -132,7 +118,7 @@ export function openOptions({ name, endian, compression, bedrockLevel }: NBTData
 /**
  * Attempts to create an NBTData object from a File object.
 */
-export async function readFile<T extends RootTag = any>(file: File): Promise<NBTData<T> | null> {
+export async function readFile(file: File): Promise<NBTData | null> {
   const buffer = await file.arrayBuffer();
   try {
     return await read(buffer);
@@ -140,7 +126,7 @@ export async function readFile<T extends RootTag = any>(file: File): Promise<NBT
     if (error instanceof Error && error.message.includes("unread bytes remaining")){
       const reattempt = confirm(`${error}\n\nEncountered extra data at the end of the file. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
       if (!reattempt) return null;
-      return read<T>(buffer,{ strict: false });
+      return read(buffer,{ strict: false });
     } else {
       alert(error);
       return null;
