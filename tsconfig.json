@@ -7,7 +7,9 @@
     "isolatedModules": true,
     "target": "ESNext",
     "types": [
-      "new-javascript"
+      "new-javascript",
+      "svelte",
+      "vite/client"
     ],
     "noEmit": true,
     "skipLibCheck": true,
