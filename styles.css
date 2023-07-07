@@ -33,6 +33,11 @@ header {
   border-right-width: env(safe-area-inset-right);
 }
 
+header > img {
+  margin: 4px;
+  height: 24px;
+}
+
 @media (display-mode: window-controls-overlay) {
   header {
     min-height: env(titlebar-area-height);

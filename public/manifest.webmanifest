@@ -18,6 +18,11 @@
       "src": "./app-512.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "./app-1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
     }
   ],
   "file_handlers": [

@@ -9,8 +9,9 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#445985">
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="16x16" href="./icon-16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="./icon-32.png">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<link rel="alternate icon" type="image/png" sizes="16x16" href="./icon-16.png">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="./icon-32.png">
 
 <link rel="stylesheet" href="./styles.css">
 
@@ -19,7 +20,7 @@
 <body>
 
 <header>
-  <img height="32" draggable="false" src="./app-512.png">
+  <img draggable="false" src="./icon.svg" alt="">
   <button onclick="fileOpener.click();">Open</button>
   <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old">
   <button id="saver" disabled>Save</button>
