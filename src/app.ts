@@ -10,6 +10,7 @@ const isiOSDevice = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigato
  * The name of the currently opened file.
 */
 let name: string;
+let fileHandle: FileSystemFileHandle | null = null;
 
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
@@ -20,8 +21,7 @@ window.launchQueue?.setConsumer?.(async launchParams => {
   if (handles.length === 0) return;
 
   const [handle] = handles;
-  const file = await handle.getFile();
-  await openFile(file);
+  await openFile(handle);
 });
 
 document.addEventListener("dragover",event => {
@@ -40,8 +40,7 @@ document.addEventListener("drop",async event => {
   if (items.length === 0) return;
 
   const [item] = items;
-  const file = item.getAsFile();
-  await openFile(file);
+  await openFile(item);
 });
 
 saver.addEventListener("click",async () => {
@@ -54,15 +53,16 @@ saver.addEventListener("click",async () => {
   if (isiOSDevice && window.isSecureContext){
     await shareFile(file);
   } else {
-    saveFile(file);
+    await saveFile(file);
   }
 });
 
 fileOpener.addEventListener("change",async () => {
-  if (fileOpener.files === null) return;
-  if (fileOpener.files.length === 0) return;
+  const { files } = fileOpener;
+  if (files === null) return;
+  if (files.length === 0) return;
 
-  const [file] = fileOpener.files;
+  const [file] = files;
   await openFile(file);
 });
 
@@ -73,10 +73,21 @@ formatOpener.addEventListener("click",() => {
 /**
  * Attempts to read an NBT file, then open it in the editor.
 */
-export async function openFile(file: File): Promise<void> {
+export async function openFile(file: File | FileSystemFileHandle | DataTransferFile): Promise<void> {
   saver.disabled = true;
   formatOpener.disabled = true;
   editor.disabled = true;
+
+  if (file instanceof DataTransferItem){
+    const handle = await file.getAsFileSystemHandle?.() ?? null;
+    file = handle === null || !(handle instanceof FileSystemFileHandle) ? file.getAsFile() : handle;
+  }
+  if ("getFile" in file){
+    fileHandle = file;
+    file = await file.getFile();
+  } else {
+    fileHandle = null;
+  }
 
   const nbt = await readFile(file);
   if (nbt === null) return;
@@ -124,11 +135,11 @@ export async function readFile(file: File): Promise<NBTData | null> {
     return await read(buffer);
   } catch (error: unknown){
     if (error instanceof Error && error.message.includes("unread bytes remaining")){
-      const reattempt = confirm(`${error}\n\nEncountered extra data at the end of the file. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
+      const reattempt = confirm(`${error}\n\nEncountered extra data at the end of '${file.name}'. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
       if (!reattempt) return null;
       return read(buffer,{ strict: false });
     } else {
-      alert(error);
+      alert(`Could not read '${file.name}' as NBT data.\n\n${error}`);
       return null;
     }
   }
@@ -149,9 +160,21 @@ export function saveOptions(): FormatOptions {
 }
 
 /**
- * Shows the save file picker to the user.
+ * Saves the file in-place to the file system, or shows the save file picker to the user.
 */
-export function saveFile(file: File): void {
+export async function saveFile(file: File): Promise<void> {
+  if (fileHandle !== null){
+    try {
+      const writable = await fileHandle.createWritable();
+      await writable.write(file);
+      await writable.close();
+      return;
+    } catch {
+      const saveManually = confirm(`'${file.name}' could not be saved in-place. Would you like to try saving it manually? It may go directly to your Downloads folder.`);
+      if (!saveManually) return;
+    }
+  }
+
   const anchor = document.createElement("a");
   const blob = URL.createObjectURL(file);
 
