@@ -36,7 +36,7 @@ document.addEventListener("drop",async event => {
   if (event.dataTransfer === null) return;
 
   const items = [...event.dataTransfer.items]
-    .filter((item): item is Omit<DataTransferItem,"getAsFile"> & { getAsFile(): File; } => item.kind === "file");
+    .filter((item): item is DataTransferFile => item.kind === "file");
   if (items.length === 0) return;
 
   const [item] = items;
