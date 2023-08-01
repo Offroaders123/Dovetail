@@ -44,8 +44,7 @@ document.addEventListener("drop",async event => {
 });
 
 saver.addEventListener("click",async () => {
-  const snbt = editor.value;
-  const nbt = parse(snbt);
+  const nbt = editor.value;
   const options = saveOptions();
   const nbtData = new NBTData(nbt,options);
   const file = await writeFile(nbtData);
@@ -70,13 +69,42 @@ formatOpener.addEventListener("click",() => {
   formatDialog.showModal();
 });
 
+const demo = fetch("./bigtest.nbt")
+  .then(response => response.blob())
+  .then(blob => new File([blob],"bigtest.nbt"));
+demo.then(console.log);
+demo.then(openFile);
+
+export class NBTTree extends HTMLElement {
+  #value: NBTData | null = null;
+
+  get value(): NBTData | null {
+    return this.#value;
+  }
+
+  set value(value: NBTData | null) {
+    console.log(value);
+    this.#value = value;
+    if (value !== null){
+      this.textContent = stringify(value);
+    }
+  }
+}
+
+window.customElements.define("nbt-tree",NBTTree);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "nbt-tree": NBTTree;
+  }
+}
+
 /**
  * Attempts to read an NBT file, then open it in the editor.
 */
 export async function openFile(file: File | FileSystemFileHandle | DataTransferFile): Promise<void> {
   saver.disabled = true;
   formatOpener.disabled = true;
-  editor.disabled = true;
 
   if (file instanceof DataTransferItem){
     const handle = await file.getAsFileSystemHandle?.() ?? null;
@@ -92,7 +120,6 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   const nbt = await readFile(file);
   if (nbt === null) return;
 
-  const snbt = stringify(nbt,{ space: 2 });
   openOptions(nbt);
   name = file.name;
 
@@ -100,8 +127,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 
   saver.disabled = false;
   formatOpener.disabled = false;
-  editor.value = snbt;
-  editor.disabled = false;
+  editor.value = nbt;
 }
 
 /**

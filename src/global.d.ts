@@ -1,3 +1,5 @@
+import type { NBTTree } from "./app.js";
+
 declare global {
   interface DataTransferFile extends DataTransferItem {
     readonly kind: "file";
@@ -15,7 +17,7 @@ declare global {
   var saver: HTMLButtonElement;
   var fileOpener: HTMLInputElement;
   var formatOpener: HTMLButtonElement;
-  var editor: HTMLTextAreaElement;
+  var editor: NBTTree;
   var formatDialog: HTMLDialogElement;
   var formatForm: HTMLFormElement & {
     readonly elements: FormatOptionsCollection;
