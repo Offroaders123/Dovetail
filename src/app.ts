@@ -18,9 +18,9 @@ if (window.isSecureContext){
 
 window.launchQueue?.setConsumer?.(async launchParams => {
   const { files: handles } = launchParams;
-  if (handles.length === 0) return;
-
   const [handle] = handles;
+  if (handle === undefined) return;
+
   await openFile(handle);
 });
 
@@ -37,9 +37,9 @@ document.addEventListener("drop",async event => {
 
   const items = [...event.dataTransfer.items]
     .filter((item): item is DataTransferFile => item.kind === "file");
-  if (items.length === 0) return;
-
   const [item] = items;
+  if (item === undefined) return;
+
   await openFile(item);
 });
 
@@ -60,9 +60,9 @@ saver.addEventListener("click",async () => {
 fileOpener.addEventListener("change",async () => {
   const { files } = fileOpener;
   if (files === null) return;
-  if (files.length === 0) return;
-
   const [file] = files;
+  if (file === undefined) return;
+
   await openFile(file);
 });
 

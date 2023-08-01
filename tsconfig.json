@@ -12,7 +12,9 @@
     "noEmit": true,
     "skipLibCheck": true,
     "strict": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true
   },
   "exclude": [
     "./dist"
