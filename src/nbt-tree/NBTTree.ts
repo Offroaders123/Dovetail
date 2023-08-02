@@ -1,11 +1,8 @@
 import { NBTData, TAG, getTagType } from "nbtify";
 import { NBTBranch } from "./NBTBranch.js";
 
-import type { RootTag, CompoundTag } from "nbtify";
-
 export class NBTTree extends HTMLElement {
-  #value: RootTag | null = null;
-  #root!: NBTBranch;
+  #value: NBTData | null = null;
 
   constructor() {
     super();
@@ -15,21 +12,15 @@ export class NBTTree extends HTMLElement {
   #render(): void {
     this.innerHTML = "";
     if (this.#value === null || getTagType(this.#value) !== TAG.COMPOUND) return;
-
-    for (const [name,entry] of Object.entries(this.#value as CompoundTag)){
-      this.append(new NBTBranch(name,entry));
-    }
+    this.append(new NBTBranch(this.#value));
   }
 
-  get value(): RootTag | null {
+  get value(): NBTData | null {
     return this.#value;
   }
 
-  set value(value: RootTag | NBTData | null) {
-    if (value instanceof NBTData){
-      value = value.data as RootTag;
-    }
-    console.log(value);
+  set value(value: NBTData | null) {
+    // console.log(value);
     this.#value = value;
     this.#render();
   }

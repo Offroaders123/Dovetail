@@ -58,7 +58,7 @@ input[type="file"] {
 
 nbt-tree {
   padding: 8px 12px;
-  flex-grow: 1;
+  height: 100%;
   display: flex;
   gap: 1em;
   flex-direction: column;
@@ -81,8 +81,29 @@ nbt-tree[disabled] {
 nbt-branch {
   display: flex;
   gap: 0.5em;
-  align-items: center;
   /* outline: 2px solid lime; */
+}
+
+nbt-branch:is(
+  [data-type="1"],
+  [data-type="2"],
+  [data-type="3"],
+  [data-type="4"],
+  [data-type="5"],
+  [data-type="6"],
+  [data-type="8"]
+) {
+  align-items: center;
+}
+
+nbt-branch:is(
+  [data-type="7"],
+  [data-type="9"],
+  [data-type="10"],
+  [data-type="11"],
+  [data-type="12"]
+) {
+  flex-direction: column;
 }
 
 nbt-branch::before {
@@ -93,6 +114,11 @@ nbt-branch::before {
   background-image: url("./nbt.png");
   background-repeat: no-repeat;
   background-size: 64px auto;
+  image-rendering: pixelated;
+}
+
+nbt-branch:not(nbt-branch > nbt-branch)::before {
+  display: none;
 }
 
 nbt-branch[data-type="1"]::before {
@@ -143,6 +169,9 @@ nbt-branch[data-type="12"]::before {
   background-position: 0 -48px;
 }
 
+:not(nbt-tree) > nbt-branch > nbt-branch {
+  margin-left: 16px;
+}
 
 ::placeholder {
   color: inherit;
