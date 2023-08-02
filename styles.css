@@ -57,24 +57,92 @@ input[type="file"] {
 }
 
 nbt-tree {
-  padding: 8px;
+  padding: 8px 12px;
   flex-grow: 1;
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
   font-size: 13px;
   font-family: ui-monospace, "Noto Sans Mono", "Cousine", monospace;
   line-height: 1.4;
   caret-color: currentColor;
-  background: #aaaaaa40;
   border: 0 solid transparent;
   border-left-width: env(safe-area-inset-left);
   border-right-width: env(safe-area-inset-right);
-  border-top: 1px solid #80808080;
   border-bottom-width: env(safe-area-inset-bottom);
   border-radius: 0;
+  overflow: auto;
 }
 
 nbt-tree[disabled] {
   opacity: unset;
 }
+
+nbt-branch {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  /* outline: 2px solid lime; */
+}
+
+nbt-branch::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background-image: url("./nbt.png");
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+}
+
+nbt-branch[data-type="1"]::before {
+  background-position: 0 0;
+}
+
+nbt-branch[data-type="2"]::before {
+  background-position: -16px -16px;
+}
+
+nbt-branch[data-type="3"]::before {
+  background-position: -48px 0;
+}
+
+nbt-branch[data-type="4"]::before {
+  background-position: 0 -16px;
+}
+
+nbt-branch[data-type="5"]::before {
+  background-position: -32px 0;
+}
+
+nbt-branch[data-type="6"]::before {
+  background-position: -16px 0;
+}
+
+nbt-branch[data-type="7"]::before {
+  background-position: 0 -32px;
+}
+
+nbt-branch[data-type="8"]::before {
+  background-position: -32px -16px;
+}
+
+nbt-branch[data-type="9"]::before {
+  background-position: -32px -32px;
+}
+
+nbt-branch[data-type="10"]::before {
+  background-position: -48px -16px;
+}
+
+nbt-branch[data-type="11"]::before {
+  background-position: -16px -32px;
+}
+
+nbt-branch[data-type="12"]::before {
+  background-position: 0 -48px;
+}
+
 
 ::placeholder {
   color: inherit;

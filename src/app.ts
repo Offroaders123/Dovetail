@@ -1,4 +1,5 @@
 import "./compression-polyfill.js";
+import "./nbt-tree/index.js";
 import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
 
 import type { Name, Endian, Compression, BedrockLevel, FormatOptions } from "nbtify";
@@ -44,7 +45,7 @@ document.addEventListener("drop",async event => {
 });
 
 saver.addEventListener("click",async () => {
-  const nbt = editor.value;
+  const nbt = editor.value!;
   const options = saveOptions();
   const nbtData = new NBTData(nbt,options);
   const file = await writeFile(nbtData);
@@ -74,30 +75,6 @@ const demo = fetch("./bigtest.nbt")
   .then(blob => new File([blob],"bigtest.nbt"));
 demo.then(console.log);
 demo.then(openFile);
-
-export class NBTTree extends HTMLElement {
-  #value: NBTData | null = null;
-
-  get value(): NBTData | null {
-    return this.#value;
-  }
-
-  set value(value: NBTData | null) {
-    console.log(value);
-    this.#value = value;
-    if (value !== null){
-      this.textContent = stringify(value);
-    }
-  }
-}
-
-window.customElements.define("nbt-tree",NBTTree);
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "nbt-tree": NBTTree;
-  }
-}
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
