@@ -56,8 +56,16 @@ input[type="file"] {
   display: none;
 }
 
+main {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+}
+
 nbt-tree {
   padding: 8px 12px;
+  position: absolute;
+  inset: 0;
   height: 100%;
   display: flex;
   gap: 1em;
