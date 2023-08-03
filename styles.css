@@ -118,6 +118,7 @@ details {
 
 summary {
   padding-left: 4px;
+  min-height: 1.85em;
   /* background: orange; */
   cursor: pointer;
 }
@@ -174,6 +175,10 @@ nbt-branch[data-type="11"] > details > summary::before, nbt-branch[data-type="11
 
 nbt-branch[data-type="12"] > details > summary::before, nbt-branch[data-type="12"] > label::before {
   background-position: 0 -48px;
+}
+
+nbt-tree input {
+  font: inherit;
 }
 
 ::placeholder {
