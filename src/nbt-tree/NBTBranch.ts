@@ -23,7 +23,7 @@ export class NBTBranch<T extends Tag = Tag> extends HTMLElement {
       case 5:
       case 6:
       case 8: {
-        this.innerText = `${this.#name!}: ${this.#value as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag}`;
+        this.innerHTML = `<label>${this.#name!}: <input value="${this.#value as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag}"></label>`;
         break;
       }
       case 7:
@@ -31,10 +31,15 @@ export class NBTBranch<T extends Tag = Tag> extends HTMLElement {
       case 10:
       case 11:
       case 12: {
-        if (this.#name !== null) this.append(this.#name);
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        if (this.#name !== null) summary.append(this.#name);
         for (const [name,entry] of Object.entries(this.#value as ByteArrayTag | ListTag | CompoundTag | IntArrayTag | LongArrayTag)){
-          this.append(new NBTBranch(entry,name));
+          details.append(new NBTBranch(entry,name));
         }
+        details.open = true;
+        details.append(summary);
+        this.append(details);
       }
     }
   }
