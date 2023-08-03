@@ -88,11 +88,20 @@ nbt-tree[disabled] {
 
 nbt-branch {
   display: flex;
-  gap: 0.5em;
   /* outline: 2px solid lime; */
 }
 
-nbt-branch:not(nbt-branch > :scope)::before {
+nbt-branch nbt-branch {
+  margin-left: 12px;
+}
+
+nbt-branch > label {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+nbt-branch > details > summary::before, nbt-branch > label::before {
   content: "";
   width: 16px;
   height: 16px;
@@ -103,51 +112,67 @@ nbt-branch:not(nbt-branch > :scope)::before {
   image-rendering: pixelated;
 }
 
-nbt-branch[data-type="1"]::before {
+details {
+  width: 100%;
+}
+
+summary {
+  padding-left: 4px;
+  /* background: orange; */
+  cursor: pointer;
+}
+
+nbt-branch > details > summary::before {
+  margin: 0 0.5em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+nbt-branch[data-type="1"] > details > summary::before, nbt-branch[data-type="1"] > label::before {
   background-position: 0 0;
 }
 
-nbt-branch[data-type="2"]::before {
+nbt-branch[data-type="2"] > details > summary::before, nbt-branch[data-type="2"] > label::before {
   background-position: -16px -16px;
 }
 
-nbt-branch[data-type="3"]::before {
+nbt-branch[data-type="3"] > details > summary::before, nbt-branch[data-type="3"] > label::before {
   background-position: -48px 0;
 }
 
-nbt-branch[data-type="4"]::before {
+nbt-branch[data-type="4"] > details > summary::before, nbt-branch[data-type="4"] > label::before {
   background-position: 0 -16px;
 }
 
-nbt-branch[data-type="5"]::before {
+nbt-branch[data-type="5"] > details > summary::before, nbt-branch[data-type="5"] > label::before {
   background-position: -32px 0;
 }
 
-nbt-branch[data-type="6"]::before {
+nbt-branch[data-type="6"] > details > summary::before, nbt-branch[data-type="6"] > label::before {
   background-position: -16px 0;
 }
 
-nbt-branch[data-type="7"]::before {
+nbt-branch[data-type="7"] > details > summary::before, nbt-branch[data-type="7"] > label::before {
   background-position: 0 -32px;
 }
 
-nbt-branch[data-type="8"]::before {
+nbt-branch[data-type="8"] > details > summary::before, nbt-branch[data-type="8"] > label::before {
   background-position: -32px -16px;
 }
 
-nbt-branch[data-type="9"]::before {
+nbt-branch[data-type="9"] > details > summary::before, nbt-branch[data-type="9"] > label::before {
   background-position: -32px -32px;
 }
 
-nbt-branch[data-type="10"]::before {
+nbt-branch[data-type="10"] > details > summary::before, nbt-branch[data-type="10"] > label::before {
   background-position: -48px -16px;
 }
 
-nbt-branch[data-type="11"]::before {
+nbt-branch[data-type="11"] > details > summary::before, nbt-branch[data-type="11"] > label::before {
   background-position: -16px -32px;
 }
 
-nbt-branch[data-type="12"]::before {
+nbt-branch[data-type="12"] > details > summary::before, nbt-branch[data-type="12"] > label::before {
   background-position: 0 -48px;
 }
 

@@ -31,14 +31,18 @@ export class NBTBranch<T extends Tag = Tag> extends HTMLElement {
       case 10:
       case 11:
       case 12: {
+        const value = this.#value as ByteArrayTag | ListTag | CompoundTag | IntArrayTag | LongArrayTag;
         const details = document.createElement("details");
         const summary = document.createElement("summary");
-        if (this.#name !== null) summary.append(this.#name);
-        for (const [name,entry] of Object.entries(this.#value as ByteArrayTag | ListTag | CompoundTag | IntArrayTag | LongArrayTag)){
+        if (this.#name !== null){
+          summary.append(`${this.#name} [${Object.keys(value).length}]`);
+        } else {
+          details.open = true;
+        }
+        details.append(summary);
+        for (const [name,entry] of Object.entries(value)){
           details.append(new NBTBranch(entry,name));
         }
-        details.open = true;
-        details.append(summary);
         this.append(details);
       }
     }
