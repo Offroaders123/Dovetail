@@ -23,7 +23,8 @@ export class NBTBranch<T extends Tag = Tag> extends HTMLElement {
       case 5:
       case 6:
       case 8: {
-        this.innerHTML = `<label>${this.#name!}: <input value="${this.#value as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag}"></label>`;
+        const value = this.#value as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag;
+        this.innerHTML = `<label>${this.#name!}: ${value}</label>`;
         break;
       }
       case 7:

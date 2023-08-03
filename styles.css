@@ -96,6 +96,7 @@ nbt-branch nbt-branch {
 }
 
 nbt-branch > label {
+  min-height: 1.85em;
   display: flex;
   gap: 0.5em;
   align-items: center;
