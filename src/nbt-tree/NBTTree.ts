@@ -1,4 +1,4 @@
-import { NBTData, TAG, getTagType } from "nbtify";
+import { NBTData } from "nbtify";
 import { NBTBranch } from "./NBTBranch.js";
 
 export class NBTTree extends HTMLElement {
@@ -11,7 +11,7 @@ export class NBTTree extends HTMLElement {
 
   #render(): void {
     this.innerHTML = "";
-    if (this.#value === null || getTagType(this.#value) !== TAG.COMPOUND) return;
+    if (this.#value === null) return;
     this.append(new NBTBranch(this.#value));
   }
 
