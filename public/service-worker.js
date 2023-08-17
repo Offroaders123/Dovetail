@@ -4,7 +4,7 @@
 var self = /** @type { ServiceWorkerGlobalScope } */ (/** @type { unknown } */ (globalThis));
 
 const NAME = "Dovetail";
-const VERSION = "v1.7.1";
+const VERSION = "v1.8.0";
 const CACHE_NAME = /** @type { const } */ (`${NAME} ${VERSION}`);
 
 self.addEventListener("activate",event => {

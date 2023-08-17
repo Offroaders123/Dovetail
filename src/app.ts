@@ -71,11 +71,11 @@ formatOpener.addEventListener("click",() => {
   formatDialog.showModal();
 });
 
-const demo = fetch("./bigtest.nbt")
-  .then(response => response.blob())
-  .then(blob => new File([blob],"bigtest.nbt"));
-demo.then(console.log);
-demo.then(openFile);
+// const demo = fetch("./bigtest.nbt")
+//   .then(response => response.blob())
+//   .then(blob => new File([blob],"bigtest.nbt"));
+// demo.then(console.log);
+// demo.then(openFile);
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
