@@ -32,7 +32,7 @@ export class NBTBranch<T extends Tag = Tag> extends HTMLElement {
       case 10:
       case 11:
       case 12: {
-        const value = this.#value as ByteArrayTag | ListTag | CompoundTag | IntArrayTag | LongArrayTag;
+        const value = this.#value as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag;
         const details = document.createElement("details");
         const summary = document.createElement("summary");
         if (this.#name !== null){
@@ -42,6 +42,7 @@ export class NBTBranch<T extends Tag = Tag> extends HTMLElement {
         }
         details.append(summary);
         for (const [name,entry] of Object.entries(value)){
+          if (entry === undefined) continue;
           details.append(new NBTBranch(entry,name));
         }
         this.append(details);

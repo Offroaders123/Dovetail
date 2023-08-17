@@ -17,7 +17,8 @@ declare global {
   var saver: HTMLButtonElement;
   var fileOpener: HTMLInputElement;
   var formatOpener: HTMLButtonElement;
-  var editor: NBTTree;
+  var editor: HTMLTextAreaElement;
+  var tree: NBTTree;
   var formatDialog: HTMLDialogElement;
   var formatForm: HTMLFormElement & {
     readonly elements: FormatOptionsCollection;

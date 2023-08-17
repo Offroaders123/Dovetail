@@ -45,7 +45,8 @@ document.addEventListener("drop",async event => {
 });
 
 saver.addEventListener("click",async () => {
-  const nbt = editor.value!;
+  const snbt = editor.value;
+  const nbt = parse(snbt);
   const options = saveOptions();
   const nbtData = new NBTData(nbt,options);
   const file = await writeFile(nbtData);
@@ -82,6 +83,7 @@ demo.then(openFile);
 export async function openFile(file: File | FileSystemFileHandle | DataTransferFile): Promise<void> {
   saver.disabled = true;
   formatOpener.disabled = true;
+  editor.disabled = true;
 
   if (file instanceof DataTransferItem){
     const handle = await file.getAsFileSystemHandle?.() ?? null;
@@ -97,6 +99,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   const nbt = await readFile(file);
   if (nbt === null) return;
 
+  const snbt = stringify(nbt,{ space: 2 });
   openOptions(nbt);
   name = file.name;
 
@@ -104,7 +107,8 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 
   saver.disabled = false;
   formatOpener.disabled = false;
-  editor.value = nbt;
+  editor.value = snbt;
+  editor.disabled = false;
 }
 
 /**
