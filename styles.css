@@ -31,6 +31,16 @@ header {
   border: 0 solid transparent;
   border-left-width: env(safe-area-inset-left);
   border-right-width: env(safe-area-inset-right);
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+header::-webkit-scrollbar {
+  display: none;
+}
+
+header > * {
+  flex-shrink: 0;
 }
 
 header > img {

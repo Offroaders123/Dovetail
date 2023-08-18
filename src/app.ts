@@ -19,7 +19,7 @@ if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
 }
 
-formatForm.elements.treeView.checked = showTreeView;
+treeViewToggle.checked = showTreeView;
 updateTreeView();
 
 window.launchQueue?.setConsumer?.(async launchParams => {
@@ -76,7 +76,7 @@ formatOpener.addEventListener("click",() => {
   formatDialog.showModal();
 });
 
-formatForm.elements.treeView.addEventListener("change",() => {
+treeViewToggle.addEventListener("change",() => {
   showTreeView = !showTreeView;
   updateTreeView();
 });
