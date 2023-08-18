@@ -1,22 +1,30 @@
 {
+  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
     "isolatedModules": true,
+    "resolveJsonModule": true,
     "target": "ESNext",
     "types": [
       "new-javascript"
     ],
     "noEmit": true,
-    "skipLibCheck": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true
   },
-  "exclude": [
-    "./dist"
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
