@@ -89,8 +89,7 @@ nbt-tree {
   position: absolute;
   inset: 0;
   height: 100%;
-  /* display: flex; */
-  display: none;
+  display: flex;
   gap: 1em;
   flex-direction: column;
   font-size: 13px;

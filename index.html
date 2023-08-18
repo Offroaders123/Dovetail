@@ -30,7 +30,7 @@
 <main>
 
 <textarea id="editor" disabled placeholder="NBT data will show here..." wrap="off" spellcheck="false" autocomplete="off" autocapitalize="none" autocorrect="off"></textarea>
-<nbt-tree id="tree"></nbt-tree>
+<nbt-tree id="treeView"></nbt-tree>
 
 <dialog id="formatDialog">
   <form id="formatForm" method="dialog">
@@ -97,6 +97,11 @@
         <code>(Uint32)</code>
       </label>
     </fieldset>
+
+    <label>
+      <input type="checkbox" name="treeView">
+      Tree View (Experimental)
+    </label>
   </form>
 </dialog>
 

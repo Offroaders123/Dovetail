@@ -18,7 +18,7 @@ declare global {
   var fileOpener: HTMLInputElement;
   var formatOpener: HTMLButtonElement;
   var editor: HTMLTextAreaElement;
-  var tree: NBTTree;
+  var treeView: NBTTree;
   var formatDialog: HTMLDialogElement;
   var formatForm: HTMLFormElement & {
     readonly elements: FormatOptionsCollection;
@@ -31,6 +31,7 @@ interface FormatOptionsCollection extends HTMLFormControlsCollection {
   endian: RadioNodeList;
   compression: RadioNodeList;
   bedrockLevel: HTMLInputElement;
+  treeView: HTMLInputElement;
 }
 
 export {};

@@ -7,6 +7,8 @@ import type { Name, Endian, Compression, BedrockLevel, FormatOptions } from "nbt
 const platform = navigator.userAgentData?.platform ?? navigator.platform;
 const isiOSDevice = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
 
+let showTreeView: boolean = false;
+
 /**
  * The name of the currently opened file.
 */
@@ -16,6 +18,9 @@ let fileHandle: FileSystemFileHandle | null = null;
 if (window.isSecureContext){
   await navigator.serviceWorker.register("./service-worker.js");
 }
+
+formatForm.elements.treeView.checked = showTreeView;
+updateTreeView();
 
 window.launchQueue?.setConsumer?.(async launchParams => {
   const { files: handles } = launchParams;
@@ -71,6 +76,11 @@ formatOpener.addEventListener("click",() => {
   formatDialog.showModal();
 });
 
+formatForm.elements.treeView.addEventListener("change",() => {
+  showTreeView = !showTreeView;
+  updateTreeView();
+});
+
 // const demo = fetch("./bigtest.nbt")
 //   .then(response => response.blob())
 //   .then(blob => new File([blob],"bigtest.nbt"));
@@ -109,6 +119,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   formatOpener.disabled = false;
   editor.value = snbt;
   editor.disabled = false;
+  treeView.value = nbt;
 }
 
 /**
@@ -209,4 +220,17 @@ export async function shareFile(file: File): Promise<void> {
 export async function writeFile(nbt: NBTData): Promise<File> {
   const data = await write(nbt);
   return new File([data],name);
+}
+
+/**
+ * Updates the visibility state of the editor's Tree View GUI.
+*/
+export function updateTreeView(): void {
+  if (showTreeView){
+    editor.style.display = "none";
+    treeView.style.removeProperty("display");
+  } else {
+    editor.style.removeProperty("display");
+    treeView.style.display = "none";
+  }
 }
