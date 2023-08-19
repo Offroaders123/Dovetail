@@ -1,12 +1,21 @@
 <script lang="ts">
+  import { Int32 } from "nbtify";
+
   import type { Name, Endian, Compression, BedrockLevel } from "nbtify";
 
   export let open: boolean = true;
 
   export let name: Name;
+  $: name, console.log(name);
+
   export let endian: Endian;
+  $: endian, console.log(endian);
+
   export let compression: Compression;
+  $: compression, console.log(compression);
+
   export let bedrockLevel: BedrockLevel;
+  $: bedrockLevel, console.log(bedrockLevel);
 
   $: rootNameDisabled = name === null;
 </script>
@@ -22,10 +31,10 @@
       <legend>Root Name</legend>
 
       <label>
-        <input type="text" name="name" placeholder="<empty>" autocomplete="off" disabled={rootNameDisabled} bind:value={name}>
+        <input type="text" name="name" placeholder="<empty>" autocomplete="off" disabled={rootNameDisabled}>
       </label>
       <label>
-        <input type="checkbox" name="disableName" bind:checked={rootNameDisabled}>
+        <input type="checkbox" name="disableName" bind:value={rootNameDisabled}>
         Disable
       </label>
     </fieldset>
@@ -72,7 +81,7 @@
       <legend>Bedrock Level</legend>
 
       <label>
-        <input type="number" name="bedrockLevel" placeholder="<false>" min="0" max="4294967295" bind:value={bedrockLevel}>
+        <input type="number" name="bedrockLevel" placeholder="<false>" min="0" max="4294967295">
         <code>(Uint32)</code>
       </label>
     </fieldset>
