@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "compression-streams-polyfill": "^0.1.4",
-    "nbtify": "^1.68.0"
+    "nbtify": "^1.69.420"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.5",
@@ -20,7 +20,7 @@
     "svelte": "^4.2.0",
     "svelte-check": "^3.5.0",
     "tslib": "^2.6.1",
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.2",
     "vite": "^4.4.9"
   }
 }
