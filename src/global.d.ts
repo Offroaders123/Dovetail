@@ -13,25 +13,6 @@ declare global {
     */
     readonly standalone: boolean;
   }
-
-  var saver: HTMLButtonElement;
-  var fileOpener: HTMLInputElement;
-  var formatOpener: HTMLButtonElement;
-  var treeViewToggle: HTMLInputElement;
-  var editor: HTMLTextAreaElement;
-  var treeView: NBTTree;
-  var formatDialog: HTMLDialogElement;
-  var formatForm: HTMLFormElement & {
-    readonly elements: FormatOptionsCollection;
-  };
-}
-
-interface FormatOptionsCollection extends HTMLFormControlsCollection {
-  name: HTMLInputElement;
-  disableName: HTMLInputElement;
-  endian: RadioNodeList;
-  compression: RadioNodeList;
-  bedrockLevel: HTMLInputElement;
 }
 
 export {};

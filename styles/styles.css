@@ -23,6 +23,7 @@ body > * {
   flex-shrink: 0;
 }
 
+/*
 header {
   padding: 0.5rem;
   display: flex;
@@ -120,7 +121,7 @@ nbt-tree[disabled] {
 
 nbt-branch {
   display: flex;
-  /* outline: 2px solid lime; */
+  /* outline: 2px solid lime; *\/
 }
 
 nbt-branch nbt-branch {
@@ -152,7 +153,7 @@ details {
 summary {
   padding-left: 4px;
   min-height: 1.85em;
-  /* background: orange; */
+  /* background: orange; *\/
   cursor: pointer;
 }
 
@@ -244,3 +245,4 @@ form {
 fieldset > div + div {
   margin-top: 0.25em;
 }
+*/
