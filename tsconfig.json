@@ -2,10 +2,9 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
-    "isolatedModules": true,
+    "module": "NodeNext",
     "target": "ESNext",
+    "isolatedModules": true,
     "types": [
       "new-javascript"
     ],
@@ -14,7 +13,10 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "allowUnreachableCode": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "exclude": [
     "./dist"
