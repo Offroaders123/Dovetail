@@ -1,18 +1,16 @@
 <script lang="ts">
-  import Icon from "/icon.svg";
+  import icon from "/icon.svg";
 
-  export let disabled: boolean = true;
+  export let disabled: boolean;
 
   let fileOpener: HTMLInputElement;
 </script>
 
 <header>
-  <img draggable="false" src={Icon} alt="">
-  <button on:click={() => fileOpener.click()}>Open</button>
+  <img draggable="false" src={icon} alt="">
+  <button on:click={() => fileOpener.click()}></button>
   <input bind:this={fileOpener} type="file" accept="application/octet-stream, .nbt, .dat, .dat_old">
-  <button {disabled} on:click={async () => {
-
-  }}>Save</button>
+  <button {disabled}>Save</button>
   <button {disabled}>Format Options...</button>
 </header>
 
