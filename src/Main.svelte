@@ -1,10 +1,7 @@
 <script lang="ts">
-  import Editor from "./Editor.svelte";
-
-  export let value: string;
-  export let disabled: boolean;
+  import FormatOptions from "./FormatOptions.svelte";
 </script>
 
 <main>
-  <Editor {value} {disabled}/>
+  <FormatOptions/>
 </main>
