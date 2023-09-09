@@ -111,6 +111,6 @@
   .grid-group {
     display: grid;
     gap: 0.25em;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: max-content max-content;
   }
 </style>
