@@ -6,7 +6,7 @@
 
 <dialog open>
   <form method="dialog">
-    <div class="header">
+    <div class="dialog-header">
       <h3>Format Options</h3>
       <button type="submit" aria-label="Close">✕</button>
     </div>
@@ -45,12 +45,12 @@
             value={value}
             checked={value === options.endian}
           />
-					{value}
+					{value.charAt(0).toUpperCase() + value.slice(1)}
         </label>
       {/each}
     </fieldset>
 
-    <fieldset>
+    <fieldset class="grid-group">
       <legend>Compression: {options.compression}</legend>
 
       {#each ["none","gzip","deflate","deflate-raw"] as value}
@@ -62,7 +62,13 @@
             checked={value === options.compression}
             bind:group={options.compression}
           />
-          {value}
+          {#if value === "none"}
+            None
+          {:else if value === "deflate"}
+            {value} (zlib)
+          {:else}
+            {value}
+          {/if}
         </label>
       {/each}
     </fieldset>
@@ -85,9 +91,26 @@
 </dialog>
 
 <style>
-  .header {
+  dialog {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .dialog-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  form {
+    display: flex;
+    gap: 0.75rem;
+    flex-direction: column;
+  }
+
+  .grid-group {
+    display: grid;
+    gap: 0.25em;
+    grid-template-columns: 1fr 1fr;
   }
 </style>
