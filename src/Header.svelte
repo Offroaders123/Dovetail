@@ -8,7 +8,7 @@
 
 <header>
   <img draggable="false" src={icon} alt="">
-  <button on:click={() => fileOpener.click()}></button>
+  <button on:click={() => fileOpener.click()}>Open</button>
   <input bind:this={fileOpener} type="file" accept="application/octet-stream, .nbt, .dat, .dat_old">
   <button {disabled}>Save</button>
   <button {disabled}>Format Options...</button>

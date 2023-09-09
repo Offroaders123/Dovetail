@@ -35,7 +35,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>Endian: {options.endian}</legend>
+      <legend>Endian</legend>
 
       {#each ["big","little"] as value}
         <label>
@@ -51,7 +51,7 @@
     </fieldset>
 
     <fieldset class="grid-group">
-      <legend>Compression: {options.compression}</legend>
+      <legend>Compression</legend>
 
       {#each ["none","gzip","deflate","deflate-raw"] as value}
         <label>

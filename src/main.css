@@ -22,3 +22,13 @@ body {
 body > * {
   flex-shrink: 0;
 }
+
+::placeholder {
+  color: inherit;
+  opacity: 0.55;
+  white-space: pre-wrap;
+}
+
+[disabled]::placeholder {
+  opacity: 0.5;
+}
