@@ -3,10 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc; vite build",
+    "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "preview": "vite preview"
   },
   "dependencies": {
     "compression-streams-polyfill": "^0.1.4",
@@ -14,12 +13,9 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.5",
-    "@tsconfig/svelte": "^5.0.0",
     "better-typescript": "^0.1.6",
     "new-javascript": "^0.3.5",
     "svelte": "^4.2.0",
-    "svelte-check": "^3.5.0",
-    "tslib": "^2.6.1",
     "typescript": "^5.2.2",
     "vite": "^4.4.9"
   }
