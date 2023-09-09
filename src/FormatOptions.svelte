@@ -1,21 +1,41 @@
 <script lang="ts">
-  import type { Compression } from "nbtify";
+  import type { FormatOptions } from "nbtify";
 
-  let compression: Compression = null;
+  export let options: Required<FormatOptions>;
 </script>
 
 <dialog open>
   <form method="dialog">
+    <div class="header">
+      <h3>Format Options</h3>
+      <button type="submit" aria-label="Close">✕</button>
+    </div>
+
     <fieldset>
-      <legend>Compression: {compression}</legend>
-      {#each ['none', 'gzip', 'deflate', 'deflate-raw'] as value}
+      <legend>Endian: {options.endian}</legend>
+      {#each ["big","little"] as value}
         <label>
           <input
             type="radio"
-            name="flavours"
+            name="endian"
             value={value}
-            checked={value === compression}
-            bind:group={compression}
+            checked={value === options.endian}
+          />
+					{value}
+        </label>
+      {/each}
+    </fieldset>
+
+    <fieldset>
+      <legend>Compression: {options.compression}</legend>
+      {#each ["none","gzip","deflate","deflate-raw"] as value}
+        <label>
+          <input
+            type="radio"
+            name="compression"
+            value={value}
+            checked={value === options.compression}
+            bind:group={options.compression}
           />
           {value}
         </label>
@@ -23,3 +43,11 @@
     </fieldset>
   </form>
 </dialog>
+
+<style>
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
