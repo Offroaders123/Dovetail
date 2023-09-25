@@ -8,12 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "compression-streams-polyfill": "^0.1.5",
-    "nbtify": "^1.69.420"
+    "compression-streams-polyfill": "^0.1.6",
+    "nbtify": "^1.75.0"
   },
   "devDependencies": {
     "better-typescript": "^0.1.6",
-    "new-javascript": "^0.3.5",
+    "new-javascript": "^0.3.6",
     "typescript": "^5.2.2",
     "vite": "^4.4.9"
   }
