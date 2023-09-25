@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { FormatOptions } from "nbtify";
+  import type { Format } from "nbtify";
 
-  export let options: Required<FormatOptions>;
+  export let options: Format;
 </script>
 
 <dialog open>

@@ -1,5 +1,3 @@
-import type { NBTTree } from "./nbt-tree/index.js";
-
 declare global {
   interface DataTransferFile extends DataTransferItem {
     readonly kind: "file";

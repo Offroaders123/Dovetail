@@ -2,9 +2,9 @@
   import Header from "./Header.svelte";
   import Main from "./Main.svelte";
 
-  import type { FormatOptions } from "nbtify";
+  import type { Format } from "nbtify";
 
-  let options: Required<FormatOptions> = {
+  let options: Format = {
     name: "",
     endian: "big",
     compression: null,

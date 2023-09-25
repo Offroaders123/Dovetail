@@ -1,17 +1,17 @@
 <script lang="ts">
   import Editor from "./Editor.svelte";
-  import FormatOptions2 from "./FormatOptions.svelte";
+  import FormatOptions from "./FormatOptions.svelte";
 
-  import type { FormatOptions } from "nbtify";
+  import type { Format } from "nbtify";
 
   export let value: string = "";
 
-  export let options: Required<FormatOptions>;
+  export let options: Format;
 </script>
 
 <main>
   <Editor {value} disabled={true} placeholder="NBT data will show here..."/>
-  <FormatOptions2 {options}/>
+  <FormatOptions {options}/>
 </main>
 
 <style>
