@@ -15,7 +15,7 @@ let showTreeView: boolean = false;
 let name: string;
 let fileHandle: FileSystemFileHandle | null = null;
 
-if (window.isSecureContext){
+if (window.isSecureContext && !import.meta.env.DEV){
   await navigator.serviceWorker.register("./service-worker.js");
 }
 

@@ -1,11 +1,11 @@
 /// <reference no-default-lib="true"/>
 /// <reference types="better-typescript/worker.d.ts"/>
 
-var self = /** @type { ServiceWorkerGlobalScope } */ (/** @type { unknown } */ (globalThis));
+declare var self: ServiceWorkerGlobalScope;
 
 const NAME = "Dovetail";
 const VERSION = "v1.8.4";
-const CACHE_NAME = /** @type { const } */ (`${NAME} ${VERSION}`);
+const CACHE_NAME = `${NAME} ${VERSION}`;
 
 self.addEventListener("activate",event => {
   event.waitUntil(removeOutdatedVersions());
@@ -17,10 +17,8 @@ self.addEventListener("fetch",event => {
 
 /**
  * Clears out old versions of the app from Cache Storage.
- * 
- * @returns { Promise<void> }
 */
-async function removeOutdatedVersions(){
+async function removeOutdatedVersions(): Promise<void> {
   const keys = await caches.keys();
 
   await Promise.all(keys.map(async key => {
@@ -38,11 +36,8 @@ async function removeOutdatedVersions(){
  * Matches a network request with it's cached counterpart from Cache Storage.
  * 
  * If it hasn't been cached yet, it will fetch the network for a response, cache a clone, then return the response.
- * 
- * @param { Request } request
- * @returns { Promise<Response> }
 */
-async function matchRequest(request){
+async function matchRequest(request: Request): Promise<Response> {
   let response = await caches.match(request);
   if (response !== undefined) return response;
 
@@ -54,12 +49,8 @@ async function matchRequest(request){
 
 /**
  * Adds a network request and response to Cache Storage.
- * 
- * @param { Request } request
- * @param { Response } response
- * @return { Promise<void> }
 */
-async function cacheRequest(request,response){
+async function cacheRequest(request: Request, response: Response): Promise<void> {
   const cache = await caches.open(CACHE_NAME);
   await cache.put(request,response.clone());
 }

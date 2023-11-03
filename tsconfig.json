@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "module": "NodeNext",
     "target": "ESNext",
     "isolatedModules": true,
     "types": [
-      "new-javascript"
+      "new-javascript",
+      "vite/client"
     ],
     "noEmit": true,
     "skipLibCheck": true,
@@ -17,8 +16,5 @@
     "allowUnreachableCode": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true
-  },
-  "exclude": [
-    "./dist"
-  ]
+  }
 }
