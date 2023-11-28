@@ -29,7 +29,7 @@
     {
       "action": "./",
       "accept": {
-        "application/octet-stream": [".nbt", ".dat", ".dat_old"]
+        "application/octet-stream": [".nbt", ".dat", ".dat_old", ".mcstructure", ".litematic", ".schem", ".schematic"]
       }
     }
   ]
