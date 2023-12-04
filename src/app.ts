@@ -4,8 +4,8 @@ import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
 
 import type { Name, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
-const platform = navigator.userAgentData?.platform ?? navigator.platform;
-const isiOSDevice = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
+const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
+const isiOSDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
 
 let showTreeView: boolean = false;
 
@@ -123,9 +123,10 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 }
 
 /**
- * Updates the Format Options dialog to match the NBT file's metadata.
+ * Updates the Format Options dialog to match an NBT file's format metadata.
 */
-export function openOptions({ name, endian, compression, bedrockLevel }: NBTData): Format {
+export function openOptions(format: Format): Format;
+export function openOptions({ name, endian, compression, bedrockLevel }: Format): Format {
   const { elements } = formatForm;
 
   if (name !== null){
