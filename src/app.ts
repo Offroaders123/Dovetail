@@ -1,5 +1,5 @@
 import "./compression-polyfill.js";
-import "./nbt-tree/index.js";
+import "./NBTTree.js";
 import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
 
 import type { Name, Endian, Compression, BedrockLevel, Format } from "nbtify";
@@ -7,7 +7,7 @@ import type { Name, Endian, Compression, BedrockLevel, Format } from "nbtify";
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
 const isiOSDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
 
-let showTreeView: boolean = false;
+let showTreeView: boolean = true;
 
 /**
  * The name of the currently opened file.
@@ -81,11 +81,11 @@ treeViewToggle.addEventListener("change",() => {
   updateTreeView();
 });
 
-// const demo = fetch("./bigtest.nbt")
-//   .then(response => response.blob())
-//   .then(blob => new File([blob],"bigtest.nbt"));
-// demo.then(console.log);
-// demo.then(openFile);
+const demo = fetch("./bigtest.nbt")
+  .then(response => response.blob())
+  .then(blob => new File([blob],"bigtest.nbt"));
+demo.then(console.log);
+demo.then(openFile);
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
@@ -96,8 +96,8 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   editor.disabled = true;
 
   if (file instanceof DataTransferItem){
-    const handle = await file.getAsFileSystemHandle?.() ?? null;
-    file = handle === null || !(handle instanceof FileSystemFileHandle) ? file.getAsFile() : handle;
+    const handle: FileSystemHandle | null = await file.getAsFileSystemHandle?.() ?? null;
+    file = handle instanceof FileSystemFileHandle ? handle : file.getAsFile();
   }
   if ("getFile" in file){
     fileHandle = file;

@@ -1,4 +1,4 @@
-import type { NBTTree } from "./nbt-tree/index.js";
+import type { NBTTree } from "./NBTTree.js";
 
 declare global {
   interface DataTransferFile extends DataTransferItem {
