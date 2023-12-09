@@ -50,16 +50,20 @@ document.addEventListener("drop",async event => {
 });
 
 saver.addEventListener("click",async () => {
-  const snbt = editor.value;
-  const nbt = parse(snbt);
-  const options = saveOptions();
-  const nbtData = new NBTData(nbt,options);
-  const file = await writeFile(nbtData);
-
-  if (isiOSDevice && window.isSecureContext){
-    await shareFile(file);
-  } else {
-    await saveFile(file);
+  try {
+    const snbt = editor.value;
+    const nbt = parse(snbt);
+    const options = saveOptions();
+    const nbtData = new NBTData(nbt,options);
+    const file = await writeFile(nbtData);
+  
+    if (isiOSDevice && window.isSecureContext){
+      await shareFile(file);
+    } else {
+      await saveFile(file);
+    }
+  } catch (error: unknown){
+    alert(`Could not save '${name}' as NBT data.\n\n${error}`);
   }
 });
 
