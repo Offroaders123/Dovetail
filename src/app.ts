@@ -5,9 +5,10 @@ import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
 import type { Name, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
-const isiOSDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && navigator.maxTouchPoints > 1;
+const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
+const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
 
-let showTreeView: boolean = true;
+let showTreeView: boolean = false;
 
 /**
  * The name of the currently opened file.
@@ -28,6 +29,33 @@ window.launchQueue?.setConsumer?.(async launchParams => {
   if (handle === undefined) return;
 
   await openFile(handle);
+});
+
+enum Shortcut {
+  Open = "ControlOrCommand+O",
+  Save = "ControlOrCommand+S"
+}
+
+document.addEventListener("keydown",event => {
+  let keys: Set<string> = new Set();
+  if (event.ctrlKey || event.metaKey) keys.add("ControlOrCommand");
+  if (event.altKey) keys.add("Alt");
+  if (event.shiftKey) keys.add("Shift");
+  if (event.key !== "Control" && event.key !== "Meta") keys.add(event.key.length === 1 ? event.key.toUpperCase() : event.key);
+
+  const combo: string = [...keys].join("+");
+  console.log(combo);
+  const isCombo: boolean = Object.values(Shortcut).some(shortcut => shortcut === combo);
+  console.log(isCombo);
+
+  if (!isCombo) return;
+  event.preventDefault();
+  if (event.repeat) return;
+
+  switch (combo as Shortcut){
+    case Shortcut.Open: return fileOpener.click();
+    case Shortcut.Save: return saver.click();
+  }
 });
 
 document.addEventListener("dragover",event => {
@@ -85,11 +113,11 @@ treeViewToggle.addEventListener("change",() => {
   updateTreeView();
 });
 
-const demo = fetch("./bigtest.nbt")
-  .then(response => response.blob())
-  .then(blob => new File([blob],"bigtest.nbt"));
-demo.then(console.log);
-demo.then(openFile);
+// const demo = fetch("./bigtest.nbt")
+//   .then(response => response.blob())
+//   .then(blob => new File([blob],"bigtest.nbt"));
+// demo.then(console.log);
+// demo.then(openFile);
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
