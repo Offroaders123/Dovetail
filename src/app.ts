@@ -5,7 +5,7 @@ import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
 import type { Name, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
-const isiOSDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && typeof navigator.standalone === "boolean";
+const isiOSDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform) && navigator.maxTouchPoints > 1;
 
 let showTreeView: boolean = true;
 
