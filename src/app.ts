@@ -44,9 +44,7 @@ document.addEventListener("keydown",event => {
   if (event.key !== "Control" && event.key !== "Meta") keys.add(event.key.length === 1 ? event.key.toUpperCase() : event.key);
 
   const combo: string = [...keys].join("+");
-  console.log(combo);
   const isCombo: boolean = Object.values(Shortcut).some(shortcut => shortcut === combo);
-  console.log(isCombo);
 
   if (!isCombo) return;
   event.preventDefault();

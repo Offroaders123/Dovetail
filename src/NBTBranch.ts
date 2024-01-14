@@ -27,8 +27,8 @@ export class NBTBranch<T extends Tag = Tag> extends HTMLElement {
         }
         const name = this.#name;
         const value = this.#value as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag;
-        console.log(`${name}:`,value);
-        this.innerHTML = `<label>${name satisfies string}: ${value.valueOf().toString() satisfies string}</label>`;
+        // console.log(`${name}:`,value);
+        this.innerHTML = `<span>${name satisfies string}: ${value.valueOf().toString() satisfies string}</span>`;
         break;
       }
       case TAG.BYTE_ARRAY:
