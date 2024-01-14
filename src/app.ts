@@ -1,8 +1,8 @@
 import "./compression-polyfill.js";
 import "./NBTTree.js";
-import { read, write, parse, stringify, NBTData, Int32 } from "nbtify";
+import { read, write, parse, stringify, NBTData } from "nbtify";
 
-import type { Name, Endian, Compression, BedrockLevel, Format } from "nbtify";
+import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
 const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
@@ -158,11 +158,11 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
  * Updates the Format Options dialog to match an NBT file's format metadata.
 */
 export function openOptions(format: Format): Format;
-export function openOptions({ name, endian, compression, bedrockLevel }: Format): Format {
+export function openOptions({ rootName, endian, compression, bedrockLevel }: Format): Format {
   const { elements } = formatForm;
 
-  if (name !== null){
-    elements.name.value = name;
+  if (rootName !== null){
+    elements.name.value = rootName;
     elements.name.disabled = false;
     elements.disableName.checked = false;
   } else {
@@ -174,7 +174,7 @@ export function openOptions({ name, endian, compression, bedrockLevel }: Format)
   elements.compression.value = (compression === null) ? "none" : compression;
   elements.bedrockLevel.value = (bedrockLevel === null) ? "" : `${bedrockLevel}`;
 
-  return { name, endian, compression, bedrockLevel };
+  return { rootName, endian, compression, bedrockLevel };
 }
 
 /**
@@ -202,12 +202,12 @@ export async function readFile(file: File): Promise<NBTData | null> {
 export function saveOptions(): Format {
   const { elements } = formatForm;
 
-  const name: Name = (elements.disableName.checked) ? null : elements.name.value;
+  const rootName: RootName = (elements.disableName.checked) ? null : elements.name.value;
   const endian: Endian = elements.endian.value as Endian;
   const compression: Compression = (elements.compression.value === "none") ? null : elements.compression.value as CompressionFormat;
-  const bedrockLevel: BedrockLevel = (elements.bedrockLevel.value === "") ? null : new Int32(parseInt(elements.bedrockLevel.value));
+  const bedrockLevel: BedrockLevel = (elements.bedrockLevel.value === "") ? null : parseInt(elements.bedrockLevel.value);
 
-  return { name, endian, compression, bedrockLevel };
+  return { rootName, endian, compression, bedrockLevel };
 }
 
 /**
