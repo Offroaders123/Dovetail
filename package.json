@@ -12,7 +12,6 @@
     "nbtify": "^1.85.0"
   },
   "devDependencies": {
-    "better-typescript": "^0.1.7",
     "new-javascript": "^0.4.2",
     "sass": "^1.70.0",
     "typescript": "^5.3.3",

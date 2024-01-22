@@ -1,7 +1,9 @@
 /// <reference no-default-lib="true"/>
-/// <reference types="better-typescript/worker.d.ts"/>
+/// <reference lib="ESNext"/>
+/// <reference lib="WebWorker"/>
 
 declare var self: ServiceWorkerGlobalScope;
+declare var clients: Clients;
 
 const NAME = "Dovetail";
 const VERSION = "v2.1.6";
