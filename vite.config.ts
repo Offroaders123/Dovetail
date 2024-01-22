@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import solid from "vite-plugin-solid";
 
 export default defineConfig({
   base: "./",
@@ -26,5 +27,6 @@ export default defineConfig({
   preview: {
     port: 5500,
     strictPort: true
-  }
+  },
+  plugins: [solid()]
 });
