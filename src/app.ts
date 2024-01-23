@@ -2,7 +2,28 @@ import "./compression-polyfill.js";
 import "./NBTTree.js";
 import { read, write, parse, stringify, NBTData } from "nbtify";
 
+import type { NBTTree } from "./NBTTree.js";
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
+
+// refs
+const saver = document.querySelector<HTMLButtonElement>("#saver")!;
+const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
+const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
+const treeViewToggle = document.querySelector<HTMLInputElement>("#treeViewToggle")!;
+const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
+const treeView = document.querySelector<NBTTree>("#treeView")!;
+const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
+const formatForm = document.querySelector<HTMLFormElement>("#formatForm")! as HTMLFormElement & {
+  readonly elements: FormatOptionsCollection;
+};
+
+interface FormatOptionsCollection extends HTMLFormControlsCollection {
+  name: HTMLInputElement;
+  disableName: HTMLInputElement;
+  endian: RadioNodeList;
+  compression: RadioNodeList;
+  bedrockLevel: HTMLInputElement;
+}
 
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
 const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
