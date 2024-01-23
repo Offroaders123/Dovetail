@@ -6,7 +6,10 @@ import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, Byte
 
 export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTData>; name?: Accessor<string | null>; }){
   const getName = createMemo<string | null>(() => props.name?.() ?? null);
-  const getValue = createMemo<T>(() => props.value() instanceof NBTData ? (props.value() as NBTData).data as T : props.value() as T);
+  const getValue = createMemo<T>(() => {
+    const value: T | NBTData = props.value();
+    return value instanceof NBTData ? value.data as T : value;
+  });
   const getType = createMemo(() => getTagType(getValue()));
 
   switch (getType()){
@@ -40,11 +43,11 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
         <div class="nbt-branch" data-type={getType()}>
           <details open={name === null}>
             <summary>{
-              name !== null
-                && <>{name}{
-                  type !== TAG.COMPOUND
-                    && ` [${Object.keys(value).length}]`
-                  }</>
+              name !== null &&
+                <>{name}{
+                  type !== TAG.COMPOUND &&
+                    ` [${Object.keys(value).length}]`
+                }</>
             }</summary>
             {
               Object.entries(value)

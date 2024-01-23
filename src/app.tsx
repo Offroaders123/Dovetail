@@ -34,8 +34,8 @@ export function App(){
 
   return (
     <>{
-      getShowTreeView()
-        && <NBTTree value={getTreeViewValue}/>
+      getShowTreeView() &&
+        <NBTTree value={getTreeViewValue}/>
     }</>
   );
 }
