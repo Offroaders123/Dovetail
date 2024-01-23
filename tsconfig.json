@@ -3,6 +3,8 @@
     "module": "NodeNext",
     "target": "ESNext",
     "isolatedModules": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "types": [
       "new-javascript",
       "vite/client"
