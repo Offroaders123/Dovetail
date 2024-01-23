@@ -27,7 +27,7 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
       const value = getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag;
       return (
         <div class="nbt-branch" data-type={getType()}>
-          <span>{name satisfies string}: {value.valueOf().toString() satisfies string}</span>
+          <span>{escapeString(name) satisfies string}: {escapeString(value.valueOf().toString()) satisfies string}</span>
         </div>
       );
     }
@@ -44,7 +44,7 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
           <details open={name === null}>
             <summary>{
               name !== null &&
-                <>{name}{
+                <>{escapeString(name)}{
                   type !== TAG.COMPOUND &&
                     ` [${Object.keys(value).length}]`
                 }</>
@@ -64,4 +64,14 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
       );
     }
   }
+}
+
+// Borrowed from NBTify's SNBT module for the time being
+function escapeString(value: string): string {
+  return value
+    .replaceAll("\b","\\b")
+    .replaceAll("\f","\\f")
+    .replaceAll("\n","\\n")
+    .replaceAll("\r","\\r")
+    .replaceAll("\t","\\t");
 }
