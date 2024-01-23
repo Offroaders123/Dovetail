@@ -1,35 +1,15 @@
+import { createSignal } from "solid-js";
 import { NBTData } from "nbtify";
 import { NBTBranch } from "./NBTBranch.js";
 
-export class NBTTree extends HTMLElement {
-  #value: NBTData | null = null;
+export function NBTTree(props: { defaultValue: NBTData | null; }){
+  const [getValue,_setValue] = createSignal(props.defaultValue);
+  const value = getValue();
 
-  constructor() {
-    super();
-    this.#render();
-  }
-
-  #render(): void {
-    this.innerHTML = "";
-    if (this.#value === null) return;
-    this.append(new NBTBranch(this.#value));
-  }
-
-  get value(): NBTData | null {
-    return this.#value;
-  }
-
-  set value(value: NBTData | null) {
-    // console.log(value);
-    this.#value = value;
-    this.#render();
-  }
-}
-
-window.customElements.define("nbt-tree",NBTTree);
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "nbt-tree": NBTTree;
-  }
+  return (
+    <div class="nbt-tree">{
+      value !== null
+        && <NBTBranch defaultValue={value}/>
+    }</div>
+  );
 }

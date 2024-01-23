@@ -1,9 +1,14 @@
 import "./compression-polyfill.js";
-import "./NBTTree.js";
+import { createEffect, createSignal } from "solid-js";
+import { render } from "solid-js/web";
+import { NBTTree } from "./NBTTree.js";
 import { read, write, parse, stringify, NBTData } from "nbtify";
 
-import type { NBTTree } from "./NBTTree.js";
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
+
+// global state
+const [getShowTreeView,setShowTreeView] = createSignal<boolean>(false);
+const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
 
 // refs
 const saver = document.querySelector<HTMLButtonElement>("#saver")!;
@@ -11,11 +16,28 @@ const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
 const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
 const treeViewToggle = document.querySelector<HTMLInputElement>("#treeViewToggle")!;
 const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
-const treeView = document.querySelector<NBTTree>("#treeView")!;
+/* const treeView = */
 const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
 const formatForm = document.querySelector<HTMLFormElement>("#formatForm")! as HTMLFormElement & {
   readonly elements: FormatOptionsCollection;
 };
+
+// Temporarily placed here, incrementally moving to JSX
+export function App(){
+  createEffect(() => {
+    if (getShowTreeView()){
+      editor.style.display = "none";
+    } else {
+      editor.style.removeProperty("display");
+    }
+  });
+
+  return (
+    <NBTTree defaultValue={getTreeViewValue()}/>
+  );
+}
+
+render(App,document.querySelector<HTMLDivElement>("#root")!);
 
 interface FormatOptionsCollection extends HTMLFormControlsCollection {
   name: HTMLInputElement;
@@ -29,7 +51,9 @@ const platform: string = navigator.userAgentData?.platform ?? navigator.platform
 const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
 const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
 
-let showTreeView: boolean = false;
+// vvv old global state vvv
+
+// let showTreeView: boolean = false;
 
 /**
  * The name of the currently opened file.
@@ -41,8 +65,7 @@ if (window.isSecureContext && !import.meta.env.DEV){
   await navigator.serviceWorker.register("./service-worker.js");
 }
 
-treeViewToggle.checked = showTreeView;
-updateTreeView();
+treeViewToggle.checked = getShowTreeView();
 
 window.launchQueue?.setConsumer?.(async launchParams => {
   const { files: handles } = launchParams;
@@ -128,15 +151,14 @@ formatOpener.addEventListener("click",() => {
 });
 
 treeViewToggle.addEventListener("change",() => {
-  showTreeView = !showTreeView;
-  updateTreeView();
+  setShowTreeView(!getShowTreeView());
 });
 
-// const demo = fetch("./bigtest.nbt")
-//   .then(response => response.blob())
-//   .then(blob => new File([blob],"bigtest.nbt"));
-// demo.then(console.log);
-// demo.then(openFile);
+const demo = fetch("./bigtest.nbt")
+  .then(response => response.blob())
+  .then(blob => new File([blob],"bigtest.nbt"));
+demo.then(console.log);
+demo.then(openFile);
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
@@ -170,7 +192,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   formatOpener.disabled = false;
   editor.value = snbt;
   editor.disabled = false;
-  treeView.value = nbt;
+  setTreeViewValue(nbt);
 }
 
 /**
@@ -272,17 +294,4 @@ export async function shareFile(file: File): Promise<void> {
 export async function writeFile(nbt: NBTData): Promise<File> {
   const data = await write(nbt);
   return new File([data],name);
-}
-
-/**
- * Updates the visibility state of the editor's Tree View GUI.
-*/
-export function updateTreeView(): void {
-  if (showTreeView){
-    editor.style.display = "none";
-    treeView.style.removeProperty("display");
-  } else {
-    editor.style.removeProperty("display");
-    treeView.style.display = "none";
-  }
 }
