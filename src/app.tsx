@@ -1,5 +1,5 @@
 import "./compression-polyfill.js";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import { render } from "solid-js/web";
 import { NBTTree } from "./NBTTree.js";
 import { read, write, parse, stringify, NBTData } from "nbtify";
@@ -16,10 +16,10 @@ const [getEditorValue,setEditorValue] = createSignal<string>("");
 const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(true);
 
 // refs
-const saver = document.querySelector<HTMLButtonElement>("#saver")!;
-const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
-const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
-const treeViewToggle = document.querySelector<HTMLInputElement>("#treeViewToggle")!;
+let saver: HTMLButtonElement;
+let fileOpener: HTMLInputElement;
+/* const formatOpener = */
+/* const treeViewToggle = */
 /* const editor = */
 /* const treeView = */
 let formatDialog: HTMLDialogElement;
@@ -29,13 +29,50 @@ let formatForm: HTMLFormElement & {
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
-  createEffect(() => {
-    const disabled = getEditorDisabled();
-    saver.disabled = disabled;
-    formatOpener.disabled = disabled;
-  });
-
   return (
+    <>
+
+    <header>
+      <img draggable="false" src="./img/icon.svg" alt=""/>
+      <button onclick={() => {
+        fileOpener.click();
+      }}>Open</button>
+      <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" ref={fileOpener} onclick={() => {
+        formatDialog.showModal();
+      }}/>
+      <button id="saver" disabled={getEditorDisabled()} ref={saver} onclick={async () => {
+        try {
+          const snbt = getEditorValue();
+          const nbt = parse(snbt);
+          const options = saveOptions();
+          const nbtData = new NBTData(nbt,options);
+          const file = await writeFile(nbtData);
+
+          if (isiOSDevice && window.isSecureContext){
+            await shareFile(file);
+          } else {
+            await saveFile(file);
+          }
+        } catch (error: unknown){
+          alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
+        }
+      }}>Save</button>
+      <button id="formatOpener" disabled={getEditorDisabled()} onchange={async () => {
+        const { files } = fileOpener;
+        if (files === null) return;
+        const [file] = files;
+        if (file === undefined) return;
+
+        await openFile(file);
+      }}>Format Options...</button>
+      <label style="margin-inline-start: auto;">
+        <input id="treeViewToggle" type="checkbox" checked={getEditorDisabled()} onchange={() => {
+          setShowTreeView(!getShowTreeView());
+        }}/>
+        Tree View
+      </label>
+    </header>
+
     <main>
       {
         getShowTreeView()
@@ -113,6 +150,8 @@ export function App(){
         </form>
       </dialog>
     </main>
+
+    </>
   );
 }
 
@@ -133,8 +172,6 @@ const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
 if (window.isSecureContext && !import.meta.env.DEV){
   await navigator.serviceWorker.register("./service-worker.js");
 }
-
-treeViewToggle.checked = getShowTreeView();
 
 window.launchQueue?.setConsumer?.(async launchParams => {
   const { files: handles } = launchParams;
@@ -186,41 +223,6 @@ document.addEventListener("drop",async event => {
   if (item === undefined) return;
 
   await openFile(item);
-});
-
-saver.addEventListener("click",async () => {
-  try {
-    const snbt = getEditorValue();
-    const nbt = parse(snbt);
-    const options = saveOptions();
-    const nbtData = new NBTData(nbt,options);
-    const file = await writeFile(nbtData);
-  
-    if (isiOSDevice && window.isSecureContext){
-      await shareFile(file);
-    } else {
-      await saveFile(file);
-    }
-  } catch (error: unknown){
-    alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
-  }
-});
-
-fileOpener.addEventListener("change",async () => {
-  const { files } = fileOpener;
-  if (files === null) return;
-  const [file] = files;
-  if (file === undefined) return;
-
-  await openFile(file);
-});
-
-formatOpener.addEventListener("click",() => {
-  formatDialog.showModal();
-});
-
-treeViewToggle.addEventListener("change",() => {
-  setShowTreeView(!getShowTreeView());
 });
 
 const demo = fetch("./bigtest.nbt")

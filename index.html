@@ -19,19 +19,6 @@
 
 <body>
 
-<header>
-  <img draggable="false" src="./img/icon.svg" alt="">
-  <button onclick="fileOpener.click();">Open</button>
-  <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic">
-  <button id="saver" disabled>Save</button>
-  <button id="formatOpener" disabled>Format Options...</button>
-  <label style="margin-inline-start: auto;">
-    <input id="treeViewToggle" type="checkbox">
-    Tree View
-  </label>
-</header>
-
-<!-- Temporarily placed here, incrementally moving to JSX -->
 <div id="root"></div>
 
 <script type="module" src="./src/app.tsx"></script>
