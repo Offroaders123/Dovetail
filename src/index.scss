@@ -66,6 +66,10 @@ input[type="file"] {
   display: none;
 }
 
+#root {
+  display: contents;
+}
+
 main {
   position: relative;
   flex-grow: 1;
@@ -229,7 +233,7 @@ dialog {
   user-select: none;
 }
 
-dialog-header {
+.dialog-header {
   display: flex;
   justify-content: space-between;
   align-items: center;

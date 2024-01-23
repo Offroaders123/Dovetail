@@ -12,34 +12,107 @@ const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
 /** The name of the currently opened file. */
 const [getName,setName] = createSignal<string>("");
 const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
+const [getEditorValue,setEditorValue] = createSignal<string>("");
+const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(true);
 
 // refs
 const saver = document.querySelector<HTMLButtonElement>("#saver")!;
 const fileOpener = document.querySelector<HTMLInputElement>("#fileOpener")!;
 const formatOpener = document.querySelector<HTMLButtonElement>("#formatOpener")!;
 const treeViewToggle = document.querySelector<HTMLInputElement>("#treeViewToggle")!;
-const editor = document.querySelector<HTMLTextAreaElement>("#editor")!;
+/* const editor = */
 /* const treeView = */
-const formatDialog = document.querySelector<HTMLDialogElement>("#formatDialog")!;
-const formatForm = document.querySelector<HTMLFormElement>("#formatForm")! as HTMLFormElement & {
+let formatDialog: HTMLDialogElement;
+let formatForm: HTMLFormElement & {
   readonly elements: FormatOptionsCollection;
 };
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
   createEffect(() => {
-    if (getShowTreeView()){
-      editor.style.display = "none";
-    } else {
-      editor.style.removeProperty("display");
-    }
+    const disabled = getEditorDisabled();
+    saver.disabled = disabled;
+    formatOpener.disabled = disabled;
   });
 
   return (
-    <>{
-      getShowTreeView() &&
-        <NBTTree value={getTreeViewValue}/>
-    }</>
+    <main>
+      {
+        getShowTreeView()
+          ? <NBTTree value={getTreeViewValue}/>
+          : <textarea id="editor" disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
+      }
+
+      <dialog id="formatDialog" ref={formatDialog}>
+        <form id="formatForm" method="dialog" ref={formatForm}>
+          <div class="dialog-header">
+            <h3>Format Options</h3>
+            <button type="submit" aria-label="Close">✕</button>
+          </div>
+
+          <fieldset>
+            <legend>Root Name</legend>
+
+            <label>
+              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on"/>
+            </label>
+            <label>
+              <input type="checkbox" name="disableName" onchange={function(this: HTMLInputElement){
+                formatForm.elements.name.disabled = this.checked;
+              }}/>
+              Disable
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Endian</legend>
+
+            <label>
+              <input type="radio" name="endian" value="big"/>
+              Big
+            </label>
+            <label>
+              <input type="radio" name="endian" value="little"/>
+              Little
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Compression</legend>
+
+            <div>
+              <label>
+                <input type="radio" name="compression" value="none"/>
+                None
+              </label>
+              <label>
+                <input type="radio" name="compression" value="gzip"/>
+                gzip
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="radio" name="compression" value="deflate"/>
+                deflate (zlib)
+              </label>
+              <label>
+                <input type="radio" name="compression" value="deflate-raw"/>
+                deflate-raw
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Bedrock Level</legend>
+
+            <label>
+              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295"/>
+              <code>(Uint32)</code>
+            </label>
+          </fieldset>
+        </form>
+      </dialog>
+    </main>
   );
 }
 
@@ -117,7 +190,7 @@ document.addEventListener("drop",async event => {
 
 saver.addEventListener("click",async () => {
   try {
-    const snbt = editor.value;
+    const snbt = getEditorValue();
     const nbt = parse(snbt);
     const options = saveOptions();
     const nbtData = new NBTData(nbt,options);
@@ -160,9 +233,7 @@ demo.then(openFile);
  * Attempts to read an NBT file, then open it in the editor.
 */
 export async function openFile(file: File | FileSystemFileHandle | DataTransferFile): Promise<void> {
-  saver.disabled = true;
-  formatOpener.disabled = true;
-  editor.disabled = true;
+  setEditorDisabled(true);
 
   if (file instanceof DataTransferItem){
     const handle: FileSystemHandle | null = await file.getAsFileSystemHandle?.() ?? null;
@@ -184,10 +255,8 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 
   document.title = `Dovetail - ${getName()}`;
 
-  saver.disabled = false;
-  formatOpener.disabled = false;
-  editor.value = snbt;
-  editor.disabled = false;
+  setEditorValue(snbt);
+  setEditorDisabled(false);
   setTreeViewValue(nbt);
 }
 

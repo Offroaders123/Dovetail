@@ -13,4 +13,10 @@ declare global {
   }
 }
 
+declare module "solid-js" {
+  export namespace JSX {
+    interface TextareaHTMLAttributes extends Pick<InputHTMLAttributes<HTMLInputElement>, "autocorrect"> {}
+  }
+}
+
 export {};
