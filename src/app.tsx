@@ -9,6 +9,9 @@ import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify
 // global state
 const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
 const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
+/** The name of the currently opened file. */
+const [getName,setName] = createSignal<string>("");
+const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
 
 // refs
 const saver = document.querySelector<HTMLButtonElement>("#saver")!;
@@ -53,16 +56,6 @@ interface FormatOptionsCollection extends HTMLFormControlsCollection {
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
 const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
 const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
-
-// vvv old global state vvv
-
-// let showTreeView: boolean = false;
-
-/**
- * The name of the currently opened file.
-*/
-let name: string;
-let fileHandle: FileSystemFileHandle | null = null;
 
 if (window.isSecureContext && !import.meta.env.DEV){
   await navigator.serviceWorker.register("./service-worker.js");
@@ -136,7 +129,7 @@ saver.addEventListener("click",async () => {
       await saveFile(file);
     }
   } catch (error: unknown){
-    alert(`Could not save '${name}' as NBT data.\n\n${error}`);
+    alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
   }
 });
 
@@ -176,10 +169,10 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
     file = handle instanceof FileSystemFileHandle ? handle : file.getAsFile();
   }
   if ("getFile" in file){
-    fileHandle = file;
+    setFileHandle(file);
     file = await file.getFile();
   } else {
-    fileHandle = null;
+    setFileHandle(null);
   }
 
   const nbt = await readFile(file);
@@ -187,9 +180,9 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 
   const snbt = stringify(nbt,{ space: 2 });
   openOptions(nbt);
-  name = file.name;
+  setName(file.name);
 
-  document.title = `Dovetail - ${name}`;
+  document.title = `Dovetail - ${getName()}`;
 
   saver.disabled = false;
   formatOpener.disabled = false;
@@ -258,6 +251,7 @@ export function saveOptions(): Format {
  * Saves the file in-place to the file system, or shows the save file picker to the user.
 */
 export async function saveFile(file: File): Promise<void> {
+  const fileHandle = getFileHandle();
   if (fileHandle !== null){
     try {
       const writable = await fileHandle.createWritable();
@@ -296,5 +290,5 @@ export async function shareFile(file: File): Promise<void> {
 */
 export async function writeFile(nbt: NBTData): Promise<File> {
   const data = await write(nbt);
-  return new File([data],name);
+  return new File([data],getName());
 }
