@@ -7,7 +7,7 @@ import { read, write, parse, stringify, NBTData } from "nbtify";
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
 // global state
-const [getShowTreeView,setShowTreeView] = createSignal<boolean>(false);
+const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
 const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
 
 // refs
@@ -33,7 +33,10 @@ export function App(){
   });
 
   return (
-    <NBTTree defaultValue={getTreeViewValue()}/>
+    <>{
+      getShowTreeView()
+        && <NBTTree value={getTreeViewValue}/>
+    }</>
   );
 }
 

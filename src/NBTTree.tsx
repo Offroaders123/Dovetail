@@ -1,15 +1,13 @@
-import { createSignal } from "solid-js";
 import { NBTData } from "nbtify";
 import { NBTBranch } from "./NBTBranch.js";
 
-export function NBTTree(props: { defaultValue: NBTData | null; }){
-  const [getValue,_setValue] = createSignal(props.defaultValue);
-  const value = getValue();
+import type { Accessor } from "solid-js";
 
+export function NBTTree(props: { value: Accessor<NBTData | null>; }){
   return (
     <div class="nbt-tree">{
-      value !== null
-        && <NBTBranch defaultValue={value}/>
+      props.value() !== null
+        && <NBTBranch value={() => props.value()!}/>
     }</div>
   );
 }

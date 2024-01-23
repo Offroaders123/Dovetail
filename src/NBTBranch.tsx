@@ -1,11 +1,12 @@
-import { createMemo, createSignal } from "solid-js";
+import { createMemo } from "solid-js";
 import { NBTData, TAG, getTagType, Int8, Int32 } from "nbtify";
 
+import type { Accessor } from "solid-js";
 import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, ByteArrayTag, StringTag, ListTag, CompoundTag, IntArrayTag, LongArrayTag } from "nbtify";
 
-export function NBTBranch<T extends Tag = Tag>(props: { defaultValue: T | NBTData; defaultName?: string | null; }){
-  const [getName,_setName] = createSignal<string | null>(props.defaultName ?? null);
-  const [getValue,_setValue] = createSignal<T>(props.defaultValue instanceof NBTData ? props.defaultValue.data as T : props.defaultValue);
+export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTData>; name?: Accessor<string | null>; }){
+  const getName = createMemo<string | null>(() => props.name?.() ?? null);
+  const getValue = createMemo<T>(() => props.value() instanceof NBTData ? (props.value() as NBTData).data as T : props.value() as T);
   const getType = createMemo(() => getTagType(getValue()));
 
   switch (getType()){
@@ -22,7 +23,7 @@ export function NBTBranch<T extends Tag = Tag>(props: { defaultValue: T | NBTDat
       }
       const value = getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag;
       return (
-        <div class="nbt-branch">
+        <div class="nbt-branch" data-type={getType()}>
           <span>{name satisfies string}: {value.valueOf().toString() satisfies string}</span>
         </div>
       );
@@ -36,13 +37,13 @@ export function NBTBranch<T extends Tag = Tag>(props: { defaultValue: T | NBTDat
       const type = getType();
       const value = getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag;
       return (
-        <div class="nbt-branch">
-          <details open={type !== TAG.LIST && type !== TAG.COMPOUND}>
+        <div class="nbt-branch" data-type={getType()}>
+          <details open={name === null}>
             <summary>{
               name !== null
                 && <>{name}{
                   type !== TAG.COMPOUND
-                    && `${Object.keys(value).length}`
+                    && ` [${Object.keys(value).length}]`
                   }</>
             }</summary>
             {
@@ -52,7 +53,7 @@ export function NBTBranch<T extends Tag = Tag>(props: { defaultValue: T | NBTDat
                   // This should be handled without needing to create a new wrapper object for each tag, just to render it.
                   if (type === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
                   if (type === TAG.INT_ARRAY) entry = new Int32(entry as number);
-                  return <NBTBranch defaultValue={entry} defaultName={entryName}/>;
+                  return <NBTBranch value={() => entry!} name={() => entryName}/>;
                 })
             }
           </details>
