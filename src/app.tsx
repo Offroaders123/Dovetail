@@ -3,6 +3,7 @@ import { createSignal } from "solid-js";
 import { render } from "solid-js/web";
 import { NBTTree } from "./NBTTree.js";
 import { read, write, parse, stringify, NBTData } from "nbtify";
+import icon from "/img/icon.svg";
 
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
@@ -33,7 +34,7 @@ export function App(){
     <>
 
     <header>
-      <img draggable="false" src="./img/icon.svg" alt=""/>
+      <img draggable="false" src={icon} alt=""/>
       <button onclick={() => {
         fileOpener.click();
       }}>Open</button>
