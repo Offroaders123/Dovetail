@@ -37,8 +37,13 @@ export function App(){
       <button onclick={() => {
         fileOpener.click();
       }}>Open</button>
-      <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" ref={fileOpener} onclick={() => {
-        formatDialog.showModal();
+      <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" ref={fileOpener} onchange={async () => {
+        const { files } = fileOpener;
+        if (files === null) return;
+        const [file] = files;
+        if (file === undefined) return;
+
+        await openFile(file);
       }}/>
       <button id="saver" disabled={getEditorDisabled()} ref={saver} onclick={async () => {
         try {
@@ -57,13 +62,8 @@ export function App(){
           alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
         }
       }}>Save</button>
-      <button id="formatOpener" disabled={getEditorDisabled()} onchange={async () => {
-        const { files } = fileOpener;
-        if (files === null) return;
-        const [file] = files;
-        if (file === undefined) return;
-
-        await openFile(file);
+      <button id="formatOpener" disabled={getEditorDisabled()} onclick={() => {
+        formatDialog.showModal();
       }}>Format Options...</button>
       <label style="margin-inline-start: auto;">
         <input id="treeViewToggle" type="checkbox" checked={getEditorDisabled()} onchange={() => {
