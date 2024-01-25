@@ -10,64 +10,61 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
     const value: T | NBTData = props.value();
     return value instanceof NBTData ? value.data as T : value;
   });
-  const getType = createMemo(() => getTagType(getValue()));
-
-  return <>{Object.keys(getValue()).map(key =>
-    <>{key}<br/></>
-  )}</>;
-
-  switch (getType()){
-    case TAG.BYTE:
-    case TAG.SHORT:
-    case TAG.INT:
-    case TAG.LONG:
-    case TAG.FLOAT:
-    case TAG.DOUBLE:
-    case TAG.STRING: {
-      const name = getName();
-      if (name === null){
-        throw new Error(`Tag type '${TAG[getType()]}' must have a name provided in reference to it's parent container.`);
-      }
-      const value = getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag;
-      return (
-        <div class="nbt-branch" data-type={getType()}>
-          <span>{escapeString(name) satisfies string}: {escapeString(value.valueOf().toString()) satisfies string}</span>
-        </div>
-      );
+  const getType = createMemo<TAG>(() => getTagType(getValue()));
+  const isContainerTag = createMemo<boolean>(() => {
+    switch (getType()){
+      case TAG.BYTE_ARRAY:
+      case TAG.LIST:
+      case TAG.COMPOUND:
+      case TAG.INT_ARRAY:
+      case TAG.LONG_ARRAY:
+        return true;
+      default:
+        return false;
     }
-    case TAG.BYTE_ARRAY:
-    case TAG.LIST:
-    case TAG.COMPOUND:
-    case TAG.INT_ARRAY:
-    case TAG.LONG_ARRAY: {
-      const name = getName();
-      const type = getType();
-      const value = getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag;
-      return (
-        <div class="nbt-branch" data-type={getType()}>
-          <details open={name === null}>
+  });
+
+  return (
+    <div class="nbt-branch" data-type={getType()}>{
+      isContainerTag()
+        ? <details open={getName() === null}>
             <summary>{
-              name !== null &&
-                <>{escapeString(name)}{
-                  type !== TAG.COMPOUND &&
-                    ` [${Object.keys(value).length}]`
+              getName() !== null &&
+                <>{
+                  escapeString(getName()!)
+                }{
+                  getType() !== TAG.COMPOUND &&
+                    ` [${Object.keys(getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag).length}]`
                 }</>
             }</summary>
             {
-              Object.entries(value)
+              Object.entries(getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag)
                 .map(([entryName,entry]) => {
                   if (entry === undefined) return;
                   // This should be handled without needing to create a new wrapper object for each tag, just to render it.
-                  if (type === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
-                  if (type === TAG.INT_ARRAY) entry = new Int32(entry as number);
+                  if (getType() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
+                  if (getType() === TAG.INT_ARRAY) entry = new Int32(entry as number);
                   return <NBTBranch value={() => entry!} name={() => entryName}/>;
                 })
             }
           </details>
-        </div>
-      );
-    }
-  }
+        : <span>{
+          escapeString(
+            getName() === null
+              ? ((): never => {
+                throw new Error(`Tag type '${TAG[getType()]}' must have a name provided in reference to it's parent container.`);
+              })()
+              : getName()!
+          ) satisfies string
+        }: {
+          escapeString(
+            (
+              getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag)
+              .valueOf().toString()
+            ) satisfies string
+        }</span>
+    }</div>
+  );
 }
 
 // Borrowed from NBTify's SNBT module for the time being

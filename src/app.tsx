@@ -67,7 +67,7 @@ export function App(){
         formatDialog.showModal();
       }}>Format Options...</button>
       <label style="margin-inline-start: auto;">
-        <input id="treeViewToggle" type="checkbox" checked={getEditorDisabled()} onchange={() => {
+        <input id="treeViewToggle" type="checkbox" checked={getShowTreeView()} onchange={() => {
           setShowTreeView(!getShowTreeView());
         }}/>
         Tree View
