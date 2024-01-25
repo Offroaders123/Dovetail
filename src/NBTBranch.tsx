@@ -27,42 +27,54 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
   return (
     <div class="nbt-branch" data-type={getType()}>{
       isContainerTag()
-        ? <details open={getName() === null}>
-            <summary>{
-              getName() !== null &&
-                <>{
-                  escapeString(getName()!)
-                }{
-                  getType() !== TAG.COMPOUND &&
-                    ` [${Object.keys(getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag).length}]`
-                }</>
-            }</summary>
-            {
-              Object.entries(getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag)
-                .map(([entryName,entry]) => {
-                  if (entry === undefined) return;
-                  // This should be handled without needing to create a new wrapper object for each tag, just to render it.
-                  if (getType() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
-                  if (getType() === TAG.INT_ARRAY) entry = new Int32(entry as number);
-                  return <NBTBranch value={() => entry!} name={() => entryName}/>;
-                })
-            }
-          </details>
-        : <span>{
-          escapeString(
-            getName() === null
-              ? ((): never => {
-                throw new Error(`Tag type '${TAG[getType()]}' must have a name provided in reference to it's parent container.`);
-              })()
-              : getName()!
-          ) satisfies string
-        }: {
-          escapeString(
-            (getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag)
-              .valueOf().toString()
-          ) satisfies string
-        }</span>
+        ? <NBTBranchContainerTag name={getName} type={getType} value={() => getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag}/>
+        : <NBTBranchValueTag name={getName} type={getType} value={() => getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag}/>
     }</div>
+  );
+}
+
+function NBTBranchContainerTag(props: { name: Accessor<string | null>; type: Accessor<TAG>; value: Accessor<ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag>; }){
+  return (
+    <details open={props.name() === null}>
+      <summary>{
+        props.name() !== null &&
+          <>{
+            escapeString(props.name()!)
+          }{
+            props.type() !== TAG.COMPOUND &&
+              ` [${Object.keys(props.value()).length}]`
+          }</>
+      }</summary>
+      {
+        Object.entries(props.value())
+          .map(([entryName,entry]) => {
+            if (entry === undefined) return;
+            // This should be handled without needing to create a new wrapper object for each tag, just to render it.
+            if (props.type() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
+            if (props.type() === TAG.INT_ARRAY) entry = new Int32(entry as number);
+            return <NBTBranch value={() => entry!} name={() => entryName}/>;
+          })
+      }
+    </details>
+  );
+}
+
+function NBTBranchValueTag(props: { name: Accessor<string | null>; type: Accessor<TAG>; value: Accessor<ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag>; }){
+  return (
+    <span>{
+      escapeString(
+        props.name() === null
+          ? ((): never => {
+            throw new Error(`Tag type '${TAG[props.type()]}' must have a name provided in reference to it's parent container.`);
+          })()
+          : props.name()!
+      ) satisfies string
+    }: {
+      escapeString(
+        props.value()
+          .valueOf().toString()
+      ) satisfies string
+    }</span>
   );
 }
 
