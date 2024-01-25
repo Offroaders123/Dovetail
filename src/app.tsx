@@ -1,5 +1,5 @@
 import "./compression-polyfill.js";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import { render } from "solid-js/web";
 import { NBTTree } from "./NBTTree.js";
 import { read, write, parse, stringify, NBTData } from "nbtify";
@@ -30,10 +30,6 @@ let formatForm: HTMLFormElement & {
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
-  // createEffect(() => {
-  //   console.log("tree-view-value:",getTreeViewValue());
-  // });
-
   return (
     <>
 
@@ -82,7 +78,7 @@ export function App(){
       {
         getShowTreeView()
           ? <NBTTree value={getTreeViewValue}/>
-          : 0 //<textarea id="editor" disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
+          : <textarea id="editor" disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
       }
 
       <dialog id="formatDialog" ref={formatDialog}>

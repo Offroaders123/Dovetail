@@ -1,20 +1,20 @@
-import { createEffect, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 import { NBTData, TAG, getTagType, Int8, Int32 } from "nbtify";
 
 import type { Accessor } from "solid-js";
 import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, ByteArrayTag, StringTag, ListTag, CompoundTag, IntArrayTag, LongArrayTag } from "nbtify";
 
 export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTData>; name?: Accessor<string | null>; }){
-  createEffect(() => {
-    if (typeof props.name?.() !== "string") console.log("tree-view-value:",props.value());
-  });
-
   const getName = createMemo<string | null>(() => props.name?.() ?? null);
   const getValue = createMemo<T>(() => {
     const value: T | NBTData = props.value();
     return value instanceof NBTData ? value.data as T : value;
   });
   const getType = createMemo(() => getTagType(getValue()));
+
+  return <>{Object.keys(getValue()).map(key =>
+    <>{key}<br/></>
+  )}</>;
 
   switch (getType()){
     case TAG.BYTE:
