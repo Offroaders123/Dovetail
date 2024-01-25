@@ -39,7 +39,7 @@ export function App(){
       <button onclick={() => {
         fileOpener.click();
       }}>Open</button>
-      <input id="fileOpener" type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" ref={fileOpener} onchange={async () => {
+      <input ref={fileOpener} type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" onchange={async () => {
         const { files } = fileOpener;
         if (files === null) return;
         const [file] = files;
@@ -47,7 +47,7 @@ export function App(){
 
         await openFile(file);
       }}/>
-      <button id="saver" disabled={getEditorDisabled()} ref={saver} onclick={async () => {
+      <button ref={saver} disabled={getEditorDisabled()} onclick={async () => {
         try {
           const snbt = getEditorValue();
           const nbt = parse(snbt);
@@ -64,11 +64,11 @@ export function App(){
           alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
         }
       }}>Save</button>
-      <button id="formatOpener" disabled={getEditorDisabled()} onclick={() => {
+      <button disabled={getEditorDisabled()} onclick={() => {
         formatDialog.showModal();
       }}>Format Options...</button>
       <label style="margin-inline-start: auto;">
-        <input id="treeViewToggle" type="checkbox" checked={getShowTreeView()} onchange={() => {
+        <input type="checkbox" checked={getShowTreeView()} onchange={() => {
           setShowTreeView(!getShowTreeView());
         }}/>
         Tree View
@@ -79,11 +79,11 @@ export function App(){
       {
         getShowTreeView()
           ? <NBTTree value={getTreeViewValue}/>
-          : <textarea id="editor" disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
+          : <textarea disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
       }
 
-      <dialog id="formatDialog" ref={formatDialog}>
-        <form id="formatForm" method="dialog" ref={formatForm}>
+      <dialog ref={formatDialog}>
+        <form ref={formatForm} method="dialog">
           <div class="dialog-header">
             <h3>Format Options</h3>
             <button type="submit" aria-label="Close">✕</button>

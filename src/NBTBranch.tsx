@@ -1,15 +1,12 @@
 import { createMemo } from "solid-js";
-import { NBTData, TAG, getTagType, Int8, Int32 } from "nbtify";
+import { TAG, getTagType, Int8, Int32 } from "nbtify";
 
 import type { Accessor } from "solid-js";
 import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, ByteArrayTag, StringTag, ListTag, CompoundTag, IntArrayTag, LongArrayTag } from "nbtify";
 
-export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTData>; name?: Accessor<string | null>; }){
+export function NBTBranch(props: { value: Accessor<Tag>; name?: Accessor<string | null>; }){
   const getName = createMemo<string | null>(() => props.name?.() ?? null);
-  const getValue = createMemo<T>(() => {
-    const value: T | NBTData = props.value();
-    return value instanceof NBTData ? value.data as T : value;
-  });
+  const getValue = props.value;
   const getType = createMemo<TAG>(() => getTagType(getValue()));
   const isContainerTag = createMemo<boolean>(() => {
     switch (getType()){
@@ -27,13 +24,15 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
   return (
     <div class="nbt-branch" data-type={getType()}>{
       isContainerTag()
-        ? <NBTBranchContainerTag name={getName} type={getType} value={() => getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag}/>
-        : <NBTBranchValueTag name={getName} type={getType} value={() => getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag}/>
+        ? <NBTBranchContainerTag name={getName} value={() => getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag}/>
+        : <NBTBranchValueTag name={getName} value={() => getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag}/>
     }</div>
   );
 }
 
-function NBTBranchContainerTag(props: { name: Accessor<string | null>; type: Accessor<TAG>; value: Accessor<ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag>; }){
+function NBTBranchContainerTag(props: { name: Accessor<string | null>; value: Accessor<ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag>; }){
+  const getType = createMemo<TAG>(() => getTagType(props.value()));
+
   return (
     <details open={props.name() === null}>
       <summary>{
@@ -41,7 +40,7 @@ function NBTBranchContainerTag(props: { name: Accessor<string | null>; type: Acc
           <>{
             escapeString(props.name()!)
           }{
-            props.type() !== TAG.COMPOUND &&
+            getType() !== TAG.COMPOUND &&
               ` [${Object.keys(props.value()).length}]`
           }</>
       }</summary>
@@ -50,8 +49,8 @@ function NBTBranchContainerTag(props: { name: Accessor<string | null>; type: Acc
           .map(([entryName,entry]) => {
             if (entry === undefined) return;
             // This should be handled without needing to create a new wrapper object for each tag, just to render it.
-            if (props.type() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
-            if (props.type() === TAG.INT_ARRAY) entry = new Int32(entry as number);
+            if (getType() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
+            if (getType() === TAG.INT_ARRAY) entry = new Int32(entry as number);
             return <NBTBranch value={() => entry!} name={() => entryName}/>;
           })
       }
@@ -59,13 +58,15 @@ function NBTBranchContainerTag(props: { name: Accessor<string | null>; type: Acc
   );
 }
 
-function NBTBranchValueTag(props: { name: Accessor<string | null>; type: Accessor<TAG>; value: Accessor<ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag>; }){
+function NBTBranchValueTag(props: { name: Accessor<string | null>; value: Accessor<ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag>; }){
+  const getType = createMemo<TAG>(() => getTagType(props.value()));
+
   return (
     <span>{
       escapeString(
         props.name() === null
           ? ((): never => {
-            throw new Error(`Tag type '${TAG[props.type()]}' must have a name provided in reference to it's parent container.`);
+            throw new Error(`Tag type '${TAG[getType()]}' must have a name provided in reference to it's parent container.`);
           })()
           : props.name()!
       ) satisfies string
