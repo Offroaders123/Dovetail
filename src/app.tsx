@@ -4,6 +4,7 @@ import { render } from "solid-js/web";
 import { NBTTree } from "./NBTTree.js";
 import { read, write, parse, stringify, NBTData } from "nbtify";
 import icon from "/img/icon.svg";
+import "./index.scss";
 
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 

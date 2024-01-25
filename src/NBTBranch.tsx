@@ -58,10 +58,9 @@ export function NBTBranch<T extends Tag = Tag>(props: { value: Accessor<T | NBTD
           ) satisfies string
         }: {
           escapeString(
-            (
-              getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag)
+            (getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag)
               .valueOf().toString()
-            ) satisfies string
+          ) satisfies string
         }</span>
     }</div>
   );
