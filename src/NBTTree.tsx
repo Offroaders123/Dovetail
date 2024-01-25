@@ -10,7 +10,7 @@ export function NBTTree(props: { value: Accessor<NBTData | null>; }){
 
   return (
     <div class="nbt-tree">{
-      props.value() !== null &&
+      getValue() !== null &&
         <NBTBranch value={() => getValue()!}/>
     }</div>
   );

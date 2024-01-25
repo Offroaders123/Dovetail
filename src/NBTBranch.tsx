@@ -4,10 +4,14 @@ import { TAG, getTagType, Int8, Int32 } from "nbtify";
 import type { Accessor } from "solid-js";
 import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, ByteArrayTag, StringTag, ListTag, CompoundTag, IntArrayTag, LongArrayTag } from "nbtify";
 
-export function NBTBranch(props: { value: Accessor<Tag>; name?: Accessor<string | null>; }){
+export interface NBTBranchProps {
+  name?: Accessor<string | null>;
+  value: Accessor<Tag>;
+}
+
+export function NBTBranch(props: NBTBranchProps){
   const getName = createMemo<string | null>(() => props.name?.() ?? null);
-  const getValue = props.value;
-  const getType = createMemo<TAG>(() => getTagType(getValue()));
+  const getType = createMemo<TAG>(() => getTagType(props.value()));
   const isContainerTag = createMemo<boolean>(() => {
     switch (getType()){
       case TAG.BYTE_ARRAY:
@@ -24,13 +28,20 @@ export function NBTBranch(props: { value: Accessor<Tag>; name?: Accessor<string 
   return (
     <div class="nbt-branch" data-type={getType()}>{
       isContainerTag()
-        ? <NBTBranchContainerTag name={getName} value={() => getValue() as ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag}/>
-        : <NBTBranchValueTag name={getName} value={() => getValue() as ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag}/>
+        ? <ContainerView name={getName} value={() => props.value() as ContainerTag}/>
+        : <PrimitiveView name={getName} value={() => props.value() as PrimitiveTag}/>
     }</div>
   );
 }
 
-function NBTBranchContainerTag(props: { name: Accessor<string | null>; value: Accessor<ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag>; }){
+type ContainerTag = ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag;
+
+interface ContainerViewProps {
+  name: Accessor<string | null>;
+  value: Accessor<ContainerTag>;
+}
+
+function ContainerView(props: ContainerViewProps){
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
@@ -51,30 +62,34 @@ function NBTBranchContainerTag(props: { name: Accessor<string | null>; value: Ac
             // This should be handled without needing to create a new wrapper object for each tag, just to render it.
             if (getType() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
             if (getType() === TAG.INT_ARRAY) entry = new Int32(entry as number);
-            return <NBTBranch value={() => entry!} name={() => entryName}/>;
+            return <NBTBranch name={() => entryName} value={() => entry!}/>;
           })
       }
     </details>
   );
 }
 
-function NBTBranchValueTag(props: { name: Accessor<string | null>; value: Accessor<ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag>; }){
-  const getType = createMemo<TAG>(() => getTagType(props.value()));
+type PrimitiveTag = ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag;
+
+interface PrimitiveViewProps<T extends PrimitiveTag> {
+  name: Accessor<string | null>;
+  value: Accessor<T>;
+}
+
+function PrimitiveView<T extends PrimitiveTag>(props: PrimitiveViewProps<T>){
+  const getName = createMemo<string>(() => {
+    const name = props.name();
+    if (name === null){
+      throw new Error(`Tag type '${TAG[getTagType(props.value())]}' must have a name provided in reference to it's parent container.`);
+    }
+    return name;
+  });
 
   return (
     <span>{
-      escapeString(
-        props.name() === null
-          ? ((): never => {
-            throw new Error(`Tag type '${TAG[getType()]}' must have a name provided in reference to it's parent container.`);
-          })()
-          : props.name()!
-      ) satisfies string
+      escapeString(getName())
     }: {
-      escapeString(
-        props.value()
-          .valueOf().toString()
-      ) satisfies string
+      escapeString(props.value().valueOf().toString() satisfies string)
     }</span>
   );
 }
