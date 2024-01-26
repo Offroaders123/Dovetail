@@ -109,12 +109,32 @@ function Main(props: MainProps){
           : <textarea disabled={props.getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={props.getEditorValue()}></textarea>
       }
 
-      <FormatOptions/>
+      <FormatOptions
+        getRootName={getRootName}
+        setRootName={setRootName}
+        getEndian={getEndian}
+        setEndian={setEndian}
+        getCompression={getCompression}
+        setCompression={setCompression}
+        getBedrockLevel={getBedrockLevel}
+        setBedrockLevel={setBedrockLevel}
+      />
     </main>
   );
 }
 
-function FormatOptions(){
+interface FormatOptionsProps {
+  getRootName: Accessor<RootName>;
+  setRootName: Setter<RootName>;
+  getEndian: Accessor<Endian>;
+  setEndian: Setter<Endian>;
+  getCompression: Accessor<Compression>;
+  setCompression: Setter<Compression>;
+  getBedrockLevel: Accessor<BedrockLevel>;
+  setBedrockLevel: Setter<BedrockLevel>;
+}
+
+function FormatOptions(props: FormatOptionsProps){
   return (
       <dialog ref={formatDialog}>
         <form method="dialog">
@@ -127,10 +147,10 @@ function FormatOptions(){
             <legend>Root Name</legend>
 
             <label>
-              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on" disabled={getRootName() === null} value={getRootName() === null ? "" : getRootName()!} onchange={event => setRootName(event.currentTarget.value)}/>
+              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on" disabled={props.getRootName() === null} value={props.getRootName() === null ? "" : props.getRootName()!} onchange={event => props.setRootName(event.currentTarget.value)}/>
             </label>
             <label>
-              <input type="checkbox" name="disableName" checked={getRootName() === null} onchange={event => setRootName(event.currentTarget.checked ? null : "")}/>
+              <input type="checkbox" name="disableName" checked={props.getRootName() === null} onchange={event => props.setRootName(event.currentTarget.checked ? null : "")}/>
               Disable
             </label>
           </fieldset>
@@ -139,11 +159,11 @@ function FormatOptions(){
             <legend>Endian</legend>
 
             <label>
-              <input type="radio" name="endian" value="big" checked={getEndian() === "big"} onchange={() => setEndian("big")}/>
+              <input type="radio" name="endian" value="big" checked={props.getEndian() === "big"} onchange={() => props.setEndian("big")}/>
               Big
             </label>
             <label>
-              <input type="radio" name="endian" value="little" checked={getEndian() === "little"} onchange={() => setEndian("little")}/>
+              <input type="radio" name="endian" value="little" checked={props.getEndian() === "little"} onchange={() => props.setEndian("little")}/>
               Little
             </label>
           </fieldset>
@@ -153,21 +173,21 @@ function FormatOptions(){
 
             <div>
               <label>
-                <input type="radio" name="compression" value="none" checked={getCompression() === null} onchange={() => setCompression(null)}/>
+                <input type="radio" name="compression" value="none" checked={props.getCompression() === null} onchange={() => props.setCompression(null)}/>
                 None
               </label>
               <label>
-                <input type="radio" name="compression" value="gzip" checked={getCompression() === "gzip"} onchange={() => setCompression("gzip")}/>
+                <input type="radio" name="compression" value="gzip" checked={props.getCompression() === "gzip"} onchange={() => props.setCompression("gzip")}/>
                 gzip
               </label>
             </div>
             <div>
               <label>
-                <input type="radio" name="compression" value="deflate" checked={getCompression() === "deflate"} onchange={() => setCompression("deflate")}/>
+                <input type="radio" name="compression" value="deflate" checked={props.getCompression() === "deflate"} onchange={() => props.setCompression("deflate")}/>
                 deflate (zlib)
               </label>
               <label>
-                <input type="radio" name="compression" value="deflate-raw" checked={getCompression() === "deflate-raw"} onchange={() => setCompression("deflate-raw")}/>
+                <input type="radio" name="compression" value="deflate-raw" checked={props.getCompression() === "deflate-raw"} onchange={() => props.setCompression("deflate-raw")}/>
                 deflate-raw
               </label>
             </div>
@@ -177,7 +197,7 @@ function FormatOptions(){
             <legend>Bedrock Level</legend>
 
             <label>
-              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" value={getBedrockLevel() === null ? "" : getBedrockLevel()!} onchange={event => setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}/>
+              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!} onchange={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}/>
               <code>(Uint32)</code>
             </label>
           </fieldset>
