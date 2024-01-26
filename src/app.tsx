@@ -45,10 +45,12 @@ const setFormat = (format: Format): Format => {
 // refs
 // let saver: HTMLButtonElement;
 // let fileOpener: HTMLInputElement;
-let formatDialog: HTMLDialogElement;
+// let formatDialog: HTMLDialogElement;
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
+  const [getFormatDialog,setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
+
   return (
     <>
 
@@ -59,7 +61,7 @@ export function App(){
       setShowTreeView={setShowTreeView}
       openFile={async () => await openFile(null)}
       saveFile={async () => await saveFile(null,getFileHandle())}
-      showFormatDialog={() => formatDialog.showModal()}
+      showFormatDialog={() => getFormatDialog()?.showModal()}
     />
 
     <Main getEditorDisabled={getEditorDisabled} getEditorValue={getEditorValue} setEditorValue={setEditorValue} getShowTreeView={getShowTreeView} getTreeViewValue={getTreeViewValue}/>
@@ -73,6 +75,7 @@ export function App(){
         setCompression={setCompression}
         getBedrockLevel={getBedrockLevel}
         setBedrockLevel={setBedrockLevel}
+        setFormatDialog={setFormatDialog}
       />
 
     </>
@@ -133,11 +136,12 @@ interface FormatOptionsProps {
   setCompression: Setter<Compression>;
   getBedrockLevel: Accessor<BedrockLevel>;
   setBedrockLevel: Setter<BedrockLevel>;
+  setFormatDialog: Setter<HTMLDialogElement | null>;
 }
 
 function FormatOptions(props: FormatOptionsProps){
   return (
-      <dialog ref={formatDialog}>
+      <dialog ref={props.setFormatDialog}>
         <form method="dialog">
           <div class="dialog-header">
             <h3>Format Options</h3>
