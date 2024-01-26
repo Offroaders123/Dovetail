@@ -42,7 +42,7 @@ const setFormat = (format: Format): Format => {
 }
 
 // refs
-let saver: HTMLButtonElement;
+// let saver: HTMLButtonElement;
 // let fileOpener: HTMLInputElement;
 let formatDialog: HTMLDialogElement;
 
@@ -64,23 +64,7 @@ function Header(){
     <header>
       <img draggable="false" src={icon} alt=""/>
       <button onclick={async () => await openFile(null)}>Open</button>
-      <button ref={saver} disabled={getEditorDisabled()} onclick={async () => {
-        try {
-          const snbt = getEditorValue();
-          const nbt = parse(snbt);
-          const options = getFormat();
-          const nbtData = new NBTData(nbt,options);
-          const file = await writeFile(nbtData,getName());
-
-          if (isiOSDevice && window.isSecureContext){
-            await shareFile(file);
-          } else {
-            await saveFile(file,getFileHandle());
-          }
-        } catch (error: unknown){
-          alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
-        }
-      }}>Save</button>
+      <button disabled={getEditorDisabled()} onclick={async () => await saveFile(null,getFileHandle())}>Save</button>
       <button disabled={getEditorDisabled()} onclick={() => formatDialog.showModal()}>Format Options...</button>
       <label style="margin-inline-start: auto;">
         <input type="checkbox" checked={getShowTreeView()} onchange={() => setShowTreeView(treeView => !treeView)}/>
@@ -215,7 +199,7 @@ document.addEventListener("keydown",async event => {
 
   switch (combo as Shortcut){
     case Shortcut.Open: return await openFile(null);
-    case Shortcut.Save: return saver.click();
+    case Shortcut.Save: return await saveFile(null,getFileHandle());
   }
 });
 
@@ -328,7 +312,24 @@ export async function readFile(file: File): Promise<NBTData | null> {
 /**
  * Saves the file in-place to the file system, or shows the save file picker to the user.
 */
-export async function saveFile(file: File, fileHandle: FileSystemFileHandle | null): Promise<void> {
+export async function saveFile(file: File | null, fileHandle: FileSystemFileHandle | null): Promise<void> {
+  if (file === null){
+    try {
+      const snbt = getEditorValue();
+      const nbt = parse(snbt);
+      const options = getFormat();
+      const nbtData = new NBTData(nbt,options);
+      file = await writeFile(nbtData,getName());
+
+      if (isiOSDevice && window.isSecureContext){
+        return await shareFile(file);
+      }
+    } catch (error: unknown){
+      alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
+      return;
+    }
+  }
+
   if (fileHandle !== null){
     try {
       const writable = await fileHandle.createWritable();
