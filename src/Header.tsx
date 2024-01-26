@@ -1,0 +1,28 @@
+import icon from "/img/icon.svg";
+
+import type { Accessor, Setter } from "solid-js";
+
+export interface HeaderProps {
+  getEditorDisabled: Accessor<boolean>;
+  setEditorDisabled: Setter<boolean>;
+  getShowTreeView: Accessor<boolean>;
+  setShowTreeView: Setter<boolean>;
+  openFile(): void;
+  saveFile(): void;
+  showFormatDialog(): void;
+}
+
+export function Header(props: HeaderProps){
+  return (
+    <header>
+      <img draggable="false" src={icon} alt=""/>
+      <button onclick={props.openFile}>Open</button>
+      <button disabled={props.getEditorDisabled()} onclick={props.saveFile}>Save</button>
+      <button disabled={props.getEditorDisabled()} onclick={props.showFormatDialog}>Format Options...</button>
+      <label style="margin-inline-start: auto;">
+        <input type="checkbox" checked={props.getShowTreeView()} oninput={() => props.setShowTreeView(treeView => !treeView)}/>
+        Tree View
+      </label>
+    </header>
+  );
+}

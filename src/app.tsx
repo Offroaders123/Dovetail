@@ -1,12 +1,12 @@
 import "./compression-polyfill.js";
 import { createSignal } from "solid-js";
 import { render } from "solid-js/web";
-import { NBTTree } from "./NBTTree.js";
 import { read, write, parse, stringify, NBTData } from "nbtify";
-import icon from "/img/icon.svg";
+import { Header } from "./Header.js";
+import { Main } from "./Main.js";
+import { FormatOptions } from "./FormatOptions.js";
 import "./index.scss";
 
-import type { Accessor, Setter } from "solid-js";
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
 // global state
@@ -79,135 +79,6 @@ export function App(){
       />
 
     </>
-  );
-}
-
-interface HeaderProps {
-  getEditorDisabled: Accessor<boolean>;
-  setEditorDisabled: Setter<boolean>;
-  getShowTreeView: Accessor<boolean>;
-  setShowTreeView: Setter<boolean>;
-  openFile(): void;
-  saveFile(): void;
-  showFormatDialog(): void;
-}
-
-function Header(props: HeaderProps){
-  return (
-    <header>
-      <img draggable="false" src={icon} alt=""/>
-      <button onclick={props.openFile}>Open</button>
-      <button disabled={props.getEditorDisabled()} onclick={props.saveFile}>Save</button>
-      <button disabled={props.getEditorDisabled()} onclick={props.showFormatDialog}>Format Options...</button>
-      <label style="margin-inline-start: auto;">
-        <input type="checkbox" checked={props.getShowTreeView()} oninput={() => props.setShowTreeView(treeView => !treeView)}/>
-        Tree View
-      </label>
-    </header>
-  );
-}
-
-interface MainProps {
-  getEditorDisabled: Accessor<boolean>;
-  getEditorValue: Accessor<string>;
-  setEditorValue: Setter<string>;
-  getShowTreeView: Accessor<boolean>;
-  getTreeViewValue: Accessor<NBTData | null>;
-}
-
-function Main(props: MainProps){
-  return (
-    <main>
-      {
-        props.getShowTreeView()
-          ? <NBTTree value={props.getTreeViewValue}/>
-          : <textarea disabled={props.getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={props.getEditorValue()} oninput={event => props.setEditorValue(event.currentTarget.value)}></textarea>
-      }
-    </main>
-  );
-}
-
-interface FormatOptionsProps {
-  getRootName: Accessor<RootName>;
-  setRootName: Setter<RootName>;
-  getEndian: Accessor<Endian>;
-  setEndian: Setter<Endian>;
-  getCompression: Accessor<Compression>;
-  setCompression: Setter<Compression>;
-  getBedrockLevel: Accessor<BedrockLevel>;
-  setBedrockLevel: Setter<BedrockLevel>;
-  setFormatDialog: Setter<HTMLDialogElement | null>;
-}
-
-function FormatOptions(props: FormatOptionsProps){
-  return (
-      <dialog ref={props.setFormatDialog}>
-        <form method="dialog">
-          <div class="dialog-header">
-            <h3>Format Options</h3>
-            <button type="submit" aria-label="Close">✕</button>
-          </div>
-
-          <fieldset>
-            <legend>Root Name</legend>
-
-            <label>
-              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on" disabled={props.getRootName() === null} value={props.getRootName() === null ? "" : props.getRootName()!} oninput={event => props.setRootName(event.currentTarget.value)}/>
-            </label>
-            <label>
-              <input type="checkbox" name="disableName" checked={props.getRootName() === null} oninput={event => props.setRootName(event.currentTarget.checked ? null : "")}/>
-              Disable
-            </label>
-          </fieldset>
-
-          <fieldset>
-            <legend>Endian</legend>
-
-            <label>
-              <input type="radio" name="endian" value="big" checked={props.getEndian() === "big"} oninput={() => props.setEndian("big")}/>
-              Big
-            </label>
-            <label>
-              <input type="radio" name="endian" value="little" checked={props.getEndian() === "little"} oninput={() => props.setEndian("little")}/>
-              Little
-            </label>
-          </fieldset>
-
-          <fieldset>
-            <legend>Compression</legend>
-
-            <div>
-              <label>
-                <input type="radio" name="compression" value="none" checked={props.getCompression() === null} oninput={() => props.setCompression(null)}/>
-                None
-              </label>
-              <label>
-                <input type="radio" name="compression" value="gzip" checked={props.getCompression() === "gzip"} oninput={() => props.setCompression("gzip")}/>
-                gzip
-              </label>
-            </div>
-            <div>
-              <label>
-                <input type="radio" name="compression" value="deflate" checked={props.getCompression() === "deflate"} oninput={() => props.setCompression("deflate")}/>
-                deflate (zlib)
-              </label>
-              <label>
-                <input type="radio" name="compression" value="deflate-raw" checked={props.getCompression() === "deflate-raw"} oninput={() => props.setCompression("deflate-raw")}/>
-                deflate-raw
-              </label>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>Bedrock Level</legend>
-
-            <label>
-              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!} oninput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}/>
-              <code>(Uint32)</code>
-            </label>
-          </fieldset>
-        </form>
-      </dialog>
   );
 }
 
