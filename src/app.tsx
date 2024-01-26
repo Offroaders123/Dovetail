@@ -31,6 +31,16 @@ export function App(){
   return (
     <>
 
+    <Header/>
+
+    <Main/>
+
+    </>
+  );
+}
+
+function Header(){
+  return (
     <header>
       <img draggable="false" src={icon} alt=""/>
       <button onclick={() => {
@@ -71,7 +81,11 @@ export function App(){
         Tree View
       </label>
     </header>
+  );
+}
 
+function Main(){
+  return (
     <main>
       {
         getShowTreeView()
@@ -79,16 +93,14 @@ export function App(){
           : <textarea disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
       }
 
-      <FormatOptions ref={formatDialog}/>
+      <FormatOptions/>
     </main>
-
-    </>
   );
 }
 
 function FormatOptions(){
   return (
-      <dialog>
+      <dialog ref={formatDialog}>
         <form method="dialog">
           <div class="dialog-header">
             <h3>Format Options</h3>
