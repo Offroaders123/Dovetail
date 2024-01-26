@@ -75,12 +75,12 @@ function Header(){
           const nbt = parse(snbt);
           const options = getFormat();
           const nbtData = new NBTData(nbt,options);
-          const file = await writeFile(nbtData);
+          const file = await writeFile(nbtData,getName());
 
           if (isiOSDevice && window.isSecureContext){
             await shareFile(file);
           } else {
-            await saveFile(file);
+            await saveFile(file,getFileHandle());
           }
         } catch (error: unknown){
           alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
@@ -302,8 +302,7 @@ export async function readFile(file: File): Promise<NBTData | null> {
 /**
  * Saves the file in-place to the file system, or shows the save file picker to the user.
 */
-export async function saveFile(file: File): Promise<void> {
-  const fileHandle = getFileHandle();
+export async function saveFile(file: File, fileHandle: FileSystemFileHandle | null): Promise<void> {
   if (fileHandle !== null){
     try {
       const writable = await fileHandle.createWritable();
@@ -340,7 +339,7 @@ export async function shareFile(file: File): Promise<void> {
 /**
  * Creates a File object from an NBTData object.
 */
-export async function writeFile(nbt: NBTData): Promise<File> {
+export async function writeFile(nbt: NBTData, name: string): Promise<File> {
   const data = await write(nbt);
-  return new File([data],getName());
+  return new File([data],name);
 }
