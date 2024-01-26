@@ -43,7 +43,7 @@ const setFormat = (format: Format): Format => {
 
 // refs
 let saver: HTMLButtonElement;
-let fileOpener: HTMLInputElement;
+// let fileOpener: HTMLInputElement;
 let formatDialog: HTMLDialogElement;
 
 // Temporarily placed here, incrementally moving to JSX
@@ -63,12 +63,7 @@ function Header(){
   return (
     <header>
       <img draggable="false" src={icon} alt=""/>
-      <button onclick={() => fileOpener.click()}>Open</button>
-      <input ref={fileOpener} type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" onchange={async event => {
-        const file: File | undefined = event.currentTarget.files?.[0];
-        if (file === undefined) return;
-        await openFile(file);
-      }}/>
+      <button onclick={async () => await openFile(null)}>Open</button>
       <button ref={saver} disabled={getEditorDisabled()} onclick={async () => {
         try {
           const snbt = getEditorValue();
@@ -204,7 +199,7 @@ enum Shortcut {
   Save = "ControlOrCommand+S"
 }
 
-document.addEventListener("keydown",event => {
+document.addEventListener("keydown",async event => {
   let keys: Set<string> = new Set();
   if (event.ctrlKey || event.metaKey) keys.add("ControlOrCommand");
   if (event.altKey) keys.add("Alt");
@@ -219,7 +214,7 @@ document.addEventListener("keydown",event => {
   if (event.repeat) return;
 
   switch (combo as Shortcut){
-    case Shortcut.Open: return fileOpener.click();
+    case Shortcut.Open: return await openFile(null);
     case Shortcut.Save: return saver.click();
   }
 });
@@ -252,8 +247,39 @@ demo.then(openFile);
 /**
  * Attempts to read an NBT file, then open it in the editor.
 */
-export async function openFile(file: File | FileSystemFileHandle | DataTransferFile): Promise<void> {
+export async function openFile(file: File | FileSystemFileHandle | DataTransferFile | null): Promise<void> {
   setEditorDisabled(true);
+
+  if (file === null){
+    if ("showOpenFilePicker" in window){
+      const [fileHandle] = await window.showOpenFilePicker({
+        types: [
+          {
+            // This is from the `manifest.webmanifest`. I want to eventually derive these from that itself.
+            accept: {                               // ".dat_old" is invalid for the FS Access API?
+              "application/octet-stream": [".nbt", ".dat" /*, ".dat_old"*/, ".mcstructure", ".litematic", ".schem", ".schematic"]
+            }
+          }
+        ]
+      }).catch(() => ([]));
+
+      file = fileHandle ?? null;
+    } else {    
+      const fileOpener = document.createElement("input");
+      fileOpener.type = "file";
+      // Same with this one, I want to dedupe these, now that I am using a bundler.
+      fileOpener.accept = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic";
+
+      await new Promise(resolve => {
+        fileOpener.addEventListener("change",resolve,{ once: true });
+        fileOpener.click();
+      });
+
+      file = fileOpener.files?.[0] ?? null;
+    }
+
+    if (file === null) return;
+  }
 
   if (file instanceof DataTransferItem){
     const handle: FileSystemHandle | null = await file.getAsFileSystemHandle?.() ?? null;
