@@ -23,6 +23,10 @@ body > * {
   flex-shrink: 0;
 }
 
+#root {
+  display: contents;
+}
+
 header {
   padding: 0.5rem;
   display: flex;
@@ -64,10 +68,6 @@ header > img {
 
 input[type="file"] {
   display: none;
-}
-
-#root {
-  display: contents;
 }
 
 main {

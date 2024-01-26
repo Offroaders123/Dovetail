@@ -64,6 +64,17 @@ export function App(){
 
     <Main getEditorDisabled={getEditorDisabled} getEditorValue={getEditorValue} setEditorValue={setEditorValue} getShowTreeView={getShowTreeView} getTreeViewValue={getTreeViewValue}/>
 
+    <FormatOptions
+        getRootName={getRootName}
+        setRootName={setRootName}
+        getEndian={getEndian}
+        setEndian={setEndian}
+        getCompression={getCompression}
+        setCompression={setCompression}
+        getBedrockLevel={getBedrockLevel}
+        setBedrockLevel={setBedrockLevel}
+      />
+
     </>
   );
 }
@@ -109,17 +120,6 @@ function Main(props: MainProps){
           ? <NBTTree value={props.getTreeViewValue}/>
           : <textarea disabled={props.getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={props.getEditorValue()} oninput={event => props.setEditorValue(event.currentTarget.value)}></textarea>
       }
-
-      <FormatOptions
-        getRootName={getRootName}
-        setRootName={setRootName}
-        getEndian={getEndian}
-        setEndian={setEndian}
-        getCompression={getCompression}
-        setCompression={setCompression}
-        getBedrockLevel={getBedrockLevel}
-        setBedrockLevel={setBedrockLevel}
-      />
     </main>
   );
 }
