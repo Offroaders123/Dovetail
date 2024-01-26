@@ -20,6 +20,26 @@ const [getRootName,setRootName] = createSignal<RootName>("");
 const [getEndian,setEndian] = createSignal<Endian>("big");
 const [getCompression,setCompression] = createSignal<Compression>(null);
 const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(null);
+/**
+ * Turns the values from the Format Options dialog into the NBT file's metadata.
+*/
+const getFormat = (): Format => ({
+  rootName: getRootName(),
+  endian: getEndian(),
+  compression: getCompression(),
+  bedrockLevel: getBedrockLevel()
+});
+/**
+ * Updates the Format Options dialog to match an NBT file's format metadata.
+*/
+const setFormat = (format: Format): Format => {
+  const { rootName, endian, compression, bedrockLevel } = format;
+  setRootName(rootName);
+  setEndian(endian);
+  setCompression(compression);
+  setBedrockLevel(bedrockLevel);
+  return format;
+}
 
 // refs
 let saver: HTMLButtonElement;
@@ -53,7 +73,7 @@ function Header(){
         try {
           const snbt = getEditorValue();
           const nbt = parse(snbt);
-          const options = saveOptions();
+          const options = getFormat();
           const nbtData = new NBTData(nbt,options);
           const file = await writeFile(nbtData);
 
@@ -250,7 +270,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   if (nbt === null) return;
 
   const snbt = stringify(nbt,{ space: 2 });
-  openOptions(nbt);
+  setFormat(nbt);
   setName(file.name);
 
   document.title = `Dovetail - ${getName()}`;
@@ -258,19 +278,6 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   setEditorValue(snbt);
   setEditorDisabled(false);
   setTreeViewValue(nbt);
-}
-
-/**
- * Updates the Format Options dialog to match an NBT file's format metadata.
-*/
-export function openOptions(format: Format): Format;
-export function openOptions({ rootName, endian, compression, bedrockLevel }: Format): Format {
-  setRootName(rootName);
-  setEndian(endian);
-  setCompression(compression);
-  setBedrockLevel(bedrockLevel);
-
-  return { rootName, endian, compression, bedrockLevel };
 }
 
 /**
@@ -290,18 +297,6 @@ export async function readFile(file: File): Promise<NBTData | null> {
       return null;
     }
   }
-}
-
-/**
- * Turns the values from the Format Options dialog into the NBT file's metadata.
-*/
-export function saveOptions(): Format {
-  const rootName: RootName = getName();
-  const endian: Endian = getEndian();
-  const compression: Compression = getCompression();
-  const bedrockLevel: BedrockLevel = getBedrockLevel();
-
-  return { rootName, endian, compression, bedrockLevel };
 }
 
 /**
