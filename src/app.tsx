@@ -43,15 +43,10 @@ function Header(){
   return (
     <header>
       <img draggable="false" src={icon} alt=""/>
-      <button onclick={() => {
-        fileOpener.click();
-      }}>Open</button>
-      <input ref={fileOpener} type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" onchange={async () => {
-        const { files } = fileOpener;
-        if (files === null) return;
-        const [file] = files;
+      <button onclick={() => fileOpener.click()}>Open</button>
+      <input ref={fileOpener} type="file" accept="application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic" onchange={async event => {
+        const file: File | undefined = event.currentTarget.files?.[0];
         if (file === undefined) return;
-
         await openFile(file);
       }}/>
       <button ref={saver} disabled={getEditorDisabled()} onclick={async () => {
@@ -71,13 +66,9 @@ function Header(){
           alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
         }
       }}>Save</button>
-      <button disabled={getEditorDisabled()} onclick={() => {
-        formatDialog.showModal();
-      }}>Format Options...</button>
+      <button disabled={getEditorDisabled()} onclick={() => formatDialog.showModal()}>Format Options...</button>
       <label style="margin-inline-start: auto;">
-        <input type="checkbox" checked={getShowTreeView()} onchange={() => {
-          setShowTreeView(!getShowTreeView());
-        }}/>
+        <input type="checkbox" checked={getShowTreeView()} onchange={() => setShowTreeView(treeView => !treeView)}/>
         Tree View
       </label>
     </header>
@@ -114,7 +105,7 @@ function FormatOptions(){
               <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on" disabled={getRootName() === null} value={getRootName() === null ? "" : getRootName()!} onchange={event => setRootName(event.currentTarget.value)}/>
             </label>
             <label>
-              <input type="checkbox" name="disableName" checked={getRootName() === null} onchange={() => setRootName(null)}/>
+              <input type="checkbox" name="disableName" checked={getRootName() === null} onchange={event => setRootName(event.currentTarget.checked ? null : "")}/>
               Disable
             </label>
           </fieldset>
