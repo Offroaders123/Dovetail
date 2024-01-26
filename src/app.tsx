@@ -62,7 +62,7 @@ export function App(){
       showFormatDialog={() => formatDialog.showModal()}
     />
 
-    <Main/>
+    <Main getEditorDisabled={getEditorDisabled} getEditorValue={getEditorValue} getShowTreeView={getShowTreeView} getTreeViewValue={getTreeViewValue}/>
 
     </>
   );
@@ -93,13 +93,20 @@ function Header(props: HeaderProps){
   );
 }
 
-function Main(){
+interface MainProps {
+  getEditorDisabled: Accessor<boolean>;
+  getEditorValue: Accessor<string>;
+  getShowTreeView: Accessor<boolean>;
+  getTreeViewValue: Accessor<NBTData | null>;
+}
+
+function Main(props: MainProps){
   return (
     <main>
       {
-        getShowTreeView()
-          ? <NBTTree value={getTreeViewValue}/>
-          : <textarea disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
+        props.getShowTreeView()
+          ? <NBTTree value={props.getTreeViewValue}/>
+          : <textarea disabled={props.getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={props.getEditorValue()}></textarea>
       }
 
       <FormatOptions/>
