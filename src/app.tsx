@@ -16,6 +16,10 @@ const [getName,setName] = createSignal<string>("");
 const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
 const [getEditorValue,setEditorValue] = createSignal<string>("");
 const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(true);
+const [getRootName,setRootName] = createSignal<RootName>("");
+const [getEndian,setEndian] = createSignal<Endian>("big");
+const [getCompression,setCompression] = createSignal<Compression>(null);
+const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(null);
 
 // refs
 let saver: HTMLButtonElement;
@@ -28,11 +32,11 @@ let formatDialog: HTMLDialogElement;
 /* let formatForm: HTMLFormElement & {
   readonly elements: FormatOptionsCollection;
 }; */
-let formatName: HTMLInputElement;
+/* let formatName: HTMLInputElement;
 let formatDisableName: HTMLInputElement;
 let formatEndian: RadioNodeList;
 let formatCompression: RadioNodeList;
-let formatBedrockLevel: HTMLInputElement;
+let formatBedrockLevel: HTMLInputElement; */
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
@@ -98,10 +102,10 @@ export function App(){
             <legend>Root Name</legend>
 
             <label>
-              <input ref={formatName} type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on"/>
+              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on" disabled={getRootName() === null} value={getRootName() === null ? "" : getRootName()!} onchange={event => setRootName(event.currentTarget.value)}/>
             </label>
             <label>
-              <input ref={formatDisableName} type="checkbox" name="disableName" onchange={() => formatName.disabled = formatDisableName.checked}/>
+              <input type="checkbox" name="disableName" checked={getRootName() === null} onchange={() => setRootName(null)}/>
               Disable
             </label>
           </fieldset>
@@ -110,11 +114,11 @@ export function App(){
             <legend>Endian</legend>
 
             <label>
-              <input ref={formatEndian} type="radio" name="endian" value="big"/>
+              <input type="radio" name="endian" value="big" checked={getEndian() === "big"} onchange={() => setEndian("big")}/>
               Big
             </label>
             <label>
-              <input ref={formatEndian} type="radio" name="endian" value="little"/>
+              <input type="radio" name="endian" value="little" checked={getEndian() === "little"} onchange={() => setEndian("little")}/>
               Little
             </label>
           </fieldset>
@@ -124,21 +128,21 @@ export function App(){
 
             <div>
               <label>
-                <input ref={formatCompression} type="radio" name="compression" value="none"/>
+                <input type="radio" name="compression" value="none" checked={getCompression() === null} onchange={() => setCompression(null)}/>
                 None
               </label>
               <label>
-                <input ref={formatCompression} type="radio" name="compression" value="gzip"/>
+                <input type="radio" name="compression" value="gzip" checked={getCompression() === "gzip"} onchange={() => setCompression("gzip")}/>
                 gzip
               </label>
             </div>
             <div>
               <label>
-                <input ref={formatCompression} type="radio" name="compression" value="deflate"/>
+                <input type="radio" name="compression" value="deflate" checked={getCompression() === "deflate"} onchange={() => setCompression("deflate")}/>
                 deflate (zlib)
               </label>
               <label>
-                <input ref={formatCompression} type="radio" name="compression" value="deflate-raw"/>
+                <input type="radio" name="compression" value="deflate-raw" checked={getCompression() === "deflate-raw"} onchange={() => setCompression("deflate-raw")}/>
                 deflate-raw
               </label>
             </div>
@@ -148,7 +152,7 @@ export function App(){
             <legend>Bedrock Level</legend>
 
             <label>
-              <input ref={formatBedrockLevel} type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295"/>
+              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" value={getBedrockLevel() === null ? "" : getBedrockLevel()!} onchange={event => setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}/>
               <code>(Uint32)</code>
             </label>
           </fieldset>
@@ -264,18 +268,10 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 */
 export function openOptions(format: Format): Format;
 export function openOptions({ rootName, endian, compression, bedrockLevel }: Format): Format {
-  if (rootName !== null){
-    formatName.value = rootName;
-    formatName.disabled = false;
-    formatDisableName.checked = false;
-  } else {
-    formatName.value = "";
-    formatName.disabled = true;
-    formatDisableName.checked = true;
-  }
-  formatEndian.value = endian;
-  formatCompression.value = (compression === null) ? "none" : compression;
-  formatBedrockLevel.value = (bedrockLevel === null) ? "" : `${bedrockLevel}`;
+  setRootName(rootName);
+  setEndian(endian);
+  setCompression(compression);
+  setBedrockLevel(bedrockLevel);
 
   return { rootName, endian, compression, bedrockLevel };
 }
@@ -303,10 +299,10 @@ export async function readFile(file: File): Promise<NBTData | null> {
  * Turns the values from the Format Options dialog into the NBT file's metadata.
 */
 export function saveOptions(): Format {
-  const rootName: RootName = (formatDisableName.checked) ? null : formatName.value;
-  const endian: Endian = formatEndian.value as Endian;
-  const compression: Compression = (formatCompression.value === "none") ? null : formatCompression.value as CompressionFormat;
-  const bedrockLevel: BedrockLevel = (formatBedrockLevel.value === "") ? null : parseInt(formatBedrockLevel.value);
+  const rootName: RootName = getName();
+  const endian: Endian = getEndian();
+  const compression: Compression = getCompression();
+  const bedrockLevel: BedrockLevel = getBedrockLevel();
 
   return { rootName, endian, compression, bedrockLevel };
 }
