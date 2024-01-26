@@ -25,9 +25,14 @@ let fileOpener: HTMLInputElement;
 /* const editor = */
 /* const treeView = */
 let formatDialog: HTMLDialogElement;
-let formatForm: HTMLFormElement & {
+/* let formatForm: HTMLFormElement & {
   readonly elements: FormatOptionsCollection;
-};
+}; */
+let formatName: HTMLInputElement;
+let formatDisableName: HTMLInputElement;
+let formatEndian: RadioNodeList;
+let formatCompression: RadioNodeList;
+let formatBedrockLevel: HTMLInputElement;
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
@@ -83,7 +88,7 @@ export function App(){
       }
 
       <dialog ref={formatDialog}>
-        <form ref={formatForm} method="dialog">
+        <form method="dialog">
           <div class="dialog-header">
             <h3>Format Options</h3>
             <button type="submit" aria-label="Close">✕</button>
@@ -93,12 +98,10 @@ export function App(){
             <legend>Root Name</legend>
 
             <label>
-              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on"/>
+              <input ref={formatName} type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on"/>
             </label>
             <label>
-              <input type="checkbox" name="disableName" onchange={function(this: HTMLInputElement){
-                formatForm.elements.name.disabled = this.checked;
-              }}/>
+              <input ref={formatDisableName} type="checkbox" name="disableName" onchange={() => formatName.disabled = formatDisableName.checked}/>
               Disable
             </label>
           </fieldset>
@@ -107,11 +110,11 @@ export function App(){
             <legend>Endian</legend>
 
             <label>
-              <input type="radio" name="endian" value="big"/>
+              <input ref={formatEndian} type="radio" name="endian" value="big"/>
               Big
             </label>
             <label>
-              <input type="radio" name="endian" value="little"/>
+              <input ref={formatEndian} type="radio" name="endian" value="little"/>
               Little
             </label>
           </fieldset>
@@ -121,21 +124,21 @@ export function App(){
 
             <div>
               <label>
-                <input type="radio" name="compression" value="none"/>
+                <input ref={formatCompression} type="radio" name="compression" value="none"/>
                 None
               </label>
               <label>
-                <input type="radio" name="compression" value="gzip"/>
+                <input ref={formatCompression} type="radio" name="compression" value="gzip"/>
                 gzip
               </label>
             </div>
             <div>
               <label>
-                <input type="radio" name="compression" value="deflate"/>
+                <input ref={formatCompression} type="radio" name="compression" value="deflate"/>
                 deflate (zlib)
               </label>
               <label>
-                <input type="radio" name="compression" value="deflate-raw"/>
+                <input ref={formatCompression} type="radio" name="compression" value="deflate-raw"/>
                 deflate-raw
               </label>
             </div>
@@ -145,7 +148,7 @@ export function App(){
             <legend>Bedrock Level</legend>
 
             <label>
-              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295"/>
+              <input ref={formatBedrockLevel} type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295"/>
               <code>(Uint32)</code>
             </label>
           </fieldset>
@@ -158,14 +161,6 @@ export function App(){
 }
 
 render(App,document.querySelector<HTMLDivElement>("#root")!);
-
-interface FormatOptionsCollection extends HTMLFormControlsCollection {
-  name: HTMLInputElement;
-  disableName: HTMLInputElement;
-  endian: RadioNodeList;
-  compression: RadioNodeList;
-  bedrockLevel: HTMLInputElement;
-}
 
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
 const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
@@ -269,20 +264,18 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 */
 export function openOptions(format: Format): Format;
 export function openOptions({ rootName, endian, compression, bedrockLevel }: Format): Format {
-  const { elements } = formatForm;
-
   if (rootName !== null){
-    elements.name.value = rootName;
-    elements.name.disabled = false;
-    elements.disableName.checked = false;
+    formatName.value = rootName;
+    formatName.disabled = false;
+    formatDisableName.checked = false;
   } else {
-    elements.name.value = "";
-    elements.name.disabled = true;
-    elements.disableName.checked = true;
+    formatName.value = "";
+    formatName.disabled = true;
+    formatDisableName.checked = true;
   }
-  elements.endian.value = endian;
-  elements.compression.value = (compression === null) ? "none" : compression;
-  elements.bedrockLevel.value = (bedrockLevel === null) ? "" : `${bedrockLevel}`;
+  formatEndian.value = endian;
+  formatCompression.value = (compression === null) ? "none" : compression;
+  formatBedrockLevel.value = (bedrockLevel === null) ? "" : `${bedrockLevel}`;
 
   return { rootName, endian, compression, bedrockLevel };
 }
@@ -310,12 +303,10 @@ export async function readFile(file: File): Promise<NBTData | null> {
  * Turns the values from the Format Options dialog into the NBT file's metadata.
 */
 export function saveOptions(): Format {
-  const { elements } = formatForm;
-
-  const rootName: RootName = (elements.disableName.checked) ? null : elements.name.value;
-  const endian: Endian = elements.endian.value as Endian;
-  const compression: Compression = (elements.compression.value === "none") ? null : elements.compression.value as CompressionFormat;
-  const bedrockLevel: BedrockLevel = (elements.bedrockLevel.value === "") ? null : parseInt(elements.bedrockLevel.value);
+  const rootName: RootName = (formatDisableName.checked) ? null : formatName.value;
+  const endian: Endian = formatEndian.value as Endian;
+  const compression: Compression = (formatCompression.value === "none") ? null : formatCompression.value as CompressionFormat;
+  const bedrockLevel: BedrockLevel = (formatBedrockLevel.value === "") ? null : parseInt(formatBedrockLevel.value);
 
   return { rootName, endian, compression, bedrockLevel };
 }
