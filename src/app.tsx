@@ -60,7 +60,7 @@ export function App(){
       getShowTreeView={getShowTreeView}
       setShowTreeView={setShowTreeView}
       openFile={async () => await openFile(null)}
-      saveFile={async () => await saveFile(null,getFileHandle())}
+      saveFile={async () => await saveFile(null,getFileHandle(),getName(),getEditorValue(),getFormat())}
       showFormatDialog={() => getFormatDialog()?.showModal()}
     />
 
@@ -250,7 +250,7 @@ document.addEventListener("keydown",async event => {
 
   switch (combo as Shortcut){
     case Shortcut.Open: return await openFile(null);
-    case Shortcut.Save: return await saveFile(null,getFileHandle());
+    case Shortcut.Save: return await saveFile(null,getFileHandle(),getName(),getEditorValue(),getFormat());
   }
 });
 
@@ -363,20 +363,20 @@ export async function readFile(file: File): Promise<NBTData | null> {
 /**
  * Saves the file in-place to the file system, or shows the save file picker to the user.
 */
-export async function saveFile(file: File | null, fileHandle: FileSystemFileHandle | null): Promise<void> {
+export async function saveFile(file: File | null, fileHandle: FileSystemFileHandle | null, name: string, value: string, format: Format): Promise<void> {
   if (file === null){
     try {
-      const snbt = getEditorValue();
+      const snbt = value;
       const nbt = parse(snbt);
-      const options = getFormat();
+      const options = format;
       const nbtData = new NBTData(nbt,options);
-      file = await writeFile(nbtData,getName());
+      file = await writeFile(nbtData,name);
 
       if (isiOSDevice && window.isSecureContext){
         return await shareFile(file);
       }
     } catch (error: unknown){
-      alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
+      alert(`Could not save '${name}' as NBT data.\n\n${error}`);
       return;
     }
   }
