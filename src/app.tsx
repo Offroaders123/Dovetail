@@ -62,7 +62,7 @@ export function App(){
       showFormatDialog={() => formatDialog.showModal()}
     />
 
-    <Main getEditorDisabled={getEditorDisabled} getEditorValue={getEditorValue} getShowTreeView={getShowTreeView} getTreeViewValue={getTreeViewValue}/>
+    <Main getEditorDisabled={getEditorDisabled} getEditorValue={getEditorValue} setEditorValue={setEditorValue} getShowTreeView={getShowTreeView} getTreeViewValue={getTreeViewValue}/>
 
     </>
   );
@@ -86,7 +86,7 @@ function Header(props: HeaderProps){
       <button disabled={props.getEditorDisabled()} onclick={props.saveFile}>Save</button>
       <button disabled={props.getEditorDisabled()} onclick={props.showFormatDialog}>Format Options...</button>
       <label style="margin-inline-start: auto;">
-        <input type="checkbox" checked={props.getShowTreeView()} onchange={() => props.setShowTreeView(treeView => !treeView)}/>
+        <input type="checkbox" checked={props.getShowTreeView()} oninput={() => props.setShowTreeView(treeView => !treeView)}/>
         Tree View
       </label>
     </header>
@@ -96,6 +96,7 @@ function Header(props: HeaderProps){
 interface MainProps {
   getEditorDisabled: Accessor<boolean>;
   getEditorValue: Accessor<string>;
+  setEditorValue: Setter<string>;
   getShowTreeView: Accessor<boolean>;
   getTreeViewValue: Accessor<NBTData | null>;
 }
@@ -106,7 +107,7 @@ function Main(props: MainProps){
       {
         props.getShowTreeView()
           ? <NBTTree value={props.getTreeViewValue}/>
-          : <textarea disabled={props.getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={props.getEditorValue()}></textarea>
+          : <textarea disabled={props.getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={props.getEditorValue()} oninput={event => props.setEditorValue(event.currentTarget.value)}></textarea>
       }
 
       <FormatOptions
@@ -147,10 +148,10 @@ function FormatOptions(props: FormatOptionsProps){
             <legend>Root Name</legend>
 
             <label>
-              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on" disabled={props.getRootName() === null} value={props.getRootName() === null ? "" : props.getRootName()!} onchange={event => props.setRootName(event.currentTarget.value)}/>
+              <input type="text" name="name" placeholder="&lt;empty&gt;" autocomplete="off" autocorrect="on" disabled={props.getRootName() === null} value={props.getRootName() === null ? "" : props.getRootName()!} oninput={event => props.setRootName(event.currentTarget.value)}/>
             </label>
             <label>
-              <input type="checkbox" name="disableName" checked={props.getRootName() === null} onchange={event => props.setRootName(event.currentTarget.checked ? null : "")}/>
+              <input type="checkbox" name="disableName" checked={props.getRootName() === null} oninput={event => props.setRootName(event.currentTarget.checked ? null : "")}/>
               Disable
             </label>
           </fieldset>
@@ -159,11 +160,11 @@ function FormatOptions(props: FormatOptionsProps){
             <legend>Endian</legend>
 
             <label>
-              <input type="radio" name="endian" value="big" checked={props.getEndian() === "big"} onchange={() => props.setEndian("big")}/>
+              <input type="radio" name="endian" value="big" checked={props.getEndian() === "big"} oninput={() => props.setEndian("big")}/>
               Big
             </label>
             <label>
-              <input type="radio" name="endian" value="little" checked={props.getEndian() === "little"} onchange={() => props.setEndian("little")}/>
+              <input type="radio" name="endian" value="little" checked={props.getEndian() === "little"} oninput={() => props.setEndian("little")}/>
               Little
             </label>
           </fieldset>
@@ -173,21 +174,21 @@ function FormatOptions(props: FormatOptionsProps){
 
             <div>
               <label>
-                <input type="radio" name="compression" value="none" checked={props.getCompression() === null} onchange={() => props.setCompression(null)}/>
+                <input type="radio" name="compression" value="none" checked={props.getCompression() === null} oninput={() => props.setCompression(null)}/>
                 None
               </label>
               <label>
-                <input type="radio" name="compression" value="gzip" checked={props.getCompression() === "gzip"} onchange={() => props.setCompression("gzip")}/>
+                <input type="radio" name="compression" value="gzip" checked={props.getCompression() === "gzip"} oninput={() => props.setCompression("gzip")}/>
                 gzip
               </label>
             </div>
             <div>
               <label>
-                <input type="radio" name="compression" value="deflate" checked={props.getCompression() === "deflate"} onchange={() => props.setCompression("deflate")}/>
+                <input type="radio" name="compression" value="deflate" checked={props.getCompression() === "deflate"} oninput={() => props.setCompression("deflate")}/>
                 deflate (zlib)
               </label>
               <label>
-                <input type="radio" name="compression" value="deflate-raw" checked={props.getCompression() === "deflate-raw"} onchange={() => props.setCompression("deflate-raw")}/>
+                <input type="radio" name="compression" value="deflate-raw" checked={props.getCompression() === "deflate-raw"} oninput={() => props.setCompression("deflate-raw")}/>
                 deflate-raw
               </label>
             </div>
@@ -197,7 +198,7 @@ function FormatOptions(props: FormatOptionsProps){
             <legend>Bedrock Level</legend>
 
             <label>
-              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!} onchange={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}/>
+              <input type="number" name="bedrockLevel" placeholder="&lt;false&gt;" min="0" max="4294967295" value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!} oninput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}/>
               <code>(Uint32)</code>
             </label>
           </fieldset>
