@@ -24,19 +24,7 @@ const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(null);
 // refs
 let saver: HTMLButtonElement;
 let fileOpener: HTMLInputElement;
-/* const formatOpener = */
-/* const treeViewToggle = */
-/* const editor = */
-/* const treeView = */
 let formatDialog: HTMLDialogElement;
-/* let formatForm: HTMLFormElement & {
-  readonly elements: FormatOptionsCollection;
-}; */
-/* let formatName: HTMLInputElement;
-let formatDisableName: HTMLInputElement;
-let formatEndian: RadioNodeList;
-let formatCompression: RadioNodeList;
-let formatBedrockLevel: HTMLInputElement; */
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
@@ -91,7 +79,16 @@ export function App(){
           : <textarea disabled={getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={getEditorValue()}></textarea>
       }
 
-      <dialog ref={formatDialog}>
+      <FormatOptions ref={formatDialog}/>
+    </main>
+
+    </>
+  );
+}
+
+function FormatOptions(){
+  return (
+      <dialog>
         <form method="dialog">
           <div class="dialog-header">
             <h3>Format Options</h3>
@@ -158,9 +155,6 @@ export function App(){
           </fieldset>
         </form>
       </dialog>
-    </main>
-
-    </>
   );
 }
 
