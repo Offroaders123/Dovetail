@@ -6,6 +6,7 @@ import { read, write, parse, stringify, NBTData } from "nbtify";
 import icon from "/img/icon.svg";
 import "./index.scss";
 
+import type { Accessor, Setter } from "solid-js";
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
 // global state
@@ -51,7 +52,15 @@ export function App(){
   return (
     <>
 
-    <Header/>
+    <Header
+      getEditorDisabled={getEditorDisabled}
+      setEditorDisabled={setEditorDisabled}
+      getShowTreeView={getShowTreeView}
+      setShowTreeView={setShowTreeView}
+      openFile={async () => await openFile(null)}
+      saveFile={async () => await saveFile(null,getFileHandle())}
+      showFormatDialog={() => formatDialog.showModal()}
+    />
 
     <Main/>
 
@@ -59,15 +68,25 @@ export function App(){
   );
 }
 
-function Header(){
+interface HeaderProps {
+  getEditorDisabled: Accessor<boolean>;
+  setEditorDisabled: Setter<boolean>;
+  getShowTreeView: Accessor<boolean>;
+  setShowTreeView: Setter<boolean>;
+  openFile(): void;
+  saveFile(): void;
+  showFormatDialog(): void;
+}
+
+function Header(props: HeaderProps){
   return (
     <header>
       <img draggable="false" src={icon} alt=""/>
-      <button onclick={async () => await openFile(null)}>Open</button>
-      <button disabled={getEditorDisabled()} onclick={async () => await saveFile(null,getFileHandle())}>Save</button>
-      <button disabled={getEditorDisabled()} onclick={() => formatDialog.showModal()}>Format Options...</button>
+      <button onclick={props.openFile}>Open</button>
+      <button disabled={props.getEditorDisabled()} onclick={props.saveFile}>Save</button>
+      <button disabled={props.getEditorDisabled()} onclick={props.showFormatDialog}>Format Options...</button>
       <label style="margin-inline-start: auto;">
-        <input type="checkbox" checked={getShowTreeView()} onchange={() => setShowTreeView(treeView => !treeView)}/>
+        <input type="checkbox" checked={props.getShowTreeView()} onchange={() => props.setShowTreeView(treeView => !treeView)}/>
         Tree View
       </label>
     </header>
