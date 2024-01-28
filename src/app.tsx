@@ -59,8 +59,8 @@ export function App(){
       setEditorDisabled={setEditorDisabled}
       getShowTreeView={getShowTreeView}
       setShowTreeView={setShowTreeView}
-      openFile={async () => await openFile(null)}
-      saveFile={async () => await saveFile(null,getFileHandle(),getName(),getEditorValue(),getFormat())}
+      openFile={async () => await openNBTFile()}
+      saveFile={async () => await saveNBTFile()}
       showFormatDialog={() => getFormatDialog()?.showModal()}
     />
 
@@ -97,7 +97,7 @@ window.launchQueue?.setConsumer?.(async launchParams => {
   const [handle] = handles;
   if (handle === undefined) return;
 
-  await openFile(handle);
+  await openNBTFile(handle);
 });
 
 enum Shortcut {
@@ -120,8 +120,8 @@ document.addEventListener("keydown",async event => {
   if (event.repeat) return;
 
   switch (combo as Shortcut){
-    case Shortcut.Open: return await openFile(null);
-    case Shortcut.Save: return await saveFile(null,getFileHandle(),getName(),getEditorValue(),getFormat());
+    case Shortcut.Open: return await openNBTFile();
+    case Shortcut.Save: return await saveNBTFile();
   }
 });
 
@@ -141,21 +141,19 @@ document.addEventListener("drop",async event => {
   const [item] = items;
   if (item === undefined) return;
 
-  await openFile(item);
+  await openNBTFile(item);
 });
 
 const demo = fetch("./bigtest.nbt")
   .then(response => response.blob())
   .then(blob => new File([blob],"bigtest.nbt"));
 demo.then(console.log);
-demo.then(openFile);
+demo.then(openNBTFile);
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
 */
-export async function openFile(file: File | FileSystemFileHandle | DataTransferFile | null): Promise<void> {
-  setEditorDisabled(true);
-
+export async function openFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<File | FileSystemFileHandle | null> {
   if (file === null){
     if ("showOpenFilePicker" in window){
       const [fileHandle] = await window.showOpenFilePicker({
@@ -170,7 +168,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
       }).catch(() => ([]));
 
       file = fileHandle ?? null;
-    } else {    
+    } else {
       const fileOpener = document.createElement("input");
       fileOpener.type = "file";
       // Same with this one, I want to dedupe these, now that I am using a bundler.
@@ -183,14 +181,25 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 
       file = fileOpener.files?.[0] ?? null;
     }
-
-    if (file === null) return;
   }
 
   if (file instanceof DataTransferItem){
     const handle: FileSystemHandle | null = await file.getAsFileSystemHandle?.() ?? null;
     file = handle instanceof FileSystemFileHandle ? handle : file.getAsFile();
   }
+
+  return file;
+}
+
+/**
+ * Opens an NBT file in the editor.
+*/
+export async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<void> {
+  setEditorDisabled(true);
+
+  file = await openFile(file);
+  if (file === null) return;
+
   if ("getFile" in file){
     setFileHandle(file);
     file = await file.getFile();
@@ -232,26 +241,33 @@ export async function readFile(file: File): Promise<NBTData | null> {
 }
 
 /**
- * Saves the file in-place to the file system, or shows the save file picker to the user.
+ * Saves the current NBT file from the editor.
 */
-export async function saveFile(file: File | null, fileHandle: FileSystemFileHandle | null, name: string, value: string, format: Format): Promise<void> {
+export async function saveNBTFile(file: File | null = null): Promise<void> {
   if (file === null){
     try {
-      const snbt = value;
+      const snbt = getEditorValue();
       const nbt = parse(snbt);
-      const options = format;
+      const options = getFormat();
       const nbtData = new NBTData(nbt,options);
-      file = await writeFile(nbtData,name);
+      file = await writeFile(nbtData,getName());
 
       if (isiOSDevice && window.isSecureContext){
         return await shareFile(file);
       }
     } catch (error: unknown){
-      alert(`Could not save '${name}' as NBT data.\n\n${error}`);
+      alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
       return;
     }
   }
 
+  return saveFile(file,getFileHandle());
+}
+
+/**
+ * Saves the file in-place to the file system, or shows the save file picker to the user.
+*/
+export async function saveFile(file: File, fileHandle: FileSystemFileHandle | null): Promise<void> {
   if (fileHandle !== null){
     try {
       const writable = await fileHandle.createWritable();
