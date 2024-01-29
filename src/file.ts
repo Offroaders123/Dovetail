@@ -56,15 +56,10 @@ export async function readFile(file: File, options?: ReadOptions): Promise<NBTDa
 */
 export async function saveFile(file: File, fileHandle: FileSystemFileHandle | null): Promise<void> {
   if (fileHandle !== null){
-    try {
-      const writable = await fileHandle.createWritable();
-      await writable.write(file);
-      await writable.close();
-      return;
-    } catch {
-      const saveManually = confirm(`'${file.name}' could not be saved in-place. Would you like to try saving it manually? It may go directly to your Downloads folder.`);
-      if (!saveManually) return;
-    }
+    const writable = await fileHandle.createWritable();
+    await writable.write(file);
+    await writable.close();
+    return;
   }
 
   const anchor = document.createElement("a");

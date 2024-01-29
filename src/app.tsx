@@ -214,5 +214,16 @@ export async function saveNBTFile(file: File | null = null): Promise<void> {
     }
   }
 
-  return saveFile(file,getFileHandle());
+  const fileHandle = getFileHandle();
+
+  if (fileHandle !== null){
+    try {
+      return await saveFile(file,fileHandle);
+    } catch {
+      const saveManually = confirm(`'${file.name}' could not be saved in-place. Would you like to try saving it manually? It may go directly to your Downloads folder.`);
+      if (!saveManually) return;
+    }
+  }
+
+  await saveFile(file,null);
 }
