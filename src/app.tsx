@@ -54,20 +54,23 @@ export function App(){
 
   return (
     <>
-
-    <Header
-      getEditorDisabled={getEditorDisabled}
-      setEditorDisabled={setEditorDisabled}
-      getShowTreeView={getShowTreeView}
-      setShowTreeView={setShowTreeView}
-      openFile={async () => await openNBTFile()}
-      saveFile={async () => await saveNBTFile()}
-      showFormatDialog={() => getFormatDialog()?.showModal()}
-    />
-
-    <Main getEditorDisabled={getEditorDisabled} getEditorValue={getEditorValue} setEditorValue={setEditorValue} getShowTreeView={getShowTreeView} getTreeViewValue={getTreeViewValue}/>
-
-    <FormatOptions
+      <Header
+        getEditorDisabled={getEditorDisabled}
+        setEditorDisabled={setEditorDisabled}
+        getShowTreeView={getShowTreeView}
+        setShowTreeView={setShowTreeView}
+        openFile={async () => await openNBTFile()}
+        saveFile={async () => await saveNBTFile()}
+        showFormatDialog={() => getFormatDialog()?.showModal()}
+      />
+      <Main
+        getEditorDisabled={getEditorDisabled}
+        getEditorValue={getEditorValue}
+        setEditorValue={setEditorValue}
+        getShowTreeView={getShowTreeView}
+        getTreeViewValue={getTreeViewValue}
+      />
+      <FormatOptions
         getRootName={getRootName}
         setRootName={setRootName}
         getEndian={getEndian}
@@ -78,7 +81,6 @@ export function App(){
         setBedrockLevel={setBedrockLevel}
         setFormatDialog={setFormatDialog}
       />
-
     </>
   );
 }
@@ -154,7 +156,7 @@ demo.then(openNBTFile);
 /**
  * Opens an NBT file in the editor.
 */
-export async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<void> {
+async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<void> {
   setEditorDisabled(true);
 
   file = await openFile(file);
@@ -196,7 +198,7 @@ export async function openNBTFile(file: File | FileSystemFileHandle | DataTransf
 /**
  * Saves the current NBT file from the editor.
 */
-export async function saveNBTFile(file: File | null = null): Promise<void> {
+async function saveNBTFile(file: File | null = null): Promise<void> {
   if (file === null){
     try {
       const snbt = getEditorValue();

@@ -20,7 +20,11 @@ export function Header(props: HeaderProps){
       <button disabled={props.getEditorDisabled()} onclick={props.saveFile}>Save</button>
       <button disabled={props.getEditorDisabled()} onclick={props.showFormatDialog}>Format Options...</button>
       <label style="margin-inline-start: auto;">
-        <input type="checkbox" checked={props.getShowTreeView()} oninput={() => props.setShowTreeView(treeView => !treeView)}/>
+        <input
+          type="checkbox"
+          checked={props.getShowTreeView()}
+          oninput={() => props.setShowTreeView(treeView => !treeView)}
+        />
         Tree View
       </label>
     </header>

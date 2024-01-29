@@ -17,7 +17,17 @@ export function Main(props: MainProps){
       {
         props.getShowTreeView()
           ? <NBTTree value={props.getTreeViewValue}/>
-          : <textarea disabled={props.getEditorDisabled()} placeholder="NBT data will show here..." wrap="off" spellcheck={false} autocomplete="off" autocapitalize="none" autocorrect="off" value={props.getEditorValue()} oninput={event => props.setEditorValue(event.currentTarget.value)}></textarea>
+          : <textarea
+              disabled={props.getEditorDisabled()}
+              placeholder="NBT data will show here..."
+              wrap="off"
+              spellcheck={false}
+              autocomplete="off"
+              autocapitalize="none"
+              autocorrect="off"
+              value={props.getEditorValue()}
+              oninput={event => props.setEditorValue(event.currentTarget.value)}
+            />
       }
     </main>
   );
