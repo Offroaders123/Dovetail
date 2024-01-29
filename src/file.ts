@@ -1,6 +1,20 @@
 import { read, write } from "nbtify";
+// import manifestImported from "/manifest.webmanifest" assert { type: "json" };
+import manifestURL from "/manifest.webmanifest";
 
 import type { NBTData, ReadOptions } from "nbtify";
+
+type Manifest = {
+  file_handlers: {
+    action: string;
+    accept: {
+      [mimeType: string]: string[];
+    };
+  }[];
+}
+
+const manifest: Manifest = await fetch(manifestURL).then(response => response.json());
+console.log(manifest.file_handlers);
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
@@ -9,16 +23,10 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   if (file === null){
     if ("showOpenFilePicker" in window){
       const [fileHandle] = await window.showOpenFilePicker({
-        types: [
-          {
-            // This is from the `manifest.webmanifest`. I want to eventually derive these from that itself.
-            accept: {                               // ".dat_old" is invalid for the FS Access API?
-              "application/octet-stream": [".nbt", ".dat" /*, ".dat_old"*/, ".mcstructure", ".litematic", ".schem", ".schematic"]
-            }
-          }
-        ]
+        types: manifest.file_handlers
+      })/*
       }).catch(() => ([]));
-
+*/
       file = fileHandle ?? null;
     } else {
       const fileOpener = document.createElement("input");

@@ -159,7 +159,12 @@ demo.then(openNBTFile);
 async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<void> {
   setEditorDisabled(true);
 
-  file = await openFile(file);
+  try {
+    file = await openFile(file);
+  } catch (error){
+    alert(error);
+    return;
+  }
   if (file === null) return;
 
   if ("getFile" in file){
