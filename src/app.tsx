@@ -184,10 +184,14 @@ async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile 
   } catch (error: unknown){
     if (error instanceof Error && error.message.includes("unread bytes remaining")){
       const reattempt = confirm(`${error}\n\nEncountered extra data at the end of '${file.name}'. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
-      if (!reattempt) return;
+      if (!reattempt){
+        setEditorDisabled(false);
+        return;
+      }
       nbt = await readFile(file,{ strict: false });
     } else {
       alert(`Could not read '${file.name}' as NBT data.\n\n${error}`);
+      setEditorDisabled(false);
       return;
     }
   }
