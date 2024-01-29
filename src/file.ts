@@ -1,6 +1,6 @@
 import { read, write } from "nbtify";
 
-import type { NBTData } from "nbtify";
+import type { NBTData, ReadOptions } from "nbtify";
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
@@ -46,20 +46,9 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 /**
  * Attempts to create an NBTData object from a File object.
 */
-export async function readFile(file: File): Promise<NBTData | null> {
+export async function readFile(file: File, options?: ReadOptions): Promise<NBTData> {
   const buffer = await file.arrayBuffer();
-  try {
-    return await read(buffer);
-  } catch (error: unknown){
-    if (error instanceof Error && error.message.includes("unread bytes remaining")){
-      const reattempt = confirm(`${error}\n\nEncountered extra data at the end of '${file.name}'. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
-      if (!reattempt) return null;
-      return read(buffer,{ strict: false });
-    } else {
-      alert(`Could not read '${file.name}' as NBT data.\n\n${error}`);
-      return null;
-    }
-  }
+  return read(buffer,options);
 }
 
 /**

@@ -167,8 +167,20 @@ export async function openNBTFile(file: File | FileSystemFileHandle | DataTransf
     setFileHandle(null);
   }
 
-  const nbt = await readFile(file);
-  if (nbt === null) return;
+  let nbt: NBTData;
+
+  try {
+    nbt = await readFile(file);
+  } catch (error: unknown){
+    if (error instanceof Error && error.message.includes("unread bytes remaining")){
+      const reattempt = confirm(`${error}\n\nEncountered extra data at the end of '${file.name}'. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
+      if (!reattempt) return;
+      nbt = await readFile(file,{ strict: false });
+    } else {
+      alert(`Could not read '${file.name}' as NBT data.\n\n${error}`);
+      return;
+    }
+  }
 
   const snbt = stringify(nbt,{ space: 2 });
   setFormat(nbt);
