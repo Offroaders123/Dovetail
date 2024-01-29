@@ -7,7 +7,6 @@ import { Header } from "./Header.js";
 import { Main } from "./Main.js";
 import { FormatOptions } from "./FormatOptions.js";
 import "./index.scss";
-import serviceWorker from "./service-worker/service-worker.ts?url";
 
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
@@ -91,7 +90,7 @@ const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
 const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
 
 if (window.isSecureContext && !import.meta.env.DEV){
-  await navigator.serviceWorker.register(serviceWorker);
+  await navigator.serviceWorker.register("./service-worker.js");
 }
 
 window.launchQueue?.setConsumer?.(async launchParams => {

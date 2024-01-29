@@ -1,5 +1,5 @@
 declare var self: ServiceWorkerGlobalScope;
-declare var clients: Clients;
+declare const clients: Clients;
 
 const NAME = "Dovetail";
 const VERSION = "v2.1.6";
@@ -52,3 +52,5 @@ async function cacheRequest(request: Request, response: Response): Promise<void>
   const cache = await caches.open(CACHE_NAME);
   await cache.put(request,response.clone());
 }
+
+export {};
