@@ -6,7 +6,9 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "types": [
-      "new-javascript",
+      "new-javascript/wicg/file-system-access",
+      "new-javascript/wicg/ua-client-hints",
+      "new-javascript/wicg/web-app-launch",
       "vite/client"
     ],
     "noEmit": true,
