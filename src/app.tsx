@@ -161,8 +161,11 @@ async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile 
 
   try {
     file = await openFile(file);
-  } catch (error){
-    alert(error);
+  } catch (error: unknown){
+    if (!(error instanceof DOMException) || error.name !== "AbortError"){
+      alert(error);
+    }
+    setEditorDisabled(false);
     return;
   }
   if (file === null) return;
