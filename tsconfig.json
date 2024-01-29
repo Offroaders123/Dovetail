@@ -20,5 +20,8 @@
     "allowUnreachableCode": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true
-  }
+  },
+  "exclude": [
+    "./src/service-worker"
+  ]
 }

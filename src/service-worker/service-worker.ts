@@ -1,6 +1,3 @@
-/// <reference lib="ESNext"/>
-/// <reference lib="WebWorker"/>
-
 declare var self: ServiceWorkerGlobalScope;
 declare var clients: Clients;
 

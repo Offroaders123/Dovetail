@@ -8,7 +8,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: "./index.html",
-        "service-worker": "./src/service-worker.ts"
+        "service-worker": "./src/service-worker/service-worker.ts"
       },
       output: {
         entryFileNames(chunkInfo): string {
