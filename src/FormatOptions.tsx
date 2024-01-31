@@ -1,5 +1,3 @@
-import { createMemo } from "solid-js";
-
 import type { Accessor, Setter } from "solid-js";
 import type { RootName, Endian, Compression, BedrockLevel } from "nbtify";
 
@@ -16,12 +14,6 @@ export interface FormatOptionsProps {
 }
 
 export function FormatOptions(props: FormatOptionsProps){
-  const rootName = createMemo<string>(previous => {
-    const rootName = props.getRootName();
-    return rootName ?? previous ?? "";
-    // return rootName === null ? previous ?? "" : rootName;
-  });
-
   return (
     <dialog ref={props.setFormatDialog}>
       <form method="dialog">
@@ -41,7 +33,7 @@ export function FormatOptions(props: FormatOptionsProps){
               autocomplete="off"
               autocorrect="on"
               disabled={props.getRootName() === null}
-              value={rootName()}
+              value={props.getRootName() === null ? "" : props.getRootName()!}
               oninput={event => props.setRootName(event.currentTarget.value)}
             />
           </label>

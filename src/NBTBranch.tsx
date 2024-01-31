@@ -1,4 +1,4 @@
-import { createMemo } from "solid-js";
+import { Match, Switch, createMemo } from "solid-js";
 import { TAG, getTagType, Int8, Int32 } from "nbtify";
 
 import type { Accessor } from "solid-js";
@@ -12,36 +12,79 @@ export interface NBTBranchProps {
 export function NBTBranch(props: NBTBranchProps){
   const getName = createMemo<string | null>(() => props.name?.() ?? null);
   const getType = createMemo<TAG>(() => getTagType(props.value()));
-  const isContainerTag = createMemo<boolean>(() => {
-    switch (getType()){
-      case TAG.BYTE_ARRAY:
-      case TAG.LIST:
-      case TAG.COMPOUND:
-      case TAG.INT_ARRAY:
-      case TAG.LONG_ARRAY:
-        return true;
-      default:
-        return false;
-    }
-  });
 
   return (
     <div class="nbt-branch" data-type={getType()}>{
-      isContainerTag()
-        ? <ContainerView name={getName} value={() => props.value() as ContainerTag}/>
-        : <PrimitiveView name={getName} value={() => props.value() as PrimitiveTag}/>
+      <Switch>
+        <Match when={getType() === TAG.BYTE}>
+          <ByteView name={getName} value={props.value as Accessor<ByteTag>}/>
+        </Match>
+        <Match when={getType() === TAG.SHORT}>
+          <ShortView name={getName} value={props.value as Accessor<ShortTag>}/>
+        </Match>
+        <Match when={getType() === TAG.INT}>
+          <IntView name={getName} value={props.value as Accessor<IntTag>}/>
+        </Match>
+        <Match when={getType() === TAG.LONG}>
+          <LongView name={getName} value={props.value as Accessor<LongTag>}/>
+        </Match>
+        <Match when={getType() === TAG.FLOAT}>
+          <FloatView name={getName} value={props.value as Accessor<FloatTag>}/>
+        </Match>
+        <Match when={getType() === TAG.DOUBLE}>
+          <DoubleView name={getName} value={props.value as Accessor<DoubleTag>}/>
+        </Match>
+        <Match when={getType() === TAG.BYTE_ARRAY}>
+          <ByteArrayView name={getName} value={props.value as Accessor<ByteArrayTag>}/>
+        </Match>
+        <Match when={getType() === TAG.STRING}>
+          <StringView name={getName} value={props.value as Accessor<StringTag>}/>
+        </Match>
+        <Match when={getType() === TAG.LIST}>
+          <ListView name={getName} value={props.value as Accessor<ListTag<Tag>>}/>
+        </Match>
+        <Match when={getType() === TAG.COMPOUND}>
+          <CompoundView name={getName} value={props.value as Accessor<CompoundTag>}/>
+        </Match>
+        <Match when={getType() === TAG.INT_ARRAY}>
+          <IntArrayView name={getName} value={props.value as Accessor<IntArrayTag>}/>
+        </Match>
+        <Match when={getType() === TAG.LONG_ARRAY}>
+          <LongArrayView name={getName} value={props.value as Accessor<LongArrayTag>}/>
+        </Match>
+      </Switch>
     }</div>
   );
 }
 
-type ContainerTag = ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag;
-
-interface ContainerViewProps {
-  name: Accessor<string | null>;
-  value: Accessor<ContainerTag>;
+function ByteArrayView(props: ContainerViewProps<ByteArrayTag>){
+  return <ContainerView {...props}/>;
 }
 
-function ContainerView(props: ContainerViewProps){
+function ListView(props: ContainerViewProps<ListTag<Tag>>){
+  return <ContainerView {...props}/>;
+}
+
+function CompoundView(props: ContainerViewProps<CompoundTag>){
+  return <ContainerView {...props}/>;
+}
+
+function IntArrayView(props: ContainerViewProps<IntArrayTag>){
+  return <ContainerView {...props}/>;
+}
+
+function LongArrayView(props: ContainerViewProps<LongArrayTag>){
+  return <ContainerView {...props}/>;
+}
+
+type ContainerTag = ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | LongArrayTag;
+
+interface ContainerViewProps<T extends ContainerTag> {
+  name: Accessor<string | null>;
+  value: Accessor<T>;
+}
+
+function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
@@ -67,6 +110,34 @@ function ContainerView(props: ContainerViewProps){
       }
     </details>
   );
+}
+
+function ByteView(props: PrimitiveViewProps<ByteTag>){
+  return <PrimitiveView {...props}/>;
+}
+
+function ShortView(props: PrimitiveViewProps<ShortTag>){
+  return <PrimitiveView {...props}/>;
+}
+
+function IntView(props: PrimitiveViewProps<IntTag>){
+  return <PrimitiveView {...props}/>;
+}
+
+function LongView(props: PrimitiveViewProps<LongTag>){
+  return <PrimitiveView {...props}/>;
+}
+
+function FloatView(props: PrimitiveViewProps<FloatTag>){
+  return <PrimitiveView {...props}/>;
+}
+
+function DoubleView(props: PrimitiveViewProps<DoubleTag>){
+  return <PrimitiveView {...props}/>;
+}
+
+function StringView(props: PrimitiveViewProps<StringTag>){
+  return <PrimitiveView {...props}/>;
 }
 
 type PrimitiveTag = ByteTag | ShortTag | IntTag | LongTag | FloatTag | DoubleTag | StringTag;
