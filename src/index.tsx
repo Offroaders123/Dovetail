@@ -1,6 +1,6 @@
 import "./compression-polyfill.js";
 import { render } from "solid-js/web";
-import { App } from "./app.jsx";
+import { App } from "./App.js";
 import "./index.scss";
 
 const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
