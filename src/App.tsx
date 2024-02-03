@@ -1,25 +1,18 @@
-import "./compression-polyfill.js";
 import { createSignal } from "solid-js";
-import { render } from "solid-js/web";
 import { parse, stringify, NBTData } from "nbtify";
 import { openFile, readFile, saveFile, shareFile, writeFile } from "./file.js";
 import { Header } from "./Header.js";
 import { Main } from "./Main.js";
 import { FormatOptions } from "./FormatOptions.js";
-import "./index.scss";
 
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
-const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
-const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
-const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
-
-if (window.isSecureContext && !import.meta.env.DEV){
-  await navigator.serviceWorker.register("./service-worker.js");
+export interface AppProps {
+  isiOSDevice: boolean;
 }
 
 // Temporarily placed here, incrementally moving to JSX
-export function App(){
+export function App(props: AppProps){
 // global state
 const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
 const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
@@ -183,7 +176,7 @@ async function saveNBTFile(file: File | null = null): Promise<void> {
       const nbtData = new NBTData(nbt,options);
       file = await writeFile(nbtData,getName());
 
-      if (isiOSDevice && window.isSecureContext){
+      if (props.isiOSDevice && window.isSecureContext){
         return await shareFile(file);
       }
     } catch (error: unknown){
@@ -239,5 +232,3 @@ async function saveNBTFile(file: File | null = null): Promise<void> {
     </>
   );
 }
-
-render(App,document.querySelector<HTMLDivElement>("#root")!);
