@@ -32,8 +32,5 @@
         "application/octet-stream": [".nbt", ".dat", ".dat_old", ".mcstructure", ".litematic", ".schem", ".schematic"]
       }
     }
-  ],
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  }
+  ]
 }

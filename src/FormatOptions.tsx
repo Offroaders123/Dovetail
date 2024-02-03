@@ -65,26 +65,21 @@ export function FormatOptions(props: FormatOptionsProps){
         <fieldset>
           <legend>Endian</legend>
 
-          <label>
-            <input
-              type="radio"
-              name="endian"
-              value="big"
-              checked={props.getEndian() === "big"}
-              oninput={() => props.setEndian("big")}
-            />
-            Big
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="endian"
-              value="little"
-              checked={props.getEndian() === "little"}
-              oninput={() => props.setEndian("little")}
-            />
-            Little
-          </label>
+          {
+            (["big", "little"] satisfies Endian[])
+              .map(endian =>
+                <label>
+                  <input
+                    type="radio"
+                    name="endian"
+                    value={endian}
+                    checked={props.getEndian() === endian}
+                    oninput={() => props.setEndian(endian)}
+                  />
+                  {`${endian.slice(0,1).toUpperCase()}${endian.slice(1)}`}
+                </label>
+              )
+          }
         </fieldset>
 
         <fieldset>
