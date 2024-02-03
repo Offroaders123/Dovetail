@@ -51,6 +51,7 @@ export function FormatOptions(props: FormatOptionsProps){
               oninput={event => props.setRootName(event.currentTarget.value)}
             />
           </label>
+          {"\n"}
           <label>
             <input
               type="checkbox"
@@ -58,7 +59,7 @@ export function FormatOptions(props: FormatOptionsProps){
               checked={props.getRootName() === null}
               oninput={event => props.setRootName(event.currentTarget.checked ? null : "")}
             />
-            Disable
+            {" Disable "}
           </label>
         </fieldset>
 
@@ -76,7 +77,7 @@ export function FormatOptions(props: FormatOptionsProps){
                     checked={props.getEndian() === endian}
                     oninput={() => props.setEndian(endian)}
                   />
-                  {`${endian.slice(0,1).toUpperCase()}${endian.slice(1)}`}
+                  {` ${endian.slice(0,1).toUpperCase()}${endian.slice(1)} `}
                 </label>
               )
           }
@@ -96,7 +97,7 @@ export function FormatOptions(props: FormatOptionsProps){
                     checked={props.getCompression() === compression}
                     oninput={() => props.setCompression(compression)}
                   />
-                  {compression === "deflate" ? `${compression} (zlib)` : compression ?? "None"}
+                  {` ${compression === "deflate" ? `${compression} (zlib)` : compression ?? "None"} `}
                 </label>
               )
               .reduce<JSX.Element[]>((previous, compression, i) => {
@@ -123,7 +124,7 @@ export function FormatOptions(props: FormatOptionsProps){
               value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!}
               oninput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}
             />
-            <code>(Uint32)</code>
+            {"\n"}<code>(Uint32)</code>{"\n"}
           </label>
         </fieldset>
       </form>

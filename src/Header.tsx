@@ -25,7 +25,7 @@ export function Header(props: HeaderProps){
           checked={props.getShowTreeView()}
           oninput={() => props.setShowTreeView(treeView => !treeView)}
         />
-        Tree View
+        {" Tree View "}
       </label>
     </header>
   );
