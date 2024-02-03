@@ -14,9 +14,9 @@ export default defineConfig({
         entryFileNames(chunkInfo): string {
           switch (chunkInfo.name){
             case "service-worker": return "[name].js";
-            default: return "asserts/js/[name]-[hash].js";
+            default: return "assets/js/[name]-[hash].js";
           }
-        },
+        }
       }
     }
   },
