@@ -29,7 +29,7 @@ export function FormatOptions(props: FormatOptionsProps){
   });
 
   return (
-    <dialog ref={setFormatDialog} onClose={() => props.getOpen() && props.setOpen(false)}>
+    <dialog ref={setFormatDialog} onclose={() => props.getOpen() && props.setOpen(false)}>
       <form method="dialog">
         <div class="dialog-header">
           <h3>Format Options</h3>
