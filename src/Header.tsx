@@ -7,9 +7,9 @@ export interface HeaderProps {
   setEditorDisabled: Setter<boolean>;
   getShowTreeView: Accessor<boolean>;
   setShowTreeView: Setter<boolean>;
+  setShowFormatDialog: Setter<boolean>;
   openFile(): void;
   saveFile(): void;
-  showFormatDialog(): void;
 }
 
 export function Header(props: HeaderProps){
@@ -18,7 +18,7 @@ export function Header(props: HeaderProps){
       <img draggable="false" src={icon} alt=""/>
       <button onclick={props.openFile}>Open</button>
       <button disabled={props.getEditorDisabled()} onclick={props.saveFile}>Save</button>
-      <button disabled={props.getEditorDisabled()} onclick={props.showFormatDialog}>Format Options...</button>
+      <button disabled={props.getEditorDisabled()} onclick={() => props.setShowFormatDialog(showFormatDialog => !showFormatDialog)}>Format Options...</button>
       <label style="margin-inline-start: auto;">
         <input
           type="checkbox"

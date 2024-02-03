@@ -13,6 +13,7 @@ import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify
 // global state
 const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
 const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
+const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
 /** The name of the currently opened file. */
 const [getName,setName] = createSignal<string>("");
 const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
@@ -50,8 +51,6 @@ const setFormat = (format: Format): Format => {
 
 // Temporarily placed here, incrementally moving to JSX
 export function App(){
-  const [getFormatDialog,setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
-
   return (
     <>
       <Header
@@ -59,9 +58,9 @@ export function App(){
         setEditorDisabled={setEditorDisabled}
         getShowTreeView={getShowTreeView}
         setShowTreeView={setShowTreeView}
+        setShowFormatDialog={setShowFormatDialog}
         openFile={async () => await openNBTFile()}
         saveFile={async () => await saveNBTFile()}
-        showFormatDialog={() => getFormatDialog()?.showModal()}
       />
       <Main
         getEditorDisabled={getEditorDisabled}
@@ -79,7 +78,8 @@ export function App(){
         setCompression={setCompression}
         getBedrockLevel={getBedrockLevel}
         setBedrockLevel={setBedrockLevel}
-        setFormatDialog={setFormatDialog}
+        getOpen={getShowFormatDialog}
+        setOpen={setShowFormatDialog}
       />
     </>
   );

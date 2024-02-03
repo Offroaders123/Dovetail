@@ -1,3 +1,5 @@
+import { createEffect, createSignal } from "solid-js";
+
 import type { Accessor, Setter } from "solid-js";
 import type { RootName, Endian, Compression, BedrockLevel } from "nbtify";
 
@@ -10,12 +12,24 @@ export interface FormatOptionsProps {
   setCompression: Setter<Compression>;
   getBedrockLevel: Accessor<BedrockLevel>;
   setBedrockLevel: Setter<BedrockLevel>;
-  setFormatDialog: Setter<HTMLDialogElement | null>;
+  getOpen: Accessor<boolean>;
+  setOpen: Setter<boolean>;
 }
 
 export function FormatOptions(props: FormatOptionsProps){
+  const [getFormatDialog,setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
+
+  createEffect(() => {
+    const dialog = getFormatDialog();
+    if (dialog?.open && !props.getOpen()){
+      dialog.close();
+    } else if (!dialog?.open && props.getOpen()){
+      dialog?.showModal();
+    }
+  });
+
   return (
-    <dialog ref={props.setFormatDialog}>
+    <dialog ref={setFormatDialog} onClose={() => props.getOpen() && props.setOpen(false)}>
       <form method="dialog">
         <div class="dialog-header">
           <h3>Format Options</h3>
