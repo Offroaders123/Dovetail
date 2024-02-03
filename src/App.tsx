@@ -52,20 +52,22 @@ const setFormat = (format: Format): Format => {
 // let fileOpener: HTMLInputElement;
 // let formatDialog: HTMLDialogElement;
 
-window.launchQueue?.setConsumer?.(async launchParams => {
+const handleLaunch: LaunchConsumer = async launchParams => {
   const { files: handles } = launchParams;
   const [handle] = handles;
   if (handle === undefined) return;
 
   await openNBTFile(handle);
-});
+};
+
+window.launchQueue?.setConsumer?.(handleLaunch);
 
 enum Shortcut {
   Open = "ControlOrCommand+O",
   Save = "ControlOrCommand+S"
 }
 
-document.addEventListener("keydown",async event => {
+const handleKeydown: NonNullable<typeof document.onkeydown> = async event => {
   let keys: Set<string> = new Set();
   if (event.ctrlKey || event.metaKey) keys.add("ControlOrCommand");
   if (event.altKey) keys.add("Alt");
@@ -83,16 +85,20 @@ document.addEventListener("keydown",async event => {
     case Shortcut.Open: return await openNBTFile();
     case Shortcut.Save: return await saveNBTFile();
   }
-});
+};
 
-document.addEventListener("dragover",event => {
+document.addEventListener("keydown",handleKeydown);
+
+const handleDragover: NonNullable<typeof document.ondragover> = event => {
   event.preventDefault();
   if (event.dataTransfer === null) return;
 
   event.dataTransfer.dropEffect = "copy";
-});
+};
 
-document.addEventListener("drop",async event => {
+document.addEventListener("dragover",handleDragover);
+
+const handleDrop: NonNullable<typeof document.ondrop> = async event => {
   event.preventDefault();
   if (event.dataTransfer === null) return;
 
@@ -102,7 +108,9 @@ document.addEventListener("drop",async event => {
   if (item === undefined) return;
 
   await openNBTFile(item);
-});
+};
+
+document.addEventListener("drop",handleDrop);
 
 const demo = fetch("./bigtest.nbt")
   .then(response => response.blob())
