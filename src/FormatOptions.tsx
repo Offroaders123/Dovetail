@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js";
 
-import type { Accessor, Setter } from "solid-js";
+import type { Accessor, JSX, Setter } from "solid-js";
 import type { RootName, Endian, Compression, BedrockLevel } from "nbtify";
 
 export interface FormatOptionsProps {
@@ -85,50 +85,29 @@ export function FormatOptions(props: FormatOptionsProps){
         <fieldset>
           <legend>Compression</legend>
 
-          <div>
-            <label>
-              <input
-                type="radio"
-                name="compression"
-                value="none"
-                checked={props.getCompression() === null}
-                oninput={() => props.setCompression(null)}
-              />
-              None
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="compression"
-                value="gzip"
-                checked={props.getCompression() === "gzip"}
-                oninput={() => props.setCompression("gzip")}
-              />
-              gzip
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                name="compression"
-                value="deflate"
-                checked={props.getCompression() === "deflate"}
-                oninput={() => props.setCompression("deflate")}
-              />
-              deflate (zlib)
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="compression"
-                value="deflate-raw"
-                checked={props.getCompression() === "deflate-raw"}
-                oninput={() => props.setCompression("deflate-raw")}
-              />
-              deflate-raw
-            </label>
-          </div>
+          {
+            ([null, "gzip", "deflate", "deflate-raw"] satisfies Compression[])
+              .map(compression =>
+                <label>
+                  <input
+                    type="radio"
+                    name="compression"
+                    value={compression ?? "none"}
+                    checked={props.getCompression() === compression}
+                    oninput={() => props.setCompression(compression)}
+                  />
+                  {compression === "deflate" ? `${compression} (zlib)` : compression ?? "None"}
+                </label>
+              )
+              .reduce<JSX.Element[]>((previous, compression, i) => {
+                if (i % 2 === 0){
+                  previous.push(<div>{compression}</div>);
+                } else {
+                  (previous.at(-1) as HTMLDivElement).append(compression as HTMLLabelElement);
+                }
+                return previous;
+              },[])
+          }
         </fieldset>
 
         <fieldset>
