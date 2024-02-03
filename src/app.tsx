@@ -10,6 +10,16 @@ import "./index.scss";
 
 import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
 
+const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
+const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
+const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
+
+if (window.isSecureContext && !import.meta.env.DEV){
+  await navigator.serviceWorker.register("./service-worker.js");
+}
+
+// Temporarily placed here, incrementally moving to JSX
+export function App(){
 // global state
 const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
 const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
@@ -48,52 +58,6 @@ const setFormat = (format: Format): Format => {
 // let saver: HTMLButtonElement;
 // let fileOpener: HTMLInputElement;
 // let formatDialog: HTMLDialogElement;
-
-// Temporarily placed here, incrementally moving to JSX
-export function App(){
-  return (
-    <>
-      <Header
-        getEditorDisabled={getEditorDisabled}
-        setEditorDisabled={setEditorDisabled}
-        getShowTreeView={getShowTreeView}
-        setShowTreeView={setShowTreeView}
-        setShowFormatDialog={setShowFormatDialog}
-        openFile={async () => await openNBTFile()}
-        saveFile={async () => await saveNBTFile()}
-      />
-      <Main
-        getEditorDisabled={getEditorDisabled}
-        getEditorValue={getEditorValue}
-        setEditorValue={setEditorValue}
-        getShowTreeView={getShowTreeView}
-        getTreeViewValue={getTreeViewValue}
-      />
-      <FormatOptions
-        getRootName={getRootName}
-        setRootName={setRootName}
-        getEndian={getEndian}
-        setEndian={setEndian}
-        getCompression={getCompression}
-        setCompression={setCompression}
-        getBedrockLevel={getBedrockLevel}
-        setBedrockLevel={setBedrockLevel}
-        getOpen={getShowFormatDialog}
-        setOpen={setShowFormatDialog}
-      />
-    </>
-  );
-}
-
-render(App,document.querySelector<HTMLDivElement>("#root")!);
-
-const platform: string = navigator.userAgentData?.platform ?? navigator.platform;
-const appleDevice: boolean = /^(Mac|iPhone|iPad|iPod)/i.test(platform);
-const isiOSDevice: boolean = appleDevice && navigator.maxTouchPoints > 1;
-
-if (window.isSecureContext && !import.meta.env.DEV){
-  await navigator.serviceWorker.register("./service-worker.js");
-}
 
 window.launchQueue?.setConsumer?.(async launchParams => {
   const { files: handles } = launchParams;
@@ -241,3 +205,39 @@ async function saveNBTFile(file: File | null = null): Promise<void> {
 
   await saveFile(file,null);
 }
+
+  return (
+    <>
+      <Header
+        getEditorDisabled={getEditorDisabled}
+        setEditorDisabled={setEditorDisabled}
+        getShowTreeView={getShowTreeView}
+        setShowTreeView={setShowTreeView}
+        setShowFormatDialog={setShowFormatDialog}
+        openFile={async () => await openNBTFile()}
+        saveFile={async () => await saveNBTFile()}
+      />
+      <Main
+        getEditorDisabled={getEditorDisabled}
+        getEditorValue={getEditorValue}
+        setEditorValue={setEditorValue}
+        getShowTreeView={getShowTreeView}
+        getTreeViewValue={getTreeViewValue}
+      />
+      <FormatOptions
+        getRootName={getRootName}
+        setRootName={setRootName}
+        getEndian={getEndian}
+        setEndian={setEndian}
+        getCompression={getCompression}
+        setCompression={setCompression}
+        getBedrockLevel={getBedrockLevel}
+        setBedrockLevel={setBedrockLevel}
+        getOpen={getShowFormatDialog}
+        setOpen={setShowFormatDialog}
+      />
+    </>
+  );
+}
+
+render(App,document.querySelector<HTMLDivElement>("#root")!);
