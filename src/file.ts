@@ -7,21 +7,6 @@ import type { NBTData, ReadOptions } from "nbtify";
 */
 export async function openFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<File | FileSystemFileHandle | null> {
   if (file === null){
-    if ("showOpenFilePicker" in window){
-      const [fileHandle] = await window.showOpenFilePicker({
-        types: [
-          {
-            // This is from the `manifest.webmanifest`. I want to eventually derive these from that itself.
-            accept: {                               // ".dat_old" is invalid for the FS Access API?
-              "application/octet-stream": [".nbt", ".dat" /*, ".dat_old"*/, ".mcstructure", ".litematic", ".schem", ".schematic"]
-            }
-          }
-        ]
-      })/*
-      }).catch(() => ([]));
-*/
-      file = fileHandle ?? null;
-    } else {
       const fileOpener = document.createElement("input");
       fileOpener.type = "file";
       // Same with this one, I want to dedupe these, now that I am using a bundler.
@@ -34,7 +19,6 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 
       file = fileOpener.files?.[0] ?? null;
     }
-  }
 
   if (file instanceof DataTransferItem){
     const handle: FileSystemHandle | null = await file.getAsFileSystemHandle?.() ?? null;
