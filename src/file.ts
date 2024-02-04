@@ -1,6 +1,6 @@
-import { read, write } from "nbtify";
+import { read, write, parse, stringify, NBTData } from "nbtify";
 
-import type { NBTData, ReadOptions } from "nbtify";
+import type { ReadOptions } from "nbtify";
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
@@ -10,7 +10,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
       const fileOpener = document.createElement("input");
       fileOpener.type = "file";
       // Same with this one, I want to dedupe these, now that I am using a bundler.
-      fileOpener.accept = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic";
+      fileOpener.accept = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic, .snbt";
 
       await new Promise(resolve => {
         fileOpener.addEventListener("change",resolve,{ once: true });
@@ -32,6 +32,11 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
  * Attempts to create an NBTData object from a File object.
 */
 export async function readFile(file: File, options?: ReadOptions): Promise<NBTData> {
+  if (file.name.endsWith(".snbt")){
+    const text = await file.text();
+    return new NBTData(parse(text));
+  }
+
   const buffer = await file.arrayBuffer();
   return read(buffer,options);
 }
@@ -72,6 +77,11 @@ export async function shareFile(file: File): Promise<void> {
  * Creates a File object from an NBTData object.
 */
 export async function writeFile(nbt: NBTData, name: string): Promise<File> {
+  if (name.endsWith(".snbt")){
+    const text = stringify(nbt);
+    return new File([text],name);
+  }
+
   const data = await write(nbt);
   return new File([data],name);
 }

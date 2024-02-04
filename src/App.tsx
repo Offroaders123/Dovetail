@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createMemo, createSignal } from "solid-js";
 import { parse, stringify, NBTData } from "nbtify";
 import { openFile, readFile, saveFile, shareFile, writeFile } from "./file.js";
 import { Header } from "./Header.js";
@@ -22,6 +22,7 @@ const [getName,setName] = createSignal<string>("");
 const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
 const [getEditorValue,setEditorValue] = createSignal<string>("");
 const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(false);
+const getEditingSNBT = createMemo<boolean>(() => getName().endsWith(".snbt"));
 const [getRootName,setRootName] = createSignal<RootName>("");
 const [getEndian,setEndian] = createSignal<Endian>("big");
 const [getCompression,setCompression] = createSignal<Compression>(null);
@@ -129,9 +130,9 @@ const handleDrop: NonNullable<typeof document.ondrop> = async event => {
 
 document.addEventListener("drop",handleDrop);
 
-const demo = fetch("./bigtest.nbt")
+const demo = fetch("./entity.snbt")
   .then(response => response.blob())
-  .then(blob => new File([blob],"bigtest.nbt"));
+  .then(blob => new File([blob],"entity.snbt"));
 demo.then(console.log);
 demo.then(openNBTFile);
 
@@ -229,6 +230,7 @@ async function saveNBTFile(file: File | null = null): Promise<void> {
       <Header
         getEditorDisabled={getEditorDisabled}
         setEditorDisabled={setEditorDisabled}
+        getEditingSNBT={getEditingSNBT}
         getShowTreeView={getShowTreeView}
         setShowTreeView={setShowTreeView}
         setShowFormatDialog={setShowFormatDialog}
