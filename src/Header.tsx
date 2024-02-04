@@ -22,6 +22,7 @@ export function Header(props: HeaderProps){
       <label style="margin-inline-start: auto;">
         <input
           type="checkbox"
+          name="treeView"
           checked={props.getShowTreeView()}
           oninput={() => props.setShowTreeView(treeView => !treeView)}
         />
