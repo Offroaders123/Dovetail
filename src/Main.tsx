@@ -15,8 +15,11 @@ export interface MainProps {
 export function Main(props: MainProps){
   return (
     <main>
-            <NBTTree name={props.getRootName} value={props.getTreeViewValue}/>
-            <textarea
+      {
+        props.getShowTreeView()
+          ? <NBTTree name={props.getRootName} value={props.getTreeViewValue}/>
+          : <textarea
+              name="editor"
               disabled={props.getEditorDisabled()}
               placeholder="NBT data will show here..."
               wrap="off"
@@ -27,6 +30,7 @@ export function Main(props: MainProps){
               value={props.getEditorValue()}
               oninput={event => props.setEditorValue(event.currentTarget.value)}
             />
+      }
     </main>
   );
 }

@@ -48,8 +48,10 @@ const setFormat = (format: Format): Format => {
 }
 
 createEffect(() => {
+  if (!getShowTreeView()) return;
+  // console.log("Hi! updating");
   let rootTag: RootTag;
-  console.clear();
+  // console.clear();
   try {
     rootTag = getEditorValue() === ""
       ? {}
@@ -127,11 +129,11 @@ const handleDrop: NonNullable<typeof document.ondrop> = async event => {
 
 document.addEventListener("drop",handleDrop);
 
-// const demo = fetch("./bigtest.nbt")
-//   .then(response => response.blob())
-//   .then(blob => new File([blob],"bigtest.nbt"));
-// demo.then(console.log);
-// demo.then(openNBTFile);
+const demo = fetch("./bigtest.nbt")
+  .then(response => response.blob())
+  .then(blob => new File([blob],"bigtest.nbt"));
+demo.then(console.log);
+demo.then(openNBTFile);
 
 /**
  * Opens an NBT file in the editor.
