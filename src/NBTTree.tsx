@@ -3,15 +3,20 @@ import { NBTData } from "nbtify";
 import { NBTBranch } from "./NBTBranch.js";
 
 import type { Accessor } from "solid-js";
-import type { Tag } from "nbtify";
+import type { RootName, Tag } from "nbtify";
 
-export function NBTTree(props: { value: Accessor<NBTData | null>; }){
+export interface NBTTreeProps {
+  name: Accessor<RootName>;
+  value: Accessor<NBTData | null>;
+}
+
+export function NBTTree(props: NBTTreeProps){
   const getValue = createMemo<Tag | null>(() => props.value()?.data ?? null);
 
   return (
     <div class="nbt-tree">{
       getValue() !== null &&
-        <NBTBranch value={() => getValue()!}/>
+        <NBTBranch name={props.name} value={() => getValue()!} open/>
     }</div>
   );
 }

@@ -5,52 +5,52 @@ import type { Accessor } from "solid-js";
 import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, ByteArrayTag, StringTag, ListTag, CompoundTag, IntArrayTag, LongArrayTag } from "nbtify";
 
 export interface NBTBranchProps {
-  name?: Accessor<string | null>;
+  name: Accessor<string | null>;
   value: Accessor<Tag>;
+  open?: boolean;
 }
 
 export function NBTBranch(props: NBTBranchProps){
-  const getName = createMemo<string | null>(() => props.name?.() ?? null);
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
     <div class="nbt-branch" data-type={getType()}>{
       <Switch>
         <Match when={getType() === TAG.BYTE}>
-          <ByteView name={getName} value={props.value as Accessor<ByteTag>}/>
+          <ByteView name={props.name} value={props.value as Accessor<ByteTag>}/>
         </Match>
         <Match when={getType() === TAG.SHORT}>
-          <ShortView name={getName} value={props.value as Accessor<ShortTag>}/>
+          <ShortView name={props.name} value={props.value as Accessor<ShortTag>}/>
         </Match>
         <Match when={getType() === TAG.INT}>
-          <IntView name={getName} value={props.value as Accessor<IntTag>}/>
+          <IntView name={props.name} value={props.value as Accessor<IntTag>}/>
         </Match>
         <Match when={getType() === TAG.LONG}>
-          <LongView name={getName} value={props.value as Accessor<LongTag>}/>
+          <LongView name={props.name} value={props.value as Accessor<LongTag>}/>
         </Match>
         <Match when={getType() === TAG.FLOAT}>
-          <FloatView name={getName} value={props.value as Accessor<FloatTag>}/>
+          <FloatView name={props.name} value={props.value as Accessor<FloatTag>}/>
         </Match>
         <Match when={getType() === TAG.DOUBLE}>
-          <DoubleView name={getName} value={props.value as Accessor<DoubleTag>}/>
+          <DoubleView name={props.name} value={props.value as Accessor<DoubleTag>}/>
         </Match>
         <Match when={getType() === TAG.BYTE_ARRAY}>
-          <ByteArrayView name={getName} value={props.value as Accessor<ByteArrayTag>}/>
+          <ByteArrayView name={props.name} value={props.value as Accessor<ByteArrayTag>}/>
         </Match>
         <Match when={getType() === TAG.STRING}>
-          <StringView name={getName} value={props.value as Accessor<StringTag>}/>
+          <StringView name={props.name} value={props.value as Accessor<StringTag>}/>
         </Match>
         <Match when={getType() === TAG.LIST}>
-          <ListView name={getName} value={props.value as Accessor<ListTag<Tag>>}/>
+          <ListView name={props.name} value={props.value as Accessor<ListTag<Tag>>} open={props.open}/>
         </Match>
         <Match when={getType() === TAG.COMPOUND}>
-          <CompoundView name={getName} value={props.value as Accessor<CompoundTag>}/>
+          <CompoundView name={props.name} value={props.value as Accessor<CompoundTag>} open={props.open}/>
         </Match>
         <Match when={getType() === TAG.INT_ARRAY}>
-          <IntArrayView name={getName} value={props.value as Accessor<IntArrayTag>}/>
+          <IntArrayView name={props.name} value={props.value as Accessor<IntArrayTag>}/>
         </Match>
         <Match when={getType() === TAG.LONG_ARRAY}>
-          <LongArrayView name={getName} value={props.value as Accessor<LongArrayTag>}/>
+          <LongArrayView name={props.name} value={props.value as Accessor<LongArrayTag>}/>
         </Match>
       </Switch>
     }</div>
@@ -82,21 +82,25 @@ type ContainerTag = ByteArrayTag | ListTag<Tag> | CompoundTag | IntArrayTag | Lo
 interface ContainerViewProps<T extends ContainerTag> {
   name: Accessor<string | null>;
   value: Accessor<T>;
+  open?: boolean;
 }
 
 function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
-    <details open={props.name() === null}>
+    <details open={props.open}>
       <summary>{
-        props.name() !== null &&
-          <>{
-            escapeString(props.name()!)
-          }{
-            getType() !== TAG.COMPOUND &&
-              ` [${Object.keys(props.value()).length}]`
-          }</>
+        <>{
+          props.name() === null
+            ? <i>(unnamed)</i> :
+          props.name() === ""
+            ? <i>""</i> :
+          escapeString(props.name()!)
+        }{
+          getType() !== TAG.COMPOUND &&
+            ` [${Object.keys(props.value()).length}]`
+        }</>
       }</summary>
       {
         Object.entries(props.value())

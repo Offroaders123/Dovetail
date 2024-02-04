@@ -1,9 +1,10 @@
 import { NBTTree } from "./NBTTree.js";
 
 import type { Accessor, Setter } from "solid-js";
-import type { NBTData } from "nbtify";
+import type { NBTData, RootName } from "nbtify";
 
 export interface MainProps {
+  getRootName: Accessor<RootName>;
   getEditorDisabled: Accessor<boolean>;
   getEditorValue: Accessor<string>;
   setEditorValue: Setter<string>;
@@ -16,7 +17,7 @@ export function Main(props: MainProps){
     <main>
       {
         props.getShowTreeView()
-          ? <NBTTree value={props.getTreeViewValue}/>
+          ? <NBTTree name={props.getRootName} value={props.getTreeViewValue}/>
           : <textarea
               disabled={props.getEditorDisabled()}
               placeholder="NBT data will show here..."

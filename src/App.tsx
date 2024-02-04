@@ -219,6 +219,7 @@ async function saveNBTFile(file: File | null = null): Promise<void> {
         saveFile={async () => await saveNBTFile()}
       />
       <Main
+        getRootName={getRootName}
         getEditorDisabled={getEditorDisabled}
         getEditorValue={getEditorValue}
         setEditorValue={setEditorValue}
