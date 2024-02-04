@@ -15,7 +15,7 @@ export interface AppProps {
 export function App(props: AppProps){
 // global state
 const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
-const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData | null>(null);
+const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
 const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
 /** The name of the currently opened file. */
 const [getName,setName] = createSignal<string>("");
@@ -215,8 +215,8 @@ async function saveNBTFile(file: File | null = null): Promise<void> {
         getShowTreeView={getShowTreeView}
         setShowTreeView={setShowTreeView}
         setShowFormatDialog={setShowFormatDialog}
-        openFile={async () => await openNBTFile()}
-        saveFile={async () => await saveNBTFile()}
+        openFile={openNBTFile}
+        saveFile={saveNBTFile}
       />
       <Main
         getRootName={getRootName}

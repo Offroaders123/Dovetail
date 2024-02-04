@@ -9,7 +9,7 @@ export interface MainProps {
   getEditorValue: Accessor<string>;
   setEditorValue: Setter<string>;
   getShowTreeView: Accessor<boolean>;
-  getTreeViewValue: Accessor<NBTData | null>;
+  getTreeViewValue: Accessor<NBTData>;
 }
 
 export function Main(props: MainProps){
