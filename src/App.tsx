@@ -1,11 +1,11 @@
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { parse, stringify, NBTData } from "nbtify";
 import { openFile, readFile, saveFile, shareFile, writeFile } from "./file.js";
 import { Header } from "./Header.js";
 import { Main } from "./Main.js";
 import { FormatOptions } from "./FormatOptions.js";
 
-import type { RootName, Endian, Compression, BedrockLevel, Format } from "nbtify";
+import type { RootName, Endian, Compression, BedrockLevel, Format, RootTag } from "nbtify";
 
 export interface AppProps {
   isiOSDevice: boolean;
@@ -21,7 +21,7 @@ const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
 const [getName,setName] = createSignal<string>("");
 const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
 const [getEditorValue,setEditorValue] = createSignal<string>("");
-const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(true);
+const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(false);
 const [getRootName,setRootName] = createSignal<RootName>("");
 const [getEndian,setEndian] = createSignal<Endian>("big");
 const [getCompression,setCompression] = createSignal<Compression>(null);
@@ -46,6 +46,21 @@ const setFormat = (format: Format): Format => {
   setBedrockLevel(bedrockLevel);
   return format;
 }
+
+createEffect(() => {
+  let rootTag: RootTag;
+  console.clear();
+  try {
+    rootTag = getEditorValue() === ""
+      ? {}
+      : parse(getEditorValue());
+  } catch (error){
+    console.warn(error);
+    return;
+  }
+  const nbt = new NBTData(rootTag,getFormat());
+  setTreeViewValue(nbt);
+});
 
 // refs
 // let saver: HTMLButtonElement;
@@ -112,11 +127,11 @@ const handleDrop: NonNullable<typeof document.ondrop> = async event => {
 
 document.addEventListener("drop",handleDrop);
 
-const demo = fetch("./bigtest.nbt")
-  .then(response => response.blob())
-  .then(blob => new File([blob],"bigtest.nbt"));
-demo.then(console.log);
-demo.then(openNBTFile);
+// const demo = fetch("./bigtest.nbt")
+//   .then(response => response.blob())
+//   .then(blob => new File([blob],"bigtest.nbt"));
+// demo.then(console.log);
+// demo.then(openNBTFile);
 
 /**
  * Opens an NBT file in the editor.

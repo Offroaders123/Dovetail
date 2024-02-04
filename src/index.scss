@@ -78,6 +78,7 @@ main {
 
 textarea {
   padding: 8px;
+  height: 50%;
   flex-grow: 1;
   font-size: 13px;
   font-family: ui-monospace, "Noto Sans Mono", "Cousine", monospace;
@@ -102,7 +103,8 @@ textarea[disabled] {
   padding: 8px 12px;
   position: absolute;
   inset: 0;
-  height: 100%;
+  top: 50%;
+  height: 50%;
   display: flex;
   gap: 1em;
   flex-direction: column;
