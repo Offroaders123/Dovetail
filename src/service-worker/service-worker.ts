@@ -2,7 +2,7 @@ declare var self: ServiceWorkerGlobalScope;
 declare const clients: Clients;
 
 const NAME = "Dovetail";
-const VERSION = "v2.1.6";
+const VERSION = "v3.0.0";
 const CACHE_NAME = `${NAME} ${VERSION}`;
 
 self.addEventListener("activate",event => {
