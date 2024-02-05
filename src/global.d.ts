@@ -11,6 +11,19 @@ declare global {
     */
     readonly standalone: boolean;
   }
+
+  interface WebAppManifest {
+    file_handlers: FileHandler[];
+  }
+
+  interface FileHandler {
+    action: string;
+    accept: FileHandlerAccept;
+  }
+
+  interface FileHandlerAccept {
+    [mimeType: string]: string[];
+  }  
 }
 
 declare module "solid-js" {

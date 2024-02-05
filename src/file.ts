@@ -3,33 +3,13 @@ import manifestURL from "/manifest.webmanifest?url";
 
 import type { ReadOptions } from "nbtify";
 
-console.clear();
-
-interface WebAppManifest {
-  file_handlers: FileHandler[];
-}
-
-interface FileHandler {
-  action: string;
-  accept: FileHandlerAccept;
-}
-
-type FileHandlerAccept = Record<string, string[]>;
-
 const manifest: WebAppManifest = await fetch(manifestURL)
   .then(response => response.json());
-// console.log(JSON.stringify(manifest,null,2));
 
-const { file_handlers } = manifest;
-console.log(JSON.stringify(file_handlers,null,2));
-
-const accept: string = file_handlers.map(handler => Object.entries(handler.accept)).flat(3).join(", ");
-console.log(accept);
-
-const acceptOld = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic, .snbt";
-console.log(acceptOld);
-
-console.log(accept === acceptOld);
+export const contentTypes: string = manifest.file_handlers
+  .map(handler => Object.entries(handler.accept))
+  .flat(3)
+  .join(", ");
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
@@ -38,7 +18,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   if (file === null){
       const fileOpener = document.createElement("input");
       fileOpener.type = "file";
-      fileOpener.accept = accept;
+      fileOpener.accept = contentTypes;
 
       await new Promise<void>(resolve => {
         fileOpener.addEventListener("change",() => resolve(),{ once: true });
