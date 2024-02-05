@@ -14,14 +14,14 @@ export interface AppProps {
 // Temporarily placed here, incrementally moving to JSX
 export function App(props: AppProps){
 // global state
-const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
+const [getShowTreeView,setShowTreeView] = createSignal<boolean>(false);
 const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
 const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
 /** The name of the currently opened file. */
 const [getName,setName] = createSignal<string>("");
 const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
 const [getEditorValue,setEditorValue] = createSignal<string>("");
-const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(false);
+const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(true);
 const getEditingSNBT = createMemo<boolean>(() => getName().endsWith(".snbt"));
 const [getRootName,setRootName] = createSignal<RootName>("");
 const [getEndian,setEndian] = createSignal<Endian>("big");
@@ -130,11 +130,11 @@ const handleDrop: NonNullable<typeof document.ondrop> = async event => {
 
 document.addEventListener("drop",handleDrop);
 
-const demo = fetch("./entity.snbt")
-  .then(response => response.blob())
-  .then(blob => new File([blob],"entity.snbt"));
-demo.then(console.log);
-demo.then(openNBTFile);
+// const demo = fetch("./bigtest.nbt")
+//   .then(response => response.blob())
+//   .then(blob => new File([blob],"bigtest.nbt"));
+// demo.then(console.log);
+// demo.then(openNBTFile);
 
 /**
  * Opens an NBT file in the editor.

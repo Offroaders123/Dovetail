@@ -12,8 +12,9 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
       // Same with this one, I want to dedupe these, now that I am using a bundler.
       fileOpener.accept = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic, .snbt";
 
-      await new Promise(resolve => {
-        fileOpener.addEventListener("change",resolve,{ once: true });
+      await new Promise<void>(resolve => {
+        fileOpener.addEventListener("change",() => resolve(),{ once: true });
+        fileOpener.addEventListener("cancel",() => resolve(),{ once: true });
         fileOpener.click();
       });
 
