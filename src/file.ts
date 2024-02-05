@@ -2,10 +2,11 @@ import { read, write, parse, stringify, NBTData } from "nbtify";
 import manifestURL from "/manifest.webmanifest?url";
 
 import type { ReadOptions } from "nbtify";
+import type { WebAppManifest } from "web-app-manifest";
 
 console.clear();
 
-const manifest = await fetch(manifestURL)
+const manifest: WebAppManifest = await fetch(manifestURL)
   .then(response => response.json());
 // console.log(JSON.stringify(manifest,null,2));
 
