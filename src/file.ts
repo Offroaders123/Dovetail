@@ -16,18 +16,18 @@ export const contentTypes: string = manifest.file_handlers
 */
 export async function openFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<File | FileSystemFileHandle | null> {
   if (file === null){
-      const fileOpener = document.createElement("input");
-      fileOpener.type = "file";
-      fileOpener.accept = contentTypes;
+    const fileOpener = document.createElement("input");
+    fileOpener.type = "file";
+    fileOpener.accept = contentTypes;
 
-      await new Promise<void>(resolve => {
-        fileOpener.addEventListener("change",() => resolve(),{ once: true });
-        fileOpener.addEventListener("cancel",() => resolve(),{ once: true });
-        fileOpener.click();
-      });
+    await new Promise<void>(resolve => {
+      fileOpener.addEventListener("change",() => resolve(),{ once: true });
+      fileOpener.addEventListener("cancel",() => resolve(),{ once: true });
+      fileOpener.click();
+    });
 
-      file = fileOpener.files?.[0] ?? null;
-    }
+    file = fileOpener.files?.[0] ?? null;
+  }
 
   if (file instanceof DataTransferItem){
     const handle: FileSystemHandle | null = await file.getAsFileSystemHandle?.() ?? null;

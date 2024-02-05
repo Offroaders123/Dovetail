@@ -23,7 +23,7 @@ declare global {
 
   interface FileHandlerAccept {
     [mimeType: string]: string[];
-  }  
+  }
 }
 
 declare module "solid-js" {

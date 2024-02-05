@@ -138,7 +138,8 @@ textarea[disabled] {
   align-items: center;
 }
 
-.nbt-branch > details > summary::before, .nbt-branch > span::before {
+.nbt-branch > details > summary::before,
+.nbt-branch > span::before {
   content: "";
   width: 16px;
   height: 16px;
@@ -166,51 +167,63 @@ summary {
   vertical-align: middle;
 }
 
-.nbt-branch[data-type="1"] > details > summary::before, .nbt-branch[data-type="1"] > span::before {
+.nbt-branch[data-type="1"] > details > summary::before,
+.nbt-branch[data-type="1"] > span::before {
   background-position: 0 0;
 }
 
-.nbt-branch[data-type="2"] > details > summary::before, .nbt-branch[data-type="2"] > span::before {
+.nbt-branch[data-type="2"] > details > summary::before,
+.nbt-branch[data-type="2"] > span::before {
   background-position: -16px -16px;
 }
 
-.nbt-branch[data-type="3"] > details > summary::before, .nbt-branch[data-type="3"] > span::before {
+.nbt-branch[data-type="3"] > details > summary::before,
+.nbt-branch[data-type="3"] > span::before {
   background-position: -48px 0;
 }
 
-.nbt-branch[data-type="4"] > details > summary::before, .nbt-branch[data-type="4"] > span::before {
+.nbt-branch[data-type="4"] > details > summary::before,
+.nbt-branch[data-type="4"] > span::before {
   background-position: 0 -16px;
 }
 
-.nbt-branch[data-type="5"] > details > summary::before, .nbt-branch[data-type="5"] > span::before {
+.nbt-branch[data-type="5"] > details > summary::before,
+.nbt-branch[data-type="5"] > span::before {
   background-position: -32px 0;
 }
 
-.nbt-branch[data-type="6"] > details > summary::before, .nbt-branch[data-type="6"] > span::before {
+.nbt-branch[data-type="6"] > details > summary::before,
+.nbt-branch[data-type="6"] > span::before {
   background-position: -16px 0;
 }
 
-.nbt-branch[data-type="7"] > details > summary::before, .nbt-branch[data-type="7"] > span::before {
+.nbt-branch[data-type="7"] > details > summary::before,
+.nbt-branch[data-type="7"] > span::before {
   background-position: 0 -32px;
 }
 
-.nbt-branch[data-type="8"] > details > summary::before, .nbt-branch[data-type="8"] > span::before {
+.nbt-branch[data-type="8"] > details > summary::before,
+.nbt-branch[data-type="8"] > span::before {
   background-position: -32px -16px;
 }
 
-.nbt-branch[data-type="9"] > details > summary::before, .nbt-branch[data-type="9"] > span::before {
+.nbt-branch[data-type="9"] > details > summary::before,
+.nbt-branch[data-type="9"] > span::before {
   background-position: -32px -32px;
 }
 
-.nbt-branch[data-type="10"] > details > summary::before, .nbt-branch[data-type="10"] > span::before {
+.nbt-branch[data-type="10"] > details > summary::before,
+.nbt-branch[data-type="10"] > span::before {
   background-position: -48px -16px;
 }
 
-.nbt-branch[data-type="11"] > details > summary::before, .nbt-branch[data-type="11"] > span::before {
+.nbt-branch[data-type="11"] > details > summary::before,
+.nbt-branch[data-type="11"] > span::before {
   background-position: -16px -32px;
 }
 
-.nbt-branch[data-type="12"] > details > summary::before, .nbt-branch[data-type="12"] > span::before {
+.nbt-branch[data-type="12"] > details > summary::before,
+.nbt-branch[data-type="12"] > span::before {
   background-position: 0 -48px;
 }
 
