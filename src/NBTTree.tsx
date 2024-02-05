@@ -14,8 +14,8 @@ export function NBTTree(props: NBTTreeProps){
   const getRootTag = createMemo(() => props.value().data);
 
   return (
-    <div class="nbt-tree">{
+    <div class="nbt-tree">
       <NBTBranch name={props.name} value={getRootTag} open/>
-    }</div>
+    </div>
   );
 }

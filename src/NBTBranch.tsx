@@ -14,7 +14,7 @@ export function NBTBranch(props: NBTBranchProps){
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
-    <div class="nbt-branch" data-type={getType()}>{
+    <div class="nbt-branch" data-type={getType()}>
       <Switch>
         <Match when={getType() === TAG.BYTE}>
           <ByteView name={props.name} value={props.value as Accessor<ByteTag>}/>
@@ -53,7 +53,7 @@ export function NBTBranch(props: NBTBranchProps){
           <LongArrayView name={props.name} value={props.value as Accessor<LongArrayTag>}/>
         </Match>
       </Switch>
-    }</div>
+    </div>
   );
 }
 
@@ -90,8 +90,8 @@ function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
 
   return (
     <details open={props.open}>
-      <summary>{
-        <>{
+      <summary>
+        {
           props.name() === null
             ? <i>(unnamed)</i> :
           props.name() === ""
@@ -100,8 +100,8 @@ function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
         }{
           getType() !== TAG.COMPOUND &&
             ` [${Object.keys(props.value()).length}]`
-        }</>
-      }</summary>
+        }
+      </summary>
       {
         Object.entries(props.value())
           .map(([entryName,entry]) => {
@@ -161,11 +161,13 @@ function PrimitiveView<T extends PrimitiveTag>(props: PrimitiveViewProps<T>){
   });
 
   return (
-    <span>{
-      escapeString(getName())
-    }: {
-      escapeString(props.value().valueOf().toString() satisfies string)
-    }</span>
+    <span>
+      {
+        escapeString(getName())
+      }: {
+        escapeString(props.value().valueOf().toString() satisfies string)
+      }
+    </span>
   );
 }
 
