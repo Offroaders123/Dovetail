@@ -2,9 +2,19 @@ import { read, write, parse, stringify, NBTData } from "nbtify";
 import manifestURL from "/manifest.webmanifest?url";
 
 import type { ReadOptions } from "nbtify";
-import type { WebAppManifest } from "web-app-manifest";
 
 console.clear();
+
+interface WebAppManifest {
+  file_handlers: FileHandler[];
+}
+
+interface FileHandler {
+  action: string;
+  accept: FileHandlerAccept;
+}
+
+type FileHandlerAccept = Record<string, string[]>;
 
 const manifest: WebAppManifest = await fetch(manifestURL)
   .then(response => response.json());
@@ -13,7 +23,7 @@ const manifest: WebAppManifest = await fetch(manifestURL)
 const { file_handlers } = manifest;
 console.log(JSON.stringify(file_handlers,null,2));
 
-const accept: string = file_handlers.map((handler: any) => Object.entries(handler.accept)).flat(3).join(", ");
+const accept: string = file_handlers.map(handler => Object.entries(handler.accept)).flat(3).join(", ");
 console.log(accept);
 
 const acceptOld = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic, .snbt";

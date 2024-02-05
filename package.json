@@ -13,7 +13,6 @@
     "solid-js": "^1.8.12"
   },
   "devDependencies": {
-    "@types/web-app-manifest": "^1.0.7",
     "new-javascript": "^0.4.2",
     "sass": "^1.70.0",
     "typescript": "^5.3.3",
