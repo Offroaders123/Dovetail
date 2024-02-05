@@ -1,6 +1,24 @@
 import { read, write, parse, stringify, NBTData } from "nbtify";
+import manifestURL from "/manifest.webmanifest?url";
 
 import type { ReadOptions } from "nbtify";
+
+console.clear();
+
+const manifest = await fetch(manifestURL)
+  .then(response => response.json());
+// console.log(JSON.stringify(manifest,null,2));
+
+const { file_handlers } = manifest;
+console.log(JSON.stringify(file_handlers,null,2));
+
+const accept: string = file_handlers.map((handler: any) => Object.entries(handler.accept)).flat(3).join(", ");
+console.log(accept);
+
+const acceptOld = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic, .snbt";
+console.log(acceptOld);
+
+console.log(accept === acceptOld);
 
 /**
  * Attempts to read an NBT file, then open it in the editor.
@@ -9,8 +27,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
   if (file === null){
       const fileOpener = document.createElement("input");
       fileOpener.type = "file";
-      // Same with this one, I want to dedupe these, now that I am using a bundler.
-      fileOpener.accept = "application/octet-stream, .nbt, .dat, .dat_old, .mcstructure, .litematic, .schem, .schematic, .snbt";
+      fileOpener.accept = accept;
 
       await new Promise<void>(resolve => {
         fileOpener.addEventListener("change",() => resolve(),{ once: true });
@@ -33,6 +50,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
  * Attempts to create an NBTData object from a File object.
 */
 export async function readFile(file: File, options?: ReadOptions): Promise<NBTData> {
+  // May want to dedupe
   if (file.name.endsWith(".snbt")){
     const text = await file.text();
     return new NBTData(parse(text));
@@ -78,6 +96,7 @@ export async function shareFile(file: File): Promise<void> {
  * Creates a File object from an NBTData object.
 */
 export async function writeFile(nbt: NBTData, name: string): Promise<File> {
+  // May want to dedupe
   if (name.endsWith(".snbt")){
     const text = stringify(nbt);
     return new File([text],name);
