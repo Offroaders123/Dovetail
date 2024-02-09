@@ -1,3 +1,5 @@
+import { CodeMirror } from "@solid-codemirror/codemirror";
+
 import type { Accessor, Setter } from "solid-js";
 
 export interface EditorProps {
@@ -8,17 +10,17 @@ export interface EditorProps {
 
 export function Editor(props: EditorProps){
   return (
-    <textarea
-      name="editor"
-      disabled={props.disabled()}
-      placeholder="NBT data will show here..."
-      wrap="off"
+    <CodeMirror
+      aria-name="editor"
+      aria-disabled={props.disabled()}
+      aria-placeholder="NBT data will show here..."
+      wrapLine={false}
       spellcheck={false}
-      autocomplete="off"
+      aria-autocomplete="none"
       autocapitalize="none"
-      autocorrect="off"
+      aria-autocorrect="off"
       value={props.getValue()}
-      oninput={event => props.setValue(event.currentTarget.value)}
+      onValueChange={value => props.setValue(value)}
     />
   );
 }

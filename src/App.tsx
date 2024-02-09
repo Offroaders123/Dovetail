@@ -130,11 +130,11 @@ export function App(props: AppProps){
 
   document.addEventListener("drop",handleDrop);
 
-  // const demo = fetch("./bigtest.nbt")
-  //   .then(response => response.blob())
-  //   .then(blob => new File([blob],"bigtest.nbt"));
-  // demo.then(console.log);
-  // demo.then(openNBTFile);
+  const demo = fetch("./bigtest.nbt")
+    .then(response => response.blob())
+    .then(blob => new File([blob],"bigtest.nbt"));
+  demo.then(console.log);
+  demo.then(openNBTFile);
 
   /**
    * Opens an NBT file in the editor.

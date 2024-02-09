@@ -29,6 +29,7 @@ body > * {
 
 header {
   padding: 0.5rem;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 0.5em;
@@ -76,8 +77,15 @@ main {
   display: flex;
 }
 
-textarea {
-  padding: 8px;
+div:has(> .cm-editor) {
+  position: absolute;
+  inset: 0;
+  flex-grow: 1;
+  display: flex;
+  overflow: auto;
+}
+
+.cm-editor {
   flex-grow: 1;
   font-size: 13px;
   font-family: ui-monospace, "Noto Sans Mono", "Cousine", monospace;
@@ -94,7 +102,7 @@ textarea {
   resize: none;
 }
 
-textarea[disabled] {
+.cm-editor[disabled] {
   opacity: unset;
 }
 

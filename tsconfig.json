@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "target": "ESNext",
     "isolatedModules": true,
     "jsx": "preserve",
