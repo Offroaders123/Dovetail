@@ -1,4 +1,5 @@
 import { NBTTree } from "./NBTTree.js";
+import { Editor } from "./Editor.js";
 
 import type { Accessor, Setter } from "solid-js";
 import type { NBTData, RootName } from "nbtify";
@@ -18,17 +19,10 @@ export function Main(props: MainProps){
       {
         props.getShowTreeView()
           ? <NBTTree name={props.getRootName} value={props.getTreeViewValue}/>
-          : <textarea
-              name="editor"
-              disabled={props.getEditorDisabled()}
-              placeholder="NBT data will show here..."
-              wrap="off"
-              spellcheck={false}
-              autocomplete="off"
-              autocapitalize="none"
-              autocorrect="off"
-              value={props.getEditorValue()}
-              oninput={event => props.setEditorValue(event.currentTarget.value)}
+          : <Editor
+              disabled={props.getEditorDisabled}
+              getValue={props.getEditorValue}
+              setValue={props.setEditorValue}
             />
       }
     </main>
