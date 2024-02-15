@@ -1,37 +1,37 @@
-import { createEffect, createSignal } from "solid-js";
+import { useEffect, useState } from "react";
 
-import type { Accessor, JSX, Setter } from "solid-js";
+import type { Dispatch, JSX, SetStateAction } from "react";
 import type { RootName, Endian, Compression, BedrockLevel } from "nbtify";
 
 export interface FormatOptionsProps {
-  getRootName: Accessor<RootName>;
-  setRootName: Setter<RootName>;
-  getEndian: Accessor<Endian>;
-  setEndian: Setter<Endian>;
-  getCompression: Accessor<Compression>;
-  setCompression: Setter<Compression>;
-  getBedrockLevel: Accessor<BedrockLevel>;
-  setBedrockLevel: Setter<BedrockLevel>;
-  getOpen: Accessor<boolean>;
-  setOpen: Setter<boolean>;
+  getRootName: RootName;
+  setRootName: Dispatch<SetStateAction<RootName>>;
+  getEndian: Endian;
+  setEndian: Dispatch<SetStateAction<Endian>>;
+  getCompression: Compression;
+  setCompression: Dispatch<SetStateAction<Compression>>;
+  getBedrockLevel: BedrockLevel;
+  setBedrockLevel: Dispatch<SetStateAction<BedrockLevel>>;
+  getOpen: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export function FormatOptions(props: FormatOptionsProps){
-  const [getFormatDialog,setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
+  const [getFormatDialog,setFormatDialog] = useState<HTMLDialogElement | null>(null);
 
-  createEffect(() => {
-    const dialog = getFormatDialog();
-    if (dialog?.open && !props.getOpen()){
+  useEffect(() => {
+    const dialog = getFormatDialog;
+    if (dialog?.open && !props.getOpen){
       dialog.close();
-    } else if (!dialog?.open && props.getOpen()){
+    } else if (!dialog?.open && props.getOpen){
       dialog?.showModal();
     }
-  });
+  },[props.getOpen,getFormatDialog]);
 
   return (
-    <dialog ref={setFormatDialog} onclose={() => props.getOpen() && props.setOpen(false)}>
+    <dialog ref={setFormatDialog} onClose={() => props.getOpen && props.setOpen(false)}>
       <form method="dialog">
-        <div class="dialog-header">
+        <div className="dialog-header">
           <h3>Format Options</h3>
           <button type="submit" aria-label="Close">✕</button>
         </div>
@@ -44,11 +44,11 @@ export function FormatOptions(props: FormatOptionsProps){
               type="text"
               name="name"
               placeholder="&lt;empty&gt;"
-              autocomplete="off"
-              autocorrect="on"
-              disabled={props.getRootName() === null}
-              value={props.getRootName() === null ? "" : props.getRootName()!}
-              oninput={event => props.setRootName(event.currentTarget.value)}
+              autoComplete="off"
+              autoCorrect="on"
+              disabled={props.getRootName === null}
+              value={props.getRootName === null ? "" : props.getRootName}
+              onInput={event => props.setRootName(event.currentTarget.value)}
             />
           </label>
           {"\n"}
@@ -56,8 +56,8 @@ export function FormatOptions(props: FormatOptionsProps){
             <input
               type="checkbox"
               name="disableName"
-              checked={props.getRootName() === null}
-              oninput={event => props.setRootName(event.currentTarget.checked ? null : "")}
+              checked={props.getRootName === null}
+              onInput={event => props.setRootName(event.currentTarget.checked ? null : "")}
             />
             {" Disable "}
           </label>
@@ -74,8 +74,8 @@ export function FormatOptions(props: FormatOptionsProps){
                     type="radio"
                     name="endian"
                     value={endian}
-                    checked={props.getEndian() === endian}
-                    oninput={() => props.setEndian(endian)}
+                    checked={props.getEndian === endian}
+                    onInput={() => props.setEndian(endian)}
                   />
                   {` ${endian.slice(0,1).toUpperCase()}${endian.slice(1)} `}
                 </label>
@@ -85,7 +85,7 @@ export function FormatOptions(props: FormatOptionsProps){
 
         <fieldset>
           <legend>Compression</legend>
-
+{/* 
           {
             ([null, "gzip", "deflate", "deflate-raw"] satisfies Compression[])
               .map(compression =>
@@ -94,8 +94,8 @@ export function FormatOptions(props: FormatOptionsProps){
                     type="radio"
                     name="compression"
                     value={compression ?? "none"}
-                    checked={props.getCompression() === compression}
-                    oninput={() => props.setCompression(compression)}
+                    checked={props.getCompression === compression}
+                    onInput={() => props.setCompression(compression)}
                   />
                   {` ${compression === "deflate" ? `${compression} (zlib)` : compression ?? "None"} `}
                 </label>
@@ -108,7 +108,7 @@ export function FormatOptions(props: FormatOptionsProps){
                 }
                 return previous;
               },[])
-          }
+          } */}
         </fieldset>
 
         <fieldset>
@@ -121,8 +121,8 @@ export function FormatOptions(props: FormatOptionsProps){
               placeholder="&lt;false&gt;"
               min="0"
               max="4294967295"
-              value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!}
-              oninput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}
+              value={props.getBedrockLevel === null ? "" : props.getBedrockLevel}
+              onInput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}
             />
             {"\n"}<code>(Uint32)</code>{"\n"}
           </label>

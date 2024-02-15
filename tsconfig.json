@@ -3,8 +3,7 @@
     "module": "NodeNext",
     "target": "ESNext",
     "isolatedModules": true,
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js",
+    "jsx": "react-jsx",
     "types": [
       "new-javascript/wicg/file-system-access",
       "new-javascript/wicg/ua-client-hints",

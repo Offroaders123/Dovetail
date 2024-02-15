@@ -1,24 +1,24 @@
-import type { Accessor, Setter } from "solid-js";
+import type { Dispatch, SetStateAction } from "react";
 
 export interface EditorProps {
-  disabled: Accessor<boolean>;
-  getValue: Accessor<string>;
-  setValue: Setter<string>;
+  disabled: boolean;
+  getValue: string;
+  setValue: Dispatch<SetStateAction<string>>;
 }
 
 export function Editor(props: EditorProps){
   return (
     <textarea
       name="editor"
-      disabled={props.disabled()}
+      disabled={props.disabled}
       placeholder="NBT data will show here..."
       wrap="off"
-      spellcheck={false}
-      autocomplete="off"
-      autocapitalize="none"
-      autocorrect="off"
-      value={props.getValue()}
-      oninput={event => props.setValue(event.currentTarget.value)}
+      spellCheck={false}
+      autoComplete="off"
+      autoCapitalize="none"
+      autoCorrect="off"
+      value={props.getValue}
+      onInput={event => props.setValue(event.currentTarget.value)}
     />
   );
 }

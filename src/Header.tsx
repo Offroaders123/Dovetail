@@ -1,14 +1,14 @@
 import icon from "/img/icon.svg";
 
-import type { Accessor, Setter } from "solid-js";
+import type { Dispatch, SetStateAction } from "react";
 
 export interface HeaderProps {
-  getEditorDisabled: Accessor<boolean>;
-  setEditorDisabled: Setter<boolean>;
-  getEditingSNBT: Accessor<boolean>;
-  getShowTreeView: Accessor<boolean>;
-  setShowTreeView: Setter<boolean>;
-  setShowFormatDialog: Setter<boolean>;
+  getEditorDisabled: boolean;
+  setEditorDisabled: Dispatch<SetStateAction<boolean>>;
+  getEditingSNBT: boolean;
+  getShowTreeView: boolean;
+  setShowTreeView: Dispatch<SetStateAction<boolean>>;
+  setShowFormatDialog: Dispatch<SetStateAction<boolean>>;
   openFile(): void;
   saveFile(): void;
 }
@@ -18,22 +18,22 @@ export function Header(props: HeaderProps){
     <header>
       <img draggable="false" src={icon} alt=""/>
       <button
-        onclick={() => props.openFile()}
+        onClick={() => props.openFile()}
       >Open</button>
       <button
-        disabled={props.getEditorDisabled()}
-        onclick={() => props.saveFile()}
+        disabled={props.getEditorDisabled}
+        onClick={() => props.saveFile()}
       >Save</button>
       <button
-        disabled={props.getEditorDisabled() || props.getEditingSNBT()}
-        onclick={() => props.setShowFormatDialog(showFormatDialog => !showFormatDialog)}
+        disabled={props.getEditorDisabled || props.getEditingSNBT}
+        onClick={() => props.setShowFormatDialog(showFormatDialog => !showFormatDialog)}
       >Format Options...</button>
-      <label style="margin-inline-start: auto;">
+      <label style={{ marginInlineStart: "auto" }}>
         <input
           type="checkbox"
           name="treeView"
-          checked={props.getShowTreeView()}
-          oninput={() => props.setShowTreeView(treeView => !treeView)}
+          checked={props.getShowTreeView}
+          onInput={() => props.setShowTreeView(treeView => !treeView)}
         />
         {" Tree View "}
       </label>

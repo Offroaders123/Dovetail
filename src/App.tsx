@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { useEffect, useMemo, useState } from "react";
 import { parse, stringify, NBTData } from "nbtify";
 import { openFile, readFile, saveFile, shareFile, writeFile } from "./file.js";
 import { Header } from "./Header.js";
@@ -14,28 +14,28 @@ export interface AppProps {
 // Temporarily placed here, incrementally moving to JSX
 export function App(props: AppProps){
   // global state
-  const [getShowTreeView,setShowTreeView] = createSignal<boolean>(false);
-  const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
-  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
+  const [getShowTreeView,setShowTreeView] = useState<boolean>(false);
+  const [getTreeViewValue,setTreeViewValue] = useState<NBTData>(new NBTData({}));
+  const [getShowFormatDialog,setShowFormatDialog] = useState<boolean>(false);
   /** The name of the currently opened file. */
-  const [getName,setName] = createSignal<string>("");
-  const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
-  const [getEditorValue,setEditorValue] = createSignal<string>("");
-  const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(true);
-  const getEditingSNBT = createMemo<boolean>(() => getName().endsWith(".snbt"));
-  const [getRootName,setRootName] = createSignal<RootName>("");
-  const [getEndian,setEndian] = createSignal<Endian>("big");
-  const [getCompression,setCompression] = createSignal<Compression>(null);
-  const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(null);
+  const [getName,setName] = useState<string>("");
+  const [getFileHandle,setFileHandle] = useState<FileSystemFileHandle | null>(null);
+  const [getEditorValue,setEditorValue] = useState<string>("");
+  const [getEditorDisabled,setEditorDisabled] = useState<boolean>(true);
+  const getEditingSNBT = useMemo<boolean>(() => getName.endsWith(".snbt"),[getName]);
+  const [getRootName,setRootName] = useState<RootName>("");
+  const [getEndian,setEndian] = useState<Endian>("big");
+  const [getCompression,setCompression] = useState<Compression>(null);
+  const [getBedrockLevel,setBedrockLevel] = useState<BedrockLevel>(null);
   /**
    * Turns the values from the Format Options dialog into the NBT file's metadata.
   */
-  const getFormat = (): Format => ({
-    rootName: getRootName(),
-    endian: getEndian(),
-    compression: getCompression(),
-    bedrockLevel: getBedrockLevel()
-  });
+  const getFormat: Format = {
+    rootName: getRootName,
+    endian: getEndian,
+    compression: getCompression,
+    bedrockLevel: getBedrockLevel
+  };
   /**
    * Updates the Format Options dialog to match an NBT file's format metadata.
   */
@@ -48,22 +48,22 @@ export function App(props: AppProps){
     return format;
   }
 
-  createEffect(() => {
-    if (!getShowTreeView()) return;
+  useEffect(() => {
+    if (!getShowTreeView) return;
     // console.log("Hi! updating");
     let rootTag: RootTag;
     // console.clear();
     try {
-      rootTag = getEditorValue() === ""
+      rootTag = getEditorValue === ""
         ? {}
-        : parse(getEditorValue());
+        : parse(getEditorValue);
     } catch (error){
       console.warn(error);
       return;
     }
-    const nbt = new NBTData(rootTag,getFormat());
+    const nbt = new NBTData(rootTag,getFormat);
     setTreeViewValue(nbt);
-  });
+  },[getShowTreeView,getEditorValue,getFormat]);
 
   // refs
   // let saver: HTMLButtonElement;
@@ -183,7 +183,7 @@ export function App(props: AppProps){
     setFormat(nbt);
     setName(file.name);
 
-    document.title = `Dovetail - ${getName()}`;
+    document.title = `Dovetail - ${getName}`;
 
     setEditorValue(snbt);
     setEditorDisabled(false);
@@ -196,22 +196,22 @@ export function App(props: AppProps){
   async function saveNBTFile(file: File | null = null): Promise<void> {
     if (file === null){
       try {
-        const snbt = getEditorValue();
+        const snbt = getEditorValue;
         const nbt = parse(snbt);
-        const options = getFormat();
+        const options = getFormat;
         const nbtData = new NBTData(nbt,options);
-        file = await writeFile(nbtData,getName());
+        file = await writeFile(nbtData,getName);
 
         if (props.isiOSDevice && window.isSecureContext){
           return await shareFile(file);
         }
       } catch (error: unknown){
-        alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
+        alert(`Could not save '${getName}' as NBT data.\n\n${error}`);
         return;
       }
     }
 
-    const fileHandle = getFileHandle();
+    const fileHandle = getFileHandle;
 
     if (fileHandle !== null){
       try {
