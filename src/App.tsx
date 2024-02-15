@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { parse, stringify, NBTData } from "nbtify";
 import { openFile, readFile, saveFile, shareFile, writeFile } from "./file.js";
 import { Header } from "./Header.js";
@@ -39,14 +39,14 @@ export function App(props: AppProps){
   /**
    * Updates the Format Options dialog to match an NBT file's format metadata.
   */
-  const setFormat = (format: Format): Format => {
+  const setFormat = useCallback((format: Format): Format => {
     const { rootName, endian, compression, bedrockLevel } = format;
     setRootName(rootName);
     setEndian(endian);
     setCompression(compression);
     setBedrockLevel(bedrockLevel);
     return format;
-  }
+  },[]);
 
   useEffect(() => {
     if (!getShowTreeView) return;
@@ -70,22 +70,24 @@ export function App(props: AppProps){
   // let fileOpener: HTMLInputElement;
   // let formatDialog: HTMLDialogElement;
 
-  const handleLaunch: LaunchConsumer = async launchParams => {
+  const handleLaunch: LaunchConsumer = useCallback(async launchParams => {
     const { files: handles } = launchParams;
     const [handle] = handles;
     if (handle === undefined) return;
 
     await openNBTFile(handle);
-  };
+  },[]);
 
-  window.launchQueue?.setConsumer?.(handleLaunch);
+  useEffect(() => {
+    window.launchQueue?.setConsumer?.(handleLaunch);
+  },[]);
 
   enum Shortcut {
     Open = "ControlOrCommand+O",
     Save = "ControlOrCommand+S"
   }
 
-  const handleKeydown: NonNullable<typeof document.onkeydown> = async event => {
+  const handleKeydown: NonNullable<typeof document.onkeydown> = useCallback(async event => {
     let keys: Set<string> = new Set();
     if (event.ctrlKey || event.metaKey) keys.add("ControlOrCommand");
     if (event.altKey) keys.add("Alt");
@@ -103,20 +105,24 @@ export function App(props: AppProps){
       case Shortcut.Open: return await openNBTFile();
       case Shortcut.Save: return await saveNBTFile();
     }
-  };
+  },[]);
 
-  document.addEventListener("keydown",handleKeydown);
+  useEffect(() => {
+    document.addEventListener("keydown",handleKeydown);
+  },[]);
 
-  const handleDragover: NonNullable<typeof document.ondragover> = event => {
+  const handleDragover: NonNullable<typeof document.ondragover> = useCallback(event => {
     event.preventDefault();
     if (event.dataTransfer === null) return;
 
     event.dataTransfer.dropEffect = "copy";
-  };
+  },[]);
 
-  document.addEventListener("dragover",handleDragover);
+  useEffect(() => {
+    document.addEventListener("dragover",handleDragover);
+  },[]);
 
-  const handleDrop: NonNullable<typeof document.ondrop> = async event => {
+  const handleDrop: NonNullable<typeof document.ondrop> = useCallback(async event => {
     event.preventDefault();
     if (event.dataTransfer === null) return;
 
@@ -126,20 +132,24 @@ export function App(props: AppProps){
     if (item === undefined) return;
 
     await openNBTFile(item);
-  };
+  },[]);
 
-  document.addEventListener("drop",handleDrop);
+  useEffect(() => {
+    document.addEventListener("drop",handleDrop);
+  },[]);
 
-  // const demo = fetch("./bigtest.nbt")
-  //   .then(response => response.blob())
-  //   .then(blob => new File([blob],"bigtest.nbt"));
-  // demo.then(console.log);
-  // demo.then(openNBTFile);
+  useEffect(() => {
+    // const demo = fetch("./bigtest.nbt")
+    //   .then(response => response.blob())
+    //   .then(blob => new File([blob],"bigtest.nbt"));
+    // demo.then(console.log);
+    // demo.then(openNBTFile);
+  },[]);
 
   /**
    * Opens an NBT file in the editor.
   */
-  async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<void> {
+  const openNBTFile = useCallback(async function openNBTFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<void> {
     setEditorDisabled(true);
 
     try {
@@ -188,12 +198,12 @@ export function App(props: AppProps){
     setEditorValue(snbt);
     setEditorDisabled(false);
     setTreeViewValue(nbt);
-  }
+  },[]);
 
   /**
    * Saves the current NBT file from the editor.
   */
-  async function saveNBTFile(file: File | null = null): Promise<void> {
+  const saveNBTFile = useCallback(async function saveNBTFile(file: File | null = null): Promise<void> {
     if (file === null){
       try {
         const snbt = getEditorValue;
@@ -223,7 +233,7 @@ export function App(props: AppProps){
     }
 
     await saveFile(file,null);
-  }
+  },[]);
 
   return (
     <>

@@ -33,7 +33,7 @@ export function Header(props: HeaderProps){
           type="checkbox"
           name="treeView"
           checked={props.getShowTreeView}
-          onInput={() => props.setShowTreeView(treeView => !treeView)}
+          onChange={() => props.setShowTreeView(treeView => !treeView)}
         />
         {" Tree View "}
       </label>

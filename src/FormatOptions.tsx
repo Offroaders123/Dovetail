@@ -48,7 +48,7 @@ export function FormatOptions(props: FormatOptionsProps){
               autoCorrect="on"
               disabled={props.getRootName === null}
               value={props.getRootName === null ? "" : props.getRootName}
-              onInput={event => props.setRootName(event.currentTarget.value)}
+              onChange={event => props.setRootName(event.currentTarget.value)}
             />
           </label>
           {"\n"}
@@ -57,7 +57,7 @@ export function FormatOptions(props: FormatOptionsProps){
               type="checkbox"
               name="disableName"
               checked={props.getRootName === null}
-              onInput={event => props.setRootName(event.currentTarget.checked ? null : "")}
+              onChange={event => props.setRootName(event.currentTarget.checked ? null : "")}
             />
             {" Disable "}
           </label>
@@ -68,14 +68,14 @@ export function FormatOptions(props: FormatOptionsProps){
 
           {
             (["big", "little"] satisfies Endian[])
-              .map(endian =>
-                <label>
+              .map((endian,i) =>
+                <label key={i}>
                   <input
                     type="radio"
                     name="endian"
                     value={endian}
                     checked={props.getEndian === endian}
-                    onInput={() => props.setEndian(endian)}
+                    onChange={() => props.setEndian(endian)}
                   />
                   {` ${endian.slice(0,1).toUpperCase()}${endian.slice(1)} `}
                 </label>
@@ -88,14 +88,14 @@ export function FormatOptions(props: FormatOptionsProps){
 {/* 
           {
             ([null, "gzip", "deflate", "deflate-raw"] satisfies Compression[])
-              .map(compression =>
-                <label>
+              .map((compression,i) =>
+                <label key={i}>
                   <input
                     type="radio"
                     name="compression"
                     value={compression ?? "none"}
                     checked={props.getCompression === compression}
-                    onInput={() => props.setCompression(compression)}
+                    onChange={() => props.setCompression(compression)}
                   />
                   {` ${compression === "deflate" ? `${compression} (zlib)` : compression ?? "None"} `}
                 </label>
@@ -122,7 +122,7 @@ export function FormatOptions(props: FormatOptionsProps){
               min="0"
               max="4294967295"
               value={props.getBedrockLevel === null ? "" : props.getBedrockLevel}
-              onInput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}
+              onChange={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}
             />
             {"\n"}<code>(Uint32)</code>{"\n"}
           </label>

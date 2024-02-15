@@ -1,6 +1,6 @@
 import "./compression-polyfill.js";
 import { StrictMode } from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { App } from "./App.js";
 import "./index.scss";
 
@@ -12,8 +12,8 @@ if (window.isSecureContext && !import.meta.env.DEV){
   await navigator.serviceWorker.register("./service-worker.js");
 }
 
-render(
+createRoot(document.querySelector<HTMLDivElement>("#root")!).render(
   <StrictMode>
     <App isiOSDevice={isiOSDevice}/>
   </StrictMode>
-,document.querySelector<HTMLDivElement>("#root")!);
+);

@@ -18,7 +18,7 @@ export function Editor(props: EditorProps){
       autoCapitalize="none"
       autoCorrect="off"
       value={props.getValue}
-      onInput={event => props.setValue(event.currentTarget.value)}
+      onChange={event => props.setValue(event.currentTarget.value)}
     />
   );
 }
