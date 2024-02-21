@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createMemo, createSignal } from "solid-js";
 
 import type { Accessor, JSX, Setter } from "solid-js";
 import type { RootName, Endian, Compression, BedrockLevel } from "nbtify";
@@ -12,20 +12,27 @@ export interface FormatOptionsProps {
   setCompression: Setter<Compression>;
   getBedrockLevel: Accessor<BedrockLevel>;
   setBedrockLevel: Setter<BedrockLevel>;
+  getBedrockLevelValue: Accessor<number | null>;
   getOpen: Accessor<boolean>;
   setOpen: Setter<boolean>;
 }
 
 export function FormatOptions(props: FormatOptionsProps){
   const [getFormatDialog,setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
+  const getBedrockLevelDisabled = createMemo<boolean>(() => props.getBedrockLevelValue() === null);
 
   createEffect(() => {
     const dialog = getFormatDialog();
     if (dialog?.open && !props.getOpen()){
       dialog.close();
     } else if (!dialog?.open && props.getOpen()){
-      dialog?.showModal();
+      if (dialog) dialog.open = true;
     }
+  });
+
+  createEffect(() => {
+    if (!getBedrockLevelDisabled()) return;
+    props.setBedrockLevel(false);
   });
 
   return (
@@ -116,15 +123,13 @@ export function FormatOptions(props: FormatOptionsProps){
 
           <label>
             <input
-              type="number"
+              type="checkbox"
               name="bedrockLevel"
-              placeholder="&lt;false&gt;"
-              min="0"
-              max="4294967295"
-              value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!}
-              oninput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}
+              disabled={getBedrockLevelDisabled()}
+              checked={props.getBedrockLevel()}
+              oninput={event => props.setBedrockLevel(event.currentTarget.checked)}
             />
-            {"\n"}<code>(Uint32)</code>{"\n"}
+            {"\n"}<code>{`${props.getBedrockLevelValue()}`}</code>{"\n"}
           </label>
         </fieldset>
       </form>
