@@ -144,10 +144,9 @@ textarea[disabled] {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-  background-image: url("/img/nbt.png");
+  background-image: var(--icon);
   background-repeat: no-repeat;
-  background-size: 64px auto;
-  image-rendering: pixelated;
+  background-size: 16px auto;
 }
 
 details {
@@ -169,62 +168,62 @@ summary {
 
 .nbt-branch[data-type="1"] > details > summary::before,
 .nbt-branch[data-type="1"] > span::before {
-  background-position: 0 0;
+  --icon: url("/img/byte.png");
 }
 
 .nbt-branch[data-type="2"] > details > summary::before,
 .nbt-branch[data-type="2"] > span::before {
-  background-position: -16px -16px;
+  --icon: url("/img/short.png");
 }
 
 .nbt-branch[data-type="3"] > details > summary::before,
 .nbt-branch[data-type="3"] > span::before {
-  background-position: -48px 0;
+  --icon: url("/img/int.png");
 }
 
 .nbt-branch[data-type="4"] > details > summary::before,
 .nbt-branch[data-type="4"] > span::before {
-  background-position: 0 -16px;
+  --icon: url("/img/long.png");
 }
 
 .nbt-branch[data-type="5"] > details > summary::before,
 .nbt-branch[data-type="5"] > span::before {
-  background-position: -32px 0;
+  --icon: url("/img/float.png");
 }
 
 .nbt-branch[data-type="6"] > details > summary::before,
 .nbt-branch[data-type="6"] > span::before {
-  background-position: -16px 0;
+  --icon: url("/img/double.png");
 }
 
 .nbt-branch[data-type="7"] > details > summary::before,
 .nbt-branch[data-type="7"] > span::before {
-  background-position: 0 -32px;
+  --icon: url("/img/byte-array.png");
 }
 
 .nbt-branch[data-type="8"] > details > summary::before,
 .nbt-branch[data-type="8"] > span::before {
-  background-position: -32px -16px;
+  --icon: url("/img/string.png");
 }
 
 .nbt-branch[data-type="9"] > details > summary::before,
 .nbt-branch[data-type="9"] > span::before {
-  background-position: -32px -32px;
+  --icon: url("/img/list.png");
 }
 
 .nbt-branch[data-type="10"] > details > summary::before,
 .nbt-branch[data-type="10"] > span::before {
-  background-position: -48px -16px;
+  --icon: url("/img/compound.png");
 }
 
 .nbt-branch[data-type="11"] > details > summary::before,
 .nbt-branch[data-type="11"] > span::before {
-  background-position: -16px -32px;
+  --icon: url("/img/int-array.png");
 }
 
 .nbt-branch[data-type="12"] > details > summary::before,
 .nbt-branch[data-type="12"] > span::before {
-  background-position: 0 -48px;
+  --icon: url("/img/long-array.png");
 }
 
 .nbt-tree input {
