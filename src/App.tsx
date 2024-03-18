@@ -1,5 +1,5 @@
-import { batch, createEffect, createMemo, createSignal } from "solid-js";
-import { parse, stringify, NBTData, Int32 } from "nbtify";
+import { createEffect, createMemo, createSignal } from "solid-js";
+import { parse, stringify, NBTData } from "nbtify";
 import { openFile, readFile, saveFile, shareFile, writeFile } from "./file.js";
 import { Header } from "./Header.js";
 import { Main } from "./Main.js";
@@ -14,9 +14,9 @@ export interface AppProps {
 // Temporarily placed here, incrementally moving to JSX
 export function App(props: AppProps){
   // global state
-  const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
+  const [getShowTreeView,setShowTreeView] = createSignal<boolean>(false);
   const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
-  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(true);
+  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
   /** The name of the currently opened file. */
   const [getName,setName] = createSignal<string>("");
   const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
@@ -26,38 +26,30 @@ export function App(props: AppProps){
   const [getRootName,setRootName] = createSignal<RootName>("");
   const [getEndian,setEndian] = createSignal<Endian>("big");
   const [getCompression,setCompression] = createSignal<Compression>(null);
-  const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(false);
-  const getBedrockLevelValue = createMemo<number | null>(() => {
-    const { data } = getTreeViewValue();
-    if (getEndian() !== "little" || !("StorageVersion" in data) || !(data["StorageVersion"] instanceof Int32)) return null;
-    return data["StorageVersion"].valueOf();
-  });
+  const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(null);
   /**
    * Turns the values from the Format Options dialog into the NBT file's metadata.
   */
-  const getFormat = createMemo<Format>(() => ({
+  const getFormat = (): Format => ({
     rootName: getRootName(),
     endian: getEndian(),
     compression: getCompression(),
-    bedrockLevel: getBedrockLevel(),
-    bedrockLevelValue: getBedrockLevelValue()
-  }));
+    bedrockLevel: getBedrockLevel()
+  });
   /**
    * Updates the Format Options dialog to match an NBT file's format metadata.
   */
   const setFormat = (format: Format): Format => {
     const { rootName, endian, compression, bedrockLevel } = format;
-    batch(() => {
-      setRootName(rootName);
-      setEndian(endian);
-      setCompression(compression);
-      setBedrockLevel(bedrockLevel);
-    });
+    setRootName(rootName);
+    setEndian(endian);
+    setCompression(compression);
+    setBedrockLevel(bedrockLevel);
     return format;
   }
 
   createEffect(() => {
-    // if (!getShowTreeView()) return;
+    if (!getShowTreeView()) return;
     // console.log("Hi! updating");
     let rootTag: RootTag;
     // console.clear();
@@ -69,9 +61,7 @@ export function App(props: AppProps){
       console.warn(error);
       return;
     }
-    const format = getFormat();
-    console.log(format);
-    const nbt = new NBTData(rootTag,format);
+    const nbt = new NBTData(rootTag,getFormat());
     setTreeViewValue(nbt);
   });
 
@@ -140,11 +130,11 @@ export function App(props: AppProps){
 
   document.addEventListener("drop",handleDrop);
 
-  const demo = fetch("./bigtest.nbt")
-    .then(response => response.blob())
-    .then(blob => new File([blob],"bigtest.nbt"));
-  demo.then(console.log);
-  demo.then(openNBTFile);
+  // const demo = fetch("./bigtest.nbt")
+  //   .then(response => response.blob())
+  //   .then(blob => new File([blob],"bigtest.nbt"));
+  // demo.then(console.log);
+  // demo.then(openNBTFile);
 
   /**
    * Opens an NBT file in the editor.
@@ -264,7 +254,6 @@ export function App(props: AppProps){
         setCompression={setCompression}
         getBedrockLevel={getBedrockLevel}
         setBedrockLevel={setBedrockLevel}
-        getBedrockLevelValue={getBedrockLevelValue}
         getOpen={getShowFormatDialog}
         setOpen={setShowFormatDialog}
       />
