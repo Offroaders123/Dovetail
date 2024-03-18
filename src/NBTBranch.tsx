@@ -1,4 +1,4 @@
-import { Match, Switch, createMemo } from "solid-js";
+import { Match, Switch, createMemo, createSignal } from "solid-js";
 import { TAG, getTagType, Int8, Int32 } from "nbtify";
 
 import type { Accessor } from "solid-js";
@@ -86,10 +86,11 @@ interface ContainerViewProps<T extends ContainerTag> {
 }
 
 function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
+  const [getOpen, setOpen] = createSignal<boolean>(props.open ?? false);
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
-    <details open={props.open}>
+    <details open={getOpen()} ontoggle={event => setOpen(event.currentTarget.open)}>
       <summary>
         {
           props.name() === null
@@ -103,7 +104,7 @@ function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
         }
       </summary>
       {
-        Object.entries(props.value())
+        getOpen() && Object.entries(props.value())
           .map(([entryName,entry]) => {
             if (entry === undefined) return;
             // This should be handled without needing to create a new wrapper object for each tag, just to render it.
