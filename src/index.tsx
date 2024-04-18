@@ -1,3 +1,4 @@
+/* @refresh reload */
 import "./compression-polyfill.js";
 import { render } from "solid-js/web";
 import { App } from "./App.js";
@@ -11,4 +12,6 @@ if (window.isSecureContext && !import.meta.env.DEV){
   await navigator.serviceWorker.register("./service-worker.js");
 }
 
-render(() => <App isiOSDevice={isiOSDevice}/>,document.querySelector<HTMLDivElement>("#root")!);
+const root: HTMLDivElement = document.querySelector("#root")!;
+
+render(() => <App isiOSDevice={isiOSDevice}/>, root);
