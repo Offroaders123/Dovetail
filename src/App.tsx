@@ -16,7 +16,7 @@ export function App(props: AppProps){
   // global state
   const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
   const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
-  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
+  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(true);
   /** The name of the currently opened file. */
   const [getName,setName] = createSignal<string>("");
   const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
@@ -26,7 +26,7 @@ export function App(props: AppProps){
   const [getRootName,setRootName] = createSignal<RootName>("");
   const [getEndian,setEndian] = createSignal<Endian>("big");
   const [getCompression,setCompression] = createSignal<Compression>(null);
-  const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(null);
+  const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(false);
   /**
    * Turns the values from the Format Options dialog into the NBT file's metadata.
   */

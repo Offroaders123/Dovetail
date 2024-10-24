@@ -40,7 +40,7 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 /**
  * Attempts to create an NBTData object from a File object.
 */
-export async function readFile(file: File, options?: ReadOptions): Promise<NBTData> {
+export async function readFile(file: File, options?: Partial<ReadOptions>): Promise<NBTData> {
   // May want to dedupe
   if (file.name.endsWith(".snbt")){
     const text = await file.text();

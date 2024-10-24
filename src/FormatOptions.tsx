@@ -116,13 +116,10 @@ export function FormatOptions(props: FormatOptionsProps){
 
           <label>
             <input
-              type="number"
+              type="checkbox"
               name="bedrockLevel"
-              placeholder="&lt;false&gt;"
-              min="0"
-              max="4294967295"
-              value={props.getBedrockLevel() === null ? "" : props.getBedrockLevel()!}
-              oninput={event => props.setBedrockLevel(event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber)}
+              checked={props.getBedrockLevel()}
+              oninput={event => props.setBedrockLevel(event.currentTarget.checked)}
             />
             {"\n"}<code>(Uint32)</code>{"\n"}
           </label>
