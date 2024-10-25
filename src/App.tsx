@@ -130,9 +130,9 @@ export function App(props: AppProps){
 
   document.addEventListener("drop",handleDrop);
 
-  const demo = fetch("./bigtest.nbt")
+  const demo = fetch("./bigtest-varint.nbt")
     .then(response => response.blob())
-    .then(blob => new File([blob],"bigtest.nbt"));
+    .then(blob => new File([blob],"bigtest-varint.nbt"));
   demo.then(console.log);
   demo.then(openNBTFile);
 

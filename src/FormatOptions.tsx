@@ -67,7 +67,7 @@ export function FormatOptions(props: FormatOptionsProps){
           <legend>Endian</legend>
 
           {
-            (["big", "little"] satisfies Endian[])
+            (["big", "little", "little-varint"] satisfies Endian[])
               .map(endian =>
                 <label>
                   <input
