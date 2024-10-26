@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "compression-streams-polyfill": "^0.1.7",
-    "nbtify": "^2.1.0",
+    "nbtify": "^2.2.0",
     "solid-js": "^1.9.3"
   },
   "devDependencies": {
