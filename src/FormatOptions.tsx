@@ -20,7 +20,7 @@ export function FormatOptions(props: FormatOptionsProps) {
   const [getFormatDialog, setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
 
   createEffect(() => {
-    const dialog = getFormatDialog();
+    const dialog: HTMLDialogElement | null = getFormatDialog();
     if (dialog?.open && !props.getOpen()) {
       dialog.close();
     } else if (!dialog?.open && props.getOpen()) {

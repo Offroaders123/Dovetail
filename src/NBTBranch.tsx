@@ -196,7 +196,7 @@ interface PrimitiveViewProps<T extends PrimitiveTag> {
 
 function PrimitiveView<T extends PrimitiveTag>(props: PrimitiveViewProps<T>) {
   const getName = createMemo<string>(() => {
-    const name = props.name();
+    const name: string | null = props.name();
     if (name === null) {
       throw new Error(`Tag type '${TAG[getTagType(props.value())]}' must have a name provided in reference to it's parent container.`);
     }
@@ -217,6 +217,7 @@ function PrimitiveView<T extends PrimitiveTag>(props: PrimitiveViewProps<T>) {
 // Borrowed from NBTify's SNBT module for the time being
 function escapeString(value: string): string {
   return value
+    .replaceAll("\0", "\\0")
     .replaceAll("\b", "\\b")
     .replaceAll("\f", "\\f")
     .replaceAll("\n", "\\n")

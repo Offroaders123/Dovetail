@@ -120,7 +120,7 @@ export function App(props: AppProps) {
     event.preventDefault();
     if (event.dataTransfer === null) return;
 
-    const items = [...event.dataTransfer.items]
+    const items: DataTransferFile[] = [...event.dataTransfer.items]
       .filter((item): item is DataTransferFile => item.kind === "file");
     const [item] = items;
     if (item === undefined) return;
@@ -179,7 +179,7 @@ export function App(props: AppProps) {
       }
     }
 
-    const snbt = stringify(nbt, { space: 2 });
+    const snbt: string = stringify(nbt, { space: 2 });
     setFormat(nbt);
     setName(file.name);
 
@@ -196,9 +196,9 @@ export function App(props: AppProps) {
   async function saveNBTFile(file: File | null = null): Promise<void> {
     if (file === null) {
       try {
-        const snbt = getEditorValue();
-        const nbt = parse(snbt);
-        const options = getFormat();
+        const snbt: string = getEditorValue();
+        const nbt: RootTag = parse(snbt);
+        const options: Format = getFormat();
         const nbtData = new NBTData(nbt, options);
         file = await writeFile(nbtData, getName());
 
@@ -211,13 +211,13 @@ export function App(props: AppProps) {
       }
     }
 
-    const fileHandle = getFileHandle();
+    const fileHandle: FileSystemFileHandle | null = getFileHandle();
 
     if (fileHandle !== null) {
       try {
         return await saveFile(file, fileHandle);
       } catch {
-        const saveManually = confirm(`'${file.name}' could not be saved in-place. Would you like to try saving it manually? It may go directly to your Downloads folder.`);
+        const saveManually: boolean = confirm(`'${file.name}' could not be saved in-place. Would you like to try saving it manually? It may go directly to your Downloads folder.`);
         if (!saveManually) return;
       }
     }

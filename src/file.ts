@@ -43,11 +43,11 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 export async function readFile(file: File, options?: Partial<ReadOptions>): Promise<NBTData> {
   // May want to dedupe
   if (file.name.endsWith(".snbt")) {
-    const text = await file.text();
+    const text: string = await file.text();
     return new NBTData(parse(text));
   }
 
-  const buffer = await file.arrayBuffer();
+  const buffer: ArrayBuffer = await file.arrayBuffer();
   return read(buffer, options);
 }
 
@@ -62,8 +62,8 @@ export async function saveFile(file: File, fileHandle: FileSystemFileHandle | nu
     return;
   }
 
-  const anchor = document.createElement("a");
-  const blob = URL.createObjectURL(file);
+  const anchor: HTMLAnchorElement = document.createElement("a");
+  const blob: string = URL.createObjectURL(file);
 
   anchor.href = blob;
   anchor.download = file.name;
@@ -89,10 +89,10 @@ export async function shareFile(file: File): Promise<void> {
 export async function writeFile(nbt: NBTData, name: string): Promise<File> {
   // May want to dedupe
   if (name.endsWith(".snbt")) {
-    const text = stringify(nbt);
+    const text: string = stringify(nbt);
     return new File([text], name);
   }
 
-  const data = await write(nbt);
+  const data: Uint8Array = await write(nbt);
   return new File([data], name);
 }
