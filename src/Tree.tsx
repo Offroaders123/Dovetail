@@ -1,5 +1,6 @@
 import { createMemo } from "solid-js";
 import Branch from "./Branch.js";
+import "./Tree.scss";
 
 import type { Accessor } from "solid-js";
 import type { NBTData, RootName, RootTag } from "nbtify";

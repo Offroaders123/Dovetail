@@ -1,0 +1,104 @@
+.Branch {
+  display: flex;
+  /* outline: 2px solid lime; */
+}
+
+.Branch .Branch {
+  margin-left: 12px;
+}
+
+.Branch > span {
+  min-height: 1.85em;
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.Branch > details > summary::before,
+.Branch > span::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background-image: url("/img/nbt.png");
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+  image-rendering: pixelated;
+}
+
+details {
+  width: 100%;
+}
+
+summary {
+  padding-left: 4px;
+  min-height: 1.85em;
+  /* background: orange; */
+  cursor: pointer;
+}
+
+.Branch > details > summary::before {
+  margin: 0 0.5em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.Branch[data-type="1"] > details > summary::before,
+.Branch[data-type="1"] > span::before {
+  background-position: 0 0;
+}
+
+.Branch[data-type="2"] > details > summary::before,
+.Branch[data-type="2"] > span::before {
+  background-position: -16px -16px;
+}
+
+.Branch[data-type="3"] > details > summary::before,
+.Branch[data-type="3"] > span::before {
+  background-position: -48px 0;
+}
+
+.Branch[data-type="4"] > details > summary::before,
+.Branch[data-type="4"] > span::before {
+  background-position: 0 -16px;
+}
+
+.Branch[data-type="5"] > details > summary::before,
+.Branch[data-type="5"] > span::before {
+  background-position: -32px 0;
+}
+
+.Branch[data-type="6"] > details > summary::before,
+.Branch[data-type="6"] > span::before {
+  background-position: -16px 0;
+}
+
+.Branch[data-type="7"] > details > summary::before,
+.Branch[data-type="7"] > span::before {
+  background-position: 0 -32px;
+}
+
+.Branch[data-type="8"] > details > summary::before,
+.Branch[data-type="8"] > span::before {
+  background-position: -32px -16px;
+}
+
+.Branch[data-type="9"] > details > summary::before,
+.Branch[data-type="9"] > span::before {
+  background-position: -32px -32px;
+}
+
+.Branch[data-type="10"] > details > summary::before,
+.Branch[data-type="10"] > span::before {
+  background-position: -48px -16px;
+}
+
+.Branch[data-type="11"] > details > summary::before,
+.Branch[data-type="11"] > span::before {
+  background-position: -16px -32px;
+}
+
+.Branch[data-type="12"] > details > summary::before,
+.Branch[data-type="12"] > span::before {
+  background-position: 0 -48px;
+}

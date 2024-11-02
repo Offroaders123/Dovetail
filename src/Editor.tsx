@@ -1,3 +1,5 @@
+import "./Editor.scss";
+
 import type { Accessor, Setter } from "solid-js";
 
 export interface EditorProps {

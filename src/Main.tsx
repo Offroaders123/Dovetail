@@ -1,5 +1,6 @@
 import Tree from "./Tree.js";
 import Editor from "./Editor.js";
+import "./Main.scss";
 
 import type { Accessor, Setter } from "solid-js";
 import type { NBTData, RootName } from "nbtify";

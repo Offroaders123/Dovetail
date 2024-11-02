@@ -1,4 +1,5 @@
 import { createEffect, createSignal } from "solid-js";
+import "./FormatOptions.scss";
 
 import type { Accessor, JSX, Setter } from "solid-js";
 import type { RootName, Endian, Compression, BedrockLevel } from "nbtify";

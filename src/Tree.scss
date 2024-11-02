@@ -1,0 +1,27 @@
+.Tree {
+  padding: 8px 12px;
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+  font-size: 13px;
+  font-family: ui-monospace, "Noto Sans Mono", "Cousine", monospace;
+  line-height: 1.4;
+  caret-color: currentColor;
+  border: 0 solid transparent;
+  border-left-width: env(safe-area-inset-left);
+  border-right-width: env(safe-area-inset-right);
+  border-bottom-width: env(safe-area-inset-bottom);
+  border-radius: 0;
+  overflow: auto;
+}
+
+.Tree[disabled] {
+  opacity: unset;
+}
+
+.Tree input {
+  font: inherit;
+}

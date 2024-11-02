@@ -1,4 +1,5 @@
 import icon from "/img/icon.svg";
+import "./Header.scss";
 
 import type { Accessor, Setter } from "solid-js";
 

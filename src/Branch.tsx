@@ -1,5 +1,6 @@
 import { Match, Switch, createMemo, createSignal } from "solid-js";
 import { TAG, getTagType, Int8, Int32 } from "nbtify";
+import "./Branch.scss";
 
 import type { Accessor } from "solid-js";
 import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, ByteArrayTag, StringTag, ListTag, CompoundTag, IntArrayTag, LongArrayTag } from "nbtify";

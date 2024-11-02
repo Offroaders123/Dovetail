@@ -1,0 +1,20 @@
+dialog {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: column;
+}
+
+fieldset > div + div {
+  margin-top: 0.25em;
+}
