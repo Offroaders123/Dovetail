@@ -14,9 +14,9 @@ export interface AppProps {
 // Temporarily placed here, incrementally moving to JSX
 export function App(props: AppProps){
   // global state
-  const [getShowTreeView,setShowTreeView] = createSignal<boolean>(true);
+  const [getShowTreeView,setShowTreeView] = createSignal<boolean>(false);
   const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
-  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(true);
+  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
   /** The name of the currently opened file. */
   const [getName,setName] = createSignal<string>("");
   const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
@@ -130,11 +130,11 @@ export function App(props: AppProps){
 
   document.addEventListener("drop",handleDrop);
 
-  const demo = fetch("./bigtest.nbt")
-    .then(response => response.blob())
-    .then(blob => new File([blob],"bigtest.nbt"));
-  demo.then(console.log);
-  demo.then(openNBTFile);
+  // const demo = fetch("./bigtest.nbt")
+  //   .then(response => response.blob())
+  //   .then(blob => new File([blob],"bigtest.nbt"));
+  // demo.then(console.log);
+  // demo.then(openNBTFile);
 
   /**
    * Opens an NBT file in the editor.
