@@ -1,4 +1,4 @@
-import NBTTree from "./NBTTree.js";
+import Tree from "./Tree.js";
 import Editor from "./Editor.js";
 
 import type { Accessor, Setter } from "solid-js";
@@ -18,7 +18,7 @@ export default function Main(props: MainProps) {
     <main>
       {
         props.getShowTreeView()
-          ? <NBTTree
+          ? <Tree
               name={props.getRootName}
               value={props.getTreeViewValue}
             />

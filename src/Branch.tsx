@@ -4,18 +4,18 @@ import { TAG, getTagType, Int8, Int32 } from "nbtify";
 import type { Accessor } from "solid-js";
 import type { Tag, ByteTag, ShortTag, IntTag, LongTag, FloatTag, DoubleTag, ByteArrayTag, StringTag, ListTag, CompoundTag, IntArrayTag, LongArrayTag } from "nbtify";
 
-export interface NBTBranchProps {
+export interface BranchProps {
   name: Accessor<string | null>;
   value: Accessor<Tag>;
   open?: boolean;
 }
 
-export default function NBTBranch(props: NBTBranchProps) {
+export default function Branch(props: BranchProps) {
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
     <div
-      class="nbt-branch"
+      class="Branch"
       data-type={getType()}>
       <Switch>
         <Match when={getType() === TAG.BYTE}>
@@ -152,7 +152,7 @@ function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>) {
             // This should be handled without needing to create a new wrapper object for each tag, just to render it.
             if (getType() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
             if (getType() === TAG.INT_ARRAY) entry = new Int32(entry as number);
-            return <NBTBranch name={() => entryName} value={() => entry!}/>;
+            return <Branch name={() => entryName} value={() => entry!}/>;
           })
       }
     </details>
