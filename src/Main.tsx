@@ -1,3 +1,4 @@
+import { Show } from "solid-js";
 import Tree from "./Tree.js";
 import Editor from "./Editor.js";
 import "./Main.scss";
@@ -17,18 +18,19 @@ export interface MainProps {
 export default function Main(props: MainProps) {
   return (
     <main>
-      {
-        props.getShowTreeView()
-          ? <Tree
-              name={props.getRootName}
-              value={props.getTreeViewValue}
-            />
-          : <Editor
-              disabled={props.getEditorDisabled}
-              getValue={props.getEditorValue}
-              setValue={props.setEditorValue}
-            />
-      }
+      <Show when={props.getShowTreeView()}>
+        <Tree
+          name={props.getRootName}
+          value={props.getTreeViewValue}
+        />
+      </Show>
+      <Show when={!props.getShowTreeView()}>
+        <Editor
+          disabled={props.getEditorDisabled}
+          getValue={props.getEditorValue}
+          setValue={props.setEditorValue}
+        />
+      </Show>
     </main>
   );
 }
