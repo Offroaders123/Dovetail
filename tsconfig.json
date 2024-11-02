@@ -3,6 +3,7 @@
     "module": "NodeNext",
     "target": "ESNext",
     "isolatedModules": true,
+    "resolveJsonModule": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "types": [
@@ -19,6 +20,7 @@
     "noUncheckedIndexedAccess": true,
     "allowUnreachableCode": false,
     "noUnusedLocals": true,
+    "allowUnusedLabels": false,
     "noUnusedParameters": true
   },
   "exclude": [

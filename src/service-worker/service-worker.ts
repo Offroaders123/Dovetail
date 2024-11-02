@@ -1,9 +1,10 @@
+import { version as VERSION } from "../../package.json";
+
 declare var self: ServiceWorkerGlobalScope;
 declare const clients: Clients;
 
-const NAME = "Dovetail";
-const VERSION = "v3.0.0";
-const CACHE_NAME = `${NAME} ${VERSION}`;
+const NAME = "Flatlands";
+const CACHE_NAME = `${NAME} v${VERSION}` as const;
 
 self.addEventListener("activate",event => {
   event.waitUntil(removeOutdatedVersions());
@@ -52,5 +53,3 @@ async function cacheRequest(request: Request, response: Response): Promise<void>
   const cache = await caches.open(CACHE_NAME);
   await cache.put(request,response.clone());
 }
-
-export {};
