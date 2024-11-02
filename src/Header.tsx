@@ -13,7 +13,7 @@ export interface HeaderProps {
   saveFile(): void;
 }
 
-export function Header(props: HeaderProps) {
+export default function Header(props: HeaderProps) {
   return (
     <header>
       <img

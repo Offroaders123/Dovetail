@@ -16,7 +16,7 @@ export interface FormatOptionsProps {
   setOpen: Setter<boolean>;
 }
 
-export function FormatOptions(props: FormatOptionsProps) {
+export default function FormatOptions(props: FormatOptionsProps) {
   const [getFormatDialog, setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
 
   createEffect(() => {

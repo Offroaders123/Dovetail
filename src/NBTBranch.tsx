@@ -10,7 +10,7 @@ export interface NBTBranchProps {
   open?: boolean;
 }
 
-export function NBTBranch(props: NBTBranchProps) {
+export default function NBTBranch(props: NBTBranchProps) {
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (

@@ -1,9 +1,9 @@
 import { createEffect, createMemo, createSignal } from "solid-js";
 import { parse, stringify, NBTData } from "nbtify";
 import { openFile, readFile, saveFile, shareFile, writeFile } from "./file.js";
-import { Header } from "./Header.js";
-import { Main } from "./Main.js";
-import { FormatOptions } from "./FormatOptions.js";
+import Header from "./Header.js";
+import Main from "./Main.js";
+import FormatOptions from "./FormatOptions.js";
 
 import type { RootName, Endian, Compression, BedrockLevel, Format, RootTag } from "nbtify";
 
@@ -12,7 +12,7 @@ export interface AppProps {
 }
 
 // Temporarily placed here, incrementally moving to JSX
-export function App(props: AppProps) {
+export default function App(props: AppProps) {
   // global state
   const [getShowTreeView, setShowTreeView] = createSignal<boolean>(false);
   const [getTreeViewValue, setTreeViewValue] = createSignal<NBTData>(new NBTData({}));

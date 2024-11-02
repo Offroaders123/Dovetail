@@ -1,5 +1,5 @@
-import { NBTTree } from "./NBTTree.js";
-import { Editor } from "./Editor.js";
+import NBTTree from "./NBTTree.js";
+import Editor from "./Editor.js";
 
 import type { Accessor, Setter } from "solid-js";
 import type { NBTData, RootName } from "nbtify";
@@ -13,7 +13,7 @@ export interface MainProps {
   getTreeViewValue: Accessor<NBTData>;
 }
 
-export function Main(props: MainProps) {
+export default function Main(props: MainProps) {
   return (
     <main>
       {

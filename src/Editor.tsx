@@ -6,7 +6,7 @@ export interface EditorProps {
   setValue: Setter<string>;
 }
 
-export function Editor(props: EditorProps) {
+export default function Editor(props: EditorProps) {
   return (
     <textarea
       name="editor"
