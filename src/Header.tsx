@@ -16,18 +16,25 @@ export interface HeaderProps {
 export function Header(props: HeaderProps) {
   return (
     <header>
-      <img draggable="false" src={icon} alt=""/>
+      <img
+        draggable="false"
+        src={icon}
+        alt=""
+      />
       <button
-        onclick={() => props.openFile()}
-      >Open</button>
+        onclick={() => props.openFile()}>
+        Open
+      </button>
       <button
         disabled={props.getEditorDisabled()}
-        onclick={() => props.saveFile()}
-      >Save</button>
+        onclick={() => props.saveFile()}>
+        Save
+      </button>
       <button
         disabled={props.getEditorDisabled() || props.getEditingSNBT()}
-        onclick={() => props.setShowFormatDialog(showFormatDialog => !showFormatDialog)}
-      >Format Options...</button>
+        onclick={() => props.setShowFormatDialog(showFormatDialog => !showFormatDialog)}>
+        Format Options...
+      </button>
       <label style="margin-inline-start: auto;">
         <input
           type="checkbox"

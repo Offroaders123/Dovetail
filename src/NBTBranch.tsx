@@ -14,43 +14,83 @@ export function NBTBranch(props: NBTBranchProps) {
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
-    <div class="nbt-branch" data-type={getType()}>
+    <div
+      class="nbt-branch"
+      data-type={getType()}>
       <Switch>
         <Match when={getType() === TAG.BYTE}>
-          <ByteView name={props.name} value={props.value as Accessor<ByteTag>}/>
+          <ByteView
+            name={props.name}
+            value={props.value as Accessor<ByteTag>}
+          />
         </Match>
         <Match when={getType() === TAG.SHORT}>
-          <ShortView name={props.name} value={props.value as Accessor<ShortTag>}/>
+          <ShortView
+            name={props.name}
+            value={props.value as Accessor<ShortTag>}
+          />
         </Match>
         <Match when={getType() === TAG.INT}>
-          <IntView name={props.name} value={props.value as Accessor<IntTag>}/>
+          <IntView
+            name={props.name}
+            value={props.value as Accessor<IntTag>}
+          />
         </Match>
         <Match when={getType() === TAG.LONG}>
-          <LongView name={props.name} value={props.value as Accessor<LongTag>}/>
+          <LongView
+            name={props.name}
+            value={props.value as Accessor<LongTag>}
+          />
         </Match>
         <Match when={getType() === TAG.FLOAT}>
-          <FloatView name={props.name} value={props.value as Accessor<FloatTag>}/>
+          <FloatView
+            name={props.name}
+            value={props.value as Accessor<FloatTag>}
+          />
         </Match>
         <Match when={getType() === TAG.DOUBLE}>
-          <DoubleView name={props.name} value={props.value as Accessor<DoubleTag>}/>
+          <DoubleView
+            name={props.name}
+            value={props.value as Accessor<DoubleTag>}
+          />
         </Match>
         <Match when={getType() === TAG.BYTE_ARRAY}>
-          <ByteArrayView name={props.name} value={props.value as Accessor<ByteArrayTag>}/>
+          <ByteArrayView
+            name={props.name}
+            value={props.value as Accessor<ByteArrayTag>}
+          />
         </Match>
         <Match when={getType() === TAG.STRING}>
-          <StringView name={props.name} value={props.value as Accessor<StringTag>}/>
+          <StringView
+            name={props.name}
+            value={props.value as Accessor<StringTag>}
+          />
         </Match>
         <Match when={getType() === TAG.LIST}>
-          <ListView name={props.name} value={props.value as Accessor<ListTag<Tag>>} open={props.open}/>
+          <ListView
+            name={props.name}
+            value={props.value as Accessor<ListTag<Tag>>}
+            open={props.open}
+          />
         </Match>
         <Match when={getType() === TAG.COMPOUND}>
-          <CompoundView name={props.name} value={props.value as Accessor<CompoundTag>} open={props.open}/>
+          <CompoundView
+            name={props.name}
+            value={props.value as Accessor<CompoundTag>}
+            open={props.open}
+          />
         </Match>
         <Match when={getType() === TAG.INT_ARRAY}>
-          <IntArrayView name={props.name} value={props.value as Accessor<IntArrayTag>}/>
+          <IntArrayView
+            name={props.name}
+            value={props.value as Accessor<IntArrayTag>}
+          />
         </Match>
         <Match when={getType() === TAG.LONG_ARRAY}>
-          <LongArrayView name={props.name} value={props.value as Accessor<LongArrayTag>}/>
+          <LongArrayView
+            name={props.name}
+            value={props.value as Accessor<LongArrayTag>}
+          />
         </Match>
       </Switch>
     </div>
@@ -90,7 +130,9 @@ function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>) {
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
-    <details open={getOpen()} ontoggle={event => setOpen(event.currentTarget.open)}>
+    <details
+      open={getOpen()}
+      ontoggle={event => setOpen(event.currentTarget.open)}>
       <summary>
         {
           props.name() === null

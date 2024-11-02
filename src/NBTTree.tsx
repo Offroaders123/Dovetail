@@ -15,7 +15,11 @@ export function NBTTree(props: NBTTreeProps) {
 
   return (
     <div class="nbt-tree">
-      <NBTBranch name={props.name} value={getRootTag} open/>
+      <NBTBranch
+        name={props.name}
+        value={getRootTag}
+        open
+      />
     </div>
   );
 }

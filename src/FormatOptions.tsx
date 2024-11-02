@@ -29,16 +29,20 @@ export function FormatOptions(props: FormatOptionsProps) {
   });
 
   return (
-    <dialog ref={setFormatDialog} onclose={() => props.getOpen() && props.setOpen(false)}>
+    <dialog
+      ref={setFormatDialog}
+      onclose={() => props.getOpen() && props.setOpen(false)}>
       <form method="dialog">
         <div class="dialog-header">
           <h3>Format Options</h3>
-          <button type="submit" aria-label="Close">✕</button>
+          <button
+            type="submit"
+            aria-label="Close">
+            ✕
+          </button>
         </div>
-
         <fieldset>
           <legend>Root Name</legend>
-
           <label>
             <input
               type="text"
@@ -62,10 +66,8 @@ export function FormatOptions(props: FormatOptionsProps) {
             {" Disable "}
           </label>
         </fieldset>
-
         <fieldset>
           <legend>Endian</legend>
-
           {
             (["big", "little", "little-varint"] satisfies Endian[])
               .map(endian =>
@@ -82,10 +84,8 @@ export function FormatOptions(props: FormatOptionsProps) {
               )
           }
         </fieldset>
-
         <fieldset>
           <legend>Compression</legend>
-
           {
             ([null, "gzip", "deflate", "deflate-raw"] satisfies Compression[])
               .map(compression =>
@@ -110,10 +110,8 @@ export function FormatOptions(props: FormatOptionsProps) {
               }, [])
           }
         </fieldset>
-
         <fieldset>
           <legend>Bedrock Level</legend>
-
           <label>
             <input
               type="checkbox"

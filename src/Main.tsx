@@ -18,7 +18,10 @@ export function Main(props: MainProps) {
     <main>
       {
         props.getShowTreeView()
-          ? <NBTTree name={props.getRootName} value={props.getTreeViewValue}/>
+          ? <NBTTree
+              name={props.getRootName}
+              value={props.getTreeViewValue}
+            />
           : <Editor
               disabled={props.getEditorDisabled}
               getValue={props.getEditorValue}
