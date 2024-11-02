@@ -15,21 +15,21 @@ export const contentTypes: string = manifest.file_handlers
  * Attempts to read an NBT file, then open it in the editor.
 */
 export async function openFile(file: File | FileSystemFileHandle | DataTransferFile | null = null): Promise<File | FileSystemFileHandle | null> {
-  if (file === null){
+  if (file === null) {
     const fileOpener = document.createElement("input");
     fileOpener.type = "file";
     fileOpener.accept = contentTypes;
 
     await new Promise<void>(resolve => {
-      fileOpener.addEventListener("change",() => resolve(),{ once: true });
-      fileOpener.addEventListener("cancel",() => resolve(),{ once: true });
+      fileOpener.addEventListener("change", () => resolve(), { once: true });
+      fileOpener.addEventListener("cancel", () => resolve(), { once: true });
       fileOpener.click();
     });
 
     file = fileOpener.files?.[0] ?? null;
   }
 
-  if (file instanceof DataTransferItem){
+  if (file instanceof DataTransferItem) {
     const handle: FileSystemHandle | null = await file.getAsFileSystemHandle?.() ?? null;
     file = handle instanceof FileSystemFileHandle ? handle : file.getAsFile();
   }
@@ -42,20 +42,20 @@ export async function openFile(file: File | FileSystemFileHandle | DataTransferF
 */
 export async function readFile(file: File, options?: Partial<ReadOptions>): Promise<NBTData> {
   // May want to dedupe
-  if (file.name.endsWith(".snbt")){
+  if (file.name.endsWith(".snbt")) {
     const text = await file.text();
     return new NBTData(parse(text));
   }
 
   const buffer = await file.arrayBuffer();
-  return read(buffer,options);
+  return read(buffer, options);
 }
 
 /**
  * Saves the file in-place to the file system, or shows the save file picker to the user.
 */
 export async function saveFile(file: File, fileHandle: FileSystemFileHandle | null): Promise<void> {
-  if (fileHandle !== null){
+  if (fileHandle !== null) {
     const writable = await fileHandle.createWritable();
     await writable.write(file);
     await writable.close();
@@ -78,7 +78,7 @@ export async function saveFile(file: File, fileHandle: FileSystemFileHandle | nu
 export async function shareFile(file: File): Promise<void> {
   try {
     await navigator.share({ files: [file] });
-  } catch (error){
+  } catch (error) {
     console.warn(error);
   }
 }
@@ -88,11 +88,11 @@ export async function shareFile(file: File): Promise<void> {
 */
 export async function writeFile(nbt: NBTData, name: string): Promise<File> {
   // May want to dedupe
-  if (name.endsWith(".snbt")){
+  if (name.endsWith(".snbt")) {
     const text = stringify(nbt);
-    return new File([text],name);
+    return new File([text], name);
   }
 
   const data = await write(nbt);
-  return new File([data],name);
+  return new File([data], name);
 }

@@ -11,7 +11,7 @@ export const usePolyfill: boolean = (() => {
   }
 })();
 
-if (usePolyfill){
+if (usePolyfill) {
   const {
     makeCompressionStream,
     makeDecompressionStream

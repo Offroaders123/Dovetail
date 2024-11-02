@@ -10,7 +10,7 @@ export interface NBTTreeProps {
   value: Accessor<NBTData>;
 }
 
-export function NBTTree(props: NBTTreeProps){
+export function NBTTree(props: NBTTreeProps) {
   const getRootTag = createMemo(() => props.value().data);
 
   return (

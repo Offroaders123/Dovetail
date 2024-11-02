@@ -10,7 +10,7 @@ export interface NBTBranchProps {
   open?: boolean;
 }
 
-export function NBTBranch(props: NBTBranchProps){
+export function NBTBranch(props: NBTBranchProps) {
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
   return (
@@ -57,23 +57,23 @@ export function NBTBranch(props: NBTBranchProps){
   );
 }
 
-function ByteArrayView(props: ContainerViewProps<ByteArrayTag>){
+function ByteArrayView(props: ContainerViewProps<ByteArrayTag>) {
   return <ContainerView {...props}/>;
 }
 
-function ListView(props: ContainerViewProps<ListTag<Tag>>){
+function ListView(props: ContainerViewProps<ListTag<Tag>>) {
   return <ContainerView {...props}/>;
 }
 
-function CompoundView(props: ContainerViewProps<CompoundTag>){
+function CompoundView(props: ContainerViewProps<CompoundTag>) {
   return <ContainerView {...props}/>;
 }
 
-function IntArrayView(props: ContainerViewProps<IntArrayTag>){
+function IntArrayView(props: ContainerViewProps<IntArrayTag>) {
   return <ContainerView {...props}/>;
 }
 
-function LongArrayView(props: ContainerViewProps<LongArrayTag>){
+function LongArrayView(props: ContainerViewProps<LongArrayTag>) {
   return <ContainerView {...props}/>;
 }
 
@@ -85,7 +85,7 @@ interface ContainerViewProps<T extends ContainerTag> {
   open?: boolean;
 }
 
-function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
+function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>) {
   const [getOpen, setOpen] = createSignal<boolean>(props.open ?? false);
   const getType = createMemo<TAG>(() => getTagType(props.value()));
 
@@ -105,7 +105,7 @@ function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
       </summary>
       {
         getOpen() && Object.entries(props.value())
-          .map(([entryName,entry]) => {
+          .map(([entryName, entry]) => {
             if (entry === undefined) return;
             // This should be handled without needing to create a new wrapper object for each tag, just to render it.
             if (getType() === TAG.BYTE_ARRAY) entry = new Int8(entry as number);
@@ -117,31 +117,31 @@ function ContainerView<T extends ContainerTag>(props: ContainerViewProps<T>){
   );
 }
 
-function ByteView(props: PrimitiveViewProps<ByteTag>){
+function ByteView(props: PrimitiveViewProps<ByteTag>) {
   return <PrimitiveView {...props}/>;
 }
 
-function ShortView(props: PrimitiveViewProps<ShortTag>){
+function ShortView(props: PrimitiveViewProps<ShortTag>) {
   return <PrimitiveView {...props}/>;
 }
 
-function IntView(props: PrimitiveViewProps<IntTag>){
+function IntView(props: PrimitiveViewProps<IntTag>) {
   return <PrimitiveView {...props}/>;
 }
 
-function LongView(props: PrimitiveViewProps<LongTag>){
+function LongView(props: PrimitiveViewProps<LongTag>) {
   return <PrimitiveView {...props}/>;
 }
 
-function FloatView(props: PrimitiveViewProps<FloatTag>){
+function FloatView(props: PrimitiveViewProps<FloatTag>) {
   return <PrimitiveView {...props}/>;
 }
 
-function DoubleView(props: PrimitiveViewProps<DoubleTag>){
+function DoubleView(props: PrimitiveViewProps<DoubleTag>) {
   return <PrimitiveView {...props}/>;
 }
 
-function StringView(props: PrimitiveViewProps<StringTag>){
+function StringView(props: PrimitiveViewProps<StringTag>) {
   return <PrimitiveView {...props}/>;
 }
 
@@ -152,10 +152,10 @@ interface PrimitiveViewProps<T extends PrimitiveTag> {
   value: Accessor<T>;
 }
 
-function PrimitiveView<T extends PrimitiveTag>(props: PrimitiveViewProps<T>){
+function PrimitiveView<T extends PrimitiveTag>(props: PrimitiveViewProps<T>) {
   const getName = createMemo<string>(() => {
     const name = props.name();
-    if (name === null){
+    if (name === null) {
       throw new Error(`Tag type '${TAG[getTagType(props.value())]}' must have a name provided in reference to it's parent container.`);
     }
     return name;
@@ -175,9 +175,9 @@ function PrimitiveView<T extends PrimitiveTag>(props: PrimitiveViewProps<T>){
 // Borrowed from NBTify's SNBT module for the time being
 function escapeString(value: string): string {
   return value
-    .replaceAll("\b","\\b")
-    .replaceAll("\f","\\f")
-    .replaceAll("\n","\\n")
-    .replaceAll("\r","\\r")
-    .replaceAll("\t","\\t");
+    .replaceAll("\b", "\\b")
+    .replaceAll("\f", "\\f")
+    .replaceAll("\n", "\\n")
+    .replaceAll("\r", "\\r")
+    .replaceAll("\t", "\\t");
 }

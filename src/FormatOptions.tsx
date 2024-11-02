@@ -16,14 +16,14 @@ export interface FormatOptionsProps {
   setOpen: Setter<boolean>;
 }
 
-export function FormatOptions(props: FormatOptionsProps){
-  const [getFormatDialog,setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
+export function FormatOptions(props: FormatOptionsProps) {
+  const [getFormatDialog, setFormatDialog] = createSignal<HTMLDialogElement | null>(null);
 
   createEffect(() => {
     const dialog = getFormatDialog();
-    if (dialog?.open && !props.getOpen()){
+    if (dialog?.open && !props.getOpen()) {
       dialog.close();
-    } else if (!dialog?.open && props.getOpen()){
+    } else if (!dialog?.open && props.getOpen()) {
       dialog?.showModal();
     }
   });
@@ -77,7 +77,7 @@ export function FormatOptions(props: FormatOptionsProps){
                     checked={props.getEndian() === endian}
                     oninput={() => props.setEndian(endian)}
                   />
-                  {` ${endian.slice(0,1).toUpperCase()}${endian.slice(1)} `}
+                  {` ${endian.slice(0, 1).toUpperCase()}${endian.slice(1)} `}
                 </label>
               )
           }
@@ -101,13 +101,13 @@ export function FormatOptions(props: FormatOptionsProps){
                 </label>
               )
               .reduce<JSX.Element[]>((previous, compression, i) => {
-                if (i % 2 === 0){
+                if (i % 2 === 0) {
                   previous.push(<div>{compression}</div>);
                 } else {
                   (previous.at(-1) as HTMLDivElement).append(compression as HTMLLabelElement);
                 }
                 return previous;
-              },[])
+              }, [])
           }
         </fieldset>
 

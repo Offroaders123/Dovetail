@@ -13,7 +13,7 @@ export interface HeaderProps {
   saveFile(): void;
 }
 
-export function Header(props: HeaderProps){
+export function Header(props: HeaderProps) {
   return (
     <header>
       <img draggable="false" src={icon} alt=""/>

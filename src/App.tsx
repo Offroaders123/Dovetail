@@ -12,21 +12,21 @@ export interface AppProps {
 }
 
 // Temporarily placed here, incrementally moving to JSX
-export function App(props: AppProps){
+export function App(props: AppProps) {
   // global state
-  const [getShowTreeView,setShowTreeView] = createSignal<boolean>(false);
-  const [getTreeViewValue,setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
-  const [getShowFormatDialog,setShowFormatDialog] = createSignal<boolean>(false);
+  const [getShowTreeView, setShowTreeView] = createSignal<boolean>(false);
+  const [getTreeViewValue, setTreeViewValue] = createSignal<NBTData>(new NBTData({}));
+  const [getShowFormatDialog, setShowFormatDialog] = createSignal<boolean>(false);
   /** The name of the currently opened file. */
-  const [getName,setName] = createSignal<string>("");
-  const [getFileHandle,setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
-  const [getEditorValue,setEditorValue] = createSignal<string>("");
-  const [getEditorDisabled,setEditorDisabled] = createSignal<boolean>(true);
+  const [getName, setName] = createSignal<string>("");
+  const [getFileHandle, setFileHandle] = createSignal<FileSystemFileHandle | null>(null);
+  const [getEditorValue, setEditorValue] = createSignal<string>("");
+  const [getEditorDisabled, setEditorDisabled] = createSignal<boolean>(true);
   const getEditingSNBT = createMemo<boolean>(() => getName().endsWith(".snbt"));
-  const [getRootName,setRootName] = createSignal<RootName>("");
-  const [getEndian,setEndian] = createSignal<Endian>("big");
-  const [getCompression,setCompression] = createSignal<Compression>(null);
-  const [getBedrockLevel,setBedrockLevel] = createSignal<BedrockLevel>(false);
+  const [getRootName, setRootName] = createSignal<RootName>("");
+  const [getEndian, setEndian] = createSignal<Endian>("big");
+  const [getCompression, setCompression] = createSignal<Compression>(null);
+  const [getBedrockLevel, setBedrockLevel] = createSignal<BedrockLevel>(false);
   /**
    * Turns the values from the Format Options dialog into the NBT file's metadata.
   */
@@ -57,11 +57,11 @@ export function App(props: AppProps){
       rootTag = getEditorValue() === ""
         ? {}
         : parse(getEditorValue());
-    } catch (error){
+    } catch (error) {
       console.warn(error);
       return;
     }
-    const nbt = new NBTData(rootTag,getFormat());
+    const nbt = new NBTData(rootTag, getFormat());
     setTreeViewValue(nbt);
   });
 
@@ -99,13 +99,13 @@ export function App(props: AppProps){
     event.preventDefault();
     if (event.repeat) return;
 
-    switch (combo as Shortcut){
+    switch (combo as Shortcut) {
       case Shortcut.Open: return await openNBTFile();
       case Shortcut.Save: return await saveNBTFile();
     }
   };
 
-  document.addEventListener("keydown",handleKeydown);
+  document.addEventListener("keydown", handleKeydown);
 
   const handleDragover: NonNullable<typeof document.ondragover> = event => {
     event.preventDefault();
@@ -114,7 +114,7 @@ export function App(props: AppProps){
     event.dataTransfer.dropEffect = "copy";
   };
 
-  document.addEventListener("dragover",handleDragover);
+  document.addEventListener("dragover", handleDragover);
 
   const handleDrop: NonNullable<typeof document.ondrop> = async event => {
     event.preventDefault();
@@ -128,7 +128,7 @@ export function App(props: AppProps){
     await openNBTFile(item);
   };
 
-  document.addEventListener("drop",handleDrop);
+  document.addEventListener("drop", handleDrop);
 
   // const demo = fetch("./bigtest.nbt")
   //   .then(response => response.blob())
@@ -144,8 +144,8 @@ export function App(props: AppProps){
 
     try {
       file = await openFile(file);
-    } catch (error: unknown){
-      if (!(error instanceof DOMException) || error.name !== "AbortError"){
+    } catch (error: unknown) {
+      if (!(error instanceof DOMException) || error.name !== "AbortError") {
         alert(error);
       }
       setEditorDisabled(false);
@@ -153,7 +153,7 @@ export function App(props: AppProps){
     }
     if (file === null) return;
 
-    if ("getFile" in file){
+    if ("getFile" in file) {
       setFileHandle(file);
       file = await file.getFile();
     } else {
@@ -164,14 +164,14 @@ export function App(props: AppProps){
 
     try {
       nbt = await readFile(file);
-    } catch (error: unknown){
-      if (error instanceof Error && error.message.includes("unread bytes remaining")){
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message.includes("unread bytes remaining")) {
         const reattempt = confirm(`${error}\n\nEncountered extra data at the end of '${file.name}'. Would you like to try opening it again without 'strict mode' enabled? The trailing data will be lost when re-saving your file again.`);
-        if (!reattempt){
+        if (!reattempt) {
           setEditorDisabled(false);
           return;
         }
-        nbt = await readFile(file,{ strict: false });
+        nbt = await readFile(file, { strict: false });
       } else {
         alert(`Could not read '${file.name}' as NBT data.\n\n${error}`);
         setEditorDisabled(false);
@@ -179,7 +179,7 @@ export function App(props: AppProps){
       }
     }
 
-    const snbt = stringify(nbt,{ space: 2 });
+    const snbt = stringify(nbt, { space: 2 });
     setFormat(nbt);
     setName(file.name);
 
@@ -194,18 +194,18 @@ export function App(props: AppProps){
    * Saves the current NBT file from the editor.
   */
   async function saveNBTFile(file: File | null = null): Promise<void> {
-    if (file === null){
+    if (file === null) {
       try {
         const snbt = getEditorValue();
         const nbt = parse(snbt);
         const options = getFormat();
-        const nbtData = new NBTData(nbt,options);
-        file = await writeFile(nbtData,getName());
+        const nbtData = new NBTData(nbt, options);
+        file = await writeFile(nbtData, getName());
 
-        if (props.isiOSDevice && window.isSecureContext){
+        if (props.isiOSDevice && window.isSecureContext) {
           return await shareFile(file);
         }
-      } catch (error: unknown){
+      } catch (error: unknown) {
         alert(`Could not save '${getName()}' as NBT data.\n\n${error}`);
         return;
       }
@@ -213,16 +213,16 @@ export function App(props: AppProps){
 
     const fileHandle = getFileHandle();
 
-    if (fileHandle !== null){
+    if (fileHandle !== null) {
       try {
-        return await saveFile(file,fileHandle);
+        return await saveFile(file, fileHandle);
       } catch {
         const saveManually = confirm(`'${file.name}' could not be saved in-place. Would you like to try saving it manually? It may go directly to your Downloads folder.`);
         if (!saveManually) return;
       }
     }
 
-    await saveFile(file,null);
+    await saveFile(file, null);
   }
 
   return (

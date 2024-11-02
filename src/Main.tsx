@@ -13,7 +13,7 @@ export interface MainProps {
   getTreeViewValue: Accessor<NBTData>;
 }
 
-export function Main(props: MainProps){
+export function Main(props: MainProps) {
   return (
     <main>
       {
